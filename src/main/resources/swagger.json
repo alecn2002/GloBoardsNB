@@ -1,0 +1,1867 @@
+  "swaggerDoc": {
+    "openapi": "3.0.0",
+    "info": {
+      "version": "1",
+      "title": "GitKraken Glo API",
+      "description": "API for GitKraken Glo - access Glo boards and cards",
+      "contact": {
+        "name": "GitKraken Support",
+        "url": "https://support.gitkraken.com/developers/overview/",
+        "email": "support@gitkraken.com"
+      }
+    },
+    "servers": [
+      {
+        "url": "https://gloapi.gitkraken.com/v1/glo",
+        "description": "Glo API"
+      }
+    ],
+    "components": {
+      "securitySchemes": {
+        "api_oauth": {
+          "type": "oauth2",
+          "description": "The Glo API uses OAuth 2",
+          "bearerFormat": "Bearer",
+          "flows": {
+            "authorizationCode": {
+              "authorizationUrl": "https://app.gitkraken.com/oauth/authorize",
+              "tokenUrl": "https://api.gitkraken.com/oauth/access_token",
+              "scopes": {
+                "board:read": "Read boards",
+                "board:write": "Write boards",
+                "user:read": "Read user",
+                "user:write": "Write user"
+              }
+            }
+          }
+        }
+      },
+      "schemas": {
+        "Attachment": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "string",
+              "readOnly": true
+            },
+            "filename": {
+              "type": "string"
+            },
+            "mime_type": {
+              "type": "string"
+            },
+            "created_date": {
+              "type": "string",
+              "format": "date-time"
+            },
+            "created_by": {
+              "$ref": "#/components/schemas/PartialUser"
+            }
+          }
+        },
+        "Board": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "string",
+              "readOnly": true
+            },
+            "name": {
+              "type": "string",
+              "maxLength": 100
+            },
+            "columns": {
+              "type": "array",
+              "items": {
+                "$ref": "#/components/schemas/Column"
+              }
+            },
+            "archived_columns": {
+              "type": "array",
+              "items": {
+                "$ref": "#/components/schemas/Column"
+              }
+            },
+            "invited_members": {
+              "type": "array",
+              "items": {
+                "$ref": "#/components/schemas/BoardMember"
+              }
+            },
+            "members": {
+              "type": "array",
+              "items": {
+                "$ref": "#/components/schemas/BoardMember"
+              }
+            },
+            "archived_date": {
+              "type": "string",
+              "format": "date-time"
+            },
+            "labels": {
+              "type": "array",
+              "items": {
+                "$ref": "#/components/schemas/Label"
+              }
+            },
+            "created_date": {
+              "type": "string",
+              "format": "date-time"
+            },
+            "created_by": {
+              "$ref": "#/components/schemas/PartialUser"
+            }
+          },
+          "required": [
+            "name"
+          ]
+        },
+        "BoardMember": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "string"
+            },
+            "role": {
+              "type": "string"
+            },
+            "username": {
+              "type": "string"
+            }
+          }
+        },
+        "Card": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "string",
+              "readOnly": true
+            },
+            "name": {
+              "type": "string",
+              "maxLength": 250
+            },
+            "position": {
+              "description": "The zero-based index of where in column to place the card. If not provided, the card will be added to the end of the column.",
+              "type": "integer",
+              "minimum": 0,
+              "writeOnly": true
+            },
+            "description": {
+              "type": "object",
+              "properties": {
+                "text": {
+                  "type": "string",
+                  "maxLength": 16000
+                },
+                "created_date": {
+                  "type": "string",
+                  "format": "date-time",
+                  "readOnly": true
+                },
+                "updated_date": {
+                  "type": "string",
+                  "format": "date-time",
+                  "readOnly": true
+                },
+                "created_by": {
+                  "readOnly": true,
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/PartialUser"
+                    }
+                  ]
+                },
+                "updated_by": {
+                  "readOnly": true,
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/PartialUser"
+                    }
+                  ]
+                }
+              }
+            },
+            "board_id": {
+              "type": "string",
+              "readOnly": true
+            },
+            "column_id": {
+              "type": "string",
+              "readOnly": true
+            },
+            "created_date": {
+              "type": "string",
+              "format": "date-time",
+              "readOnly": true
+            },
+            "updated_date": {
+              "type": "string",
+              "format": "date-time",
+              "readOnly": true
+            },
+            "archived_date": {
+              "type": "string",
+              "format": "date-time",
+              "readOnly": true
+            },
+            "assignees": {
+              "type": "array",
+              "items": {
+                "$ref": "#/components/schemas/PartialUser"
+              }
+            },
+            "labels": {
+              "type": "array",
+              "items": {
+                "$ref": "#/components/schemas/PartialLabel"
+              }
+            },
+            "due_date": {
+              "type": "string",
+              "format": "date"
+            },
+            "comment_count": {
+              "type": "number",
+              "minimum": 0,
+              "readOnly": true
+            },
+            "attachment_count": {
+              "type": "number",
+              "minimum": 0,
+              "readOnly": true
+            },
+            "completed_task_count": {
+              "type": "number",
+              "minimum": 0,
+              "readOnly": true
+            },
+            "total_task_count": {
+              "type": "number",
+              "minimum": 0,
+              "readOnly": true
+            },
+            "created_by": {
+              "readOnly": true,
+              "allOf": [
+                {
+                  "$ref": "#/components/schemas/PartialUser"
+                }
+              ]
+            }
+          },
+          "required": [
+            "name"
+          ]
+        },
+        "Column": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "string",
+              "readOnly": true
+            },
+            "name": {
+              "type": "string",
+              "maxLength": 100
+            },
+            "position": {
+              "description": "The zero-based index of where in board to place the column. If not provided, the column will be added to the end of the board.",
+              "type": "integer",
+              "minimum": 0,
+              "writeOnly": true
+            },
+            "archived_date": {
+              "type": "string",
+              "format": "date-time",
+              "readOnly": true
+            },
+            "created_date": {
+              "type": "string",
+              "format": "date-time",
+              "readOnly": true
+            },
+            "created_by": {
+              "readOnly": true,
+              "allOf": [
+                {
+                  "$ref": "#/components/schemas/PartialUser"
+                }
+              ]
+            }
+          },
+          "required": [
+            "name"
+          ]
+        },
+        "Comment": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "string",
+              "readOnly": true
+            },
+            "card_id": {
+              "type": "string",
+              "readOnly": true
+            },
+            "board_id": {
+              "type": "string",
+              "readOnly": true
+            },
+            "created_date": {
+              "type": "string",
+              "format": "date-time",
+              "readOnly": true
+            },
+            "updated_date": {
+              "type": "string",
+              "format": "date-time",
+              "readOnly": true
+            },
+            "created_by": {
+              "readOnly": true,
+              "allOf": [
+                {
+                  "$ref": "#/components/schemas/PartialUser"
+                }
+              ]
+            },
+            "updated_by": {
+              "readOnly": true,
+              "allOf": [
+                {
+                  "$ref": "#/components/schemas/PartialUser"
+                }
+              ]
+            },
+            "text": {
+              "type": "string",
+              "maxLength": 16000
+            }
+          }
+        },
+        "Label": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "string",
+              "readOnly": true
+            },
+            "name": {
+              "type": "string",
+              "maxLength": 50
+            },
+            "color": {
+              "type": "object",
+              "properties": {
+                "r": {
+                  "type": "integer",
+                  "minimum": 0,
+                  "maximum": 255
+                },
+                "g": {
+                  "type": "integer",
+                  "minimum": 0,
+                  "maximum": 255
+                },
+                "b": {
+                  "type": "integer",
+                  "minimum": 0,
+                  "maximum": 255
+                },
+                "a": {
+                  "type": "number",
+                  "minimum": 0,
+                  "maximum": 1
+                }
+              }
+            },
+            "created_date": {
+              "type": "string",
+              "format": "date-time"
+            },
+            "created_by": {
+              "$ref": "#/components/schemas/PartialUser"
+            }
+          },
+          "required": [
+            "name"
+          ]
+        },
+        "PartialLabel": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "string"
+            },
+            "name": {
+              "type": "string",
+              "readOnly": true
+            }
+          }
+        },
+        "PartialUser": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "string"
+            }
+          }
+        },
+        "User": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "string",
+              "readOnly": true
+            },
+            "name": {
+              "type": "string",
+              "maxLength": 255
+            },
+            "username": {
+              "type": "string",
+              "maxLength": 100
+            },
+            "email": {
+              "type": "string",
+              "format": "email",
+              "maxLength": 100
+            }
+          }
+        }
+      }
+    },
+    "paths": {
+      "/boards": {
+        "get": {
+          "summary": "Gets a list of boards",
+          "description": "Note: `members` and `invited_members` in the results will not include the `username` field",
+          "tags": [
+            "Boards"
+          ],
+          "parameters": [
+            {
+              "name": "fields",
+              "description": "Fields to return. Defaults to `name`.",
+              "required": false,
+              "in": "query",
+              "schema": {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "enum": [
+                    "archived_columns",
+                    "archived_date",
+                    "columns",
+                    "created_by",
+                    "created_date",
+                    "invited_members",
+                    "labels",
+                    "members",
+                    "name"
+                  ]
+                }
+              }
+            },
+            {
+              "name": "archived",
+              "description": "If set to `true`, returns archived boards instead of non-archived boards. Defaults to `false`.",
+              "required": false,
+              "in": "query",
+              "schema": {
+                "type": "boolean"
+              }
+            },
+            {
+              "name": "page",
+              "description": "The page number to return. Defaults to `1`.",
+              "required": false,
+              "in": "query",
+              "schema": {
+                "type": "int",
+                "minimum": 1
+              }
+            },
+            {
+              "name": "per_page",
+              "description": "The number of items per page to return. Defaults to `50`.",
+              "required": false,
+              "in": "query",
+              "schema": {
+                "type": "int",
+                "minimum": 1,
+                "maximum": 100
+              }
+            },
+            {
+              "name": "sort",
+              "description": "The sort direction. Defaults to `asc`.",
+              "required": false,
+              "in": "query",
+              "schema": {
+                "type": "string",
+                "enum": [
+                  "asc",
+                  "desc"
+                ]
+              }
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "The list of boards the user has access to",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/components/schemas/Board"
+                    }
+                  }
+                }
+              },
+              "headers": {
+                "has-more": {
+                  "description": "Whether or not there are any items on the next page.",
+                  "schema": {
+                    "type": "boolean"
+                  }
+                }
+              }
+            }
+          },
+          "security": [
+            {
+              "api_oauth": [
+                "board:read"
+              ]
+            }
+          ]
+        }
+      },
+      "/boards/{board_id}": {
+        "get": {
+          "summary": "Gets a board by ID",
+          "tags": [
+            "Boards"
+          ],
+          "parameters": [
+            {
+              "name": "board_id",
+              "description": "ID of the board to get",
+              "in": "path",
+              "required": true,
+              "schema": {
+                "type": "string"
+              }
+            },
+            {
+              "name": "fields",
+              "description": "Fields to return. Defaults to `name`.",
+              "required": false,
+              "in": "query",
+              "schema": {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "enum": [
+                    "archived_columns",
+                    "archived_date",
+                    "columns",
+                    "created_by",
+                    "created_date",
+                    "invited_members",
+                    "labels",
+                    "members",
+                    "name"
+                  ]
+                }
+              }
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "The requested board",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Board"
+                  }
+                }
+              }
+            },
+            "400": {
+              "description": "Board ID not valid"
+            },
+            "404": {
+              "description": "Board not found"
+            }
+          },
+          "security": [
+            {
+              "api_oauth": [
+                "board:read"
+              ]
+            }
+          ]
+        }
+      },
+      "/boards/{board_id}/columns": {
+        "post": {
+          "summary": "Creates a new column in a board",
+          "tags": [
+            "Columns"
+          ],
+          "parameters": [
+            {
+              "name": "board_id",
+              "description": "ID of the board to post the column to",
+              "in": "path",
+              "required": true,
+              "schema": {
+                "type": "string"
+              }
+            }
+          ],
+          "requestBody": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Column",
+                  "required": [
+                    "name"
+                  ]
+                }
+              }
+            }
+          },
+          "responses": {
+            "201": {
+              "description": "The created column",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "allOf": [
+                      {
+                        "$ref": "#/components/schemas/Column"
+                      },
+                      {
+                        "type": "object",
+                        "properties": {
+                          "archived_date": {
+                            "writeOnly": true
+                          }
+                        }
+                      }
+                    ]
+                  }
+                }
+              }
+            },
+            "400": {
+              "description": "Board ID not valid, or invalid payload"
+            },
+            "404": {
+              "description": "Board not found"
+            }
+          },
+          "security": [
+            {
+              "api_oauth": [
+                "board:write"
+              ]
+            }
+          ]
+        }
+      },
+      "/boards/{board_id}/columns/{column_id}": {
+        "post": {
+          "summary": "Edits a column by ID",
+          "tags": [
+            "Columns"
+          ],
+          "parameters": [
+            {
+              "name": "board_id",
+              "description": "ID of the board the column belongs to",
+              "in": "path",
+              "required": true,
+              "schema": {
+                "type": "string"
+              }
+            },
+            {
+              "name": "column_id",
+              "description": "ID of the column to edit",
+              "in": "path",
+              "required": true,
+              "schema": {
+                "type": "string"
+              }
+            }
+          ],
+          "requestBody": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Column",
+                  "required": [
+                    "name"
+                  ]
+                }
+              }
+            }
+          },
+          "responses": {
+            "200": {
+              "description": "The edited column",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "allOf": [
+                      {
+                        "$ref": "#/components/schemas/Column"
+                      },
+                      {
+                        "type": "object",
+                        "properties": {
+                          "archived_date": {
+                            "writeOnly": true
+                          }
+                        }
+                      }
+                    ]
+                  }
+                }
+              }
+            },
+            "400": {
+              "description": "Board or Column ID not valid, or invalid payload"
+            },
+            "404": {
+              "description": "Board or Column not found"
+            }
+          },
+          "security": [
+            {
+              "api_oauth": [
+                "board:write"
+              ]
+            }
+          ]
+        },
+        "delete": {
+          "summary": "Deletes a column by ID",
+          "tags": [
+            "Columns"
+          ],
+          "parameters": [
+            {
+              "name": "board_id",
+              "description": "ID of the board the column belongs to",
+              "in": "path",
+              "required": true,
+              "schema": {
+                "type": "string"
+              }
+            },
+            {
+              "name": "column_id",
+              "description": "ID of the column to delete",
+              "in": "path",
+              "required": true,
+              "schema": {
+                "type": "string"
+              }
+            }
+          ],
+          "responses": {
+            "204": {
+              "description": "Column successfully deleted"
+            },
+            "400": {
+              "description": "Board or Column ID not valid"
+            },
+            "404": {
+              "description": "Board or Column not found"
+            }
+          },
+          "security": [
+            {
+              "api_oauth": [
+                "board:write"
+              ]
+            }
+          ]
+        }
+      },
+      "/boards/{board_id}/cards": {
+        "get": {
+          "summary": "Gets a list of cards for a board",
+          "tags": [
+            "Cards"
+          ],
+          "parameters": [
+            {
+              "name": "board_id",
+              "description": "ID of the board to get",
+              "in": "path",
+              "required": true,
+              "schema": {
+                "type": "string"
+              }
+            },
+            {
+              "name": "fields",
+              "description": "Fields to return.  Defaults to `name, board_id, column_id`.",
+              "required": false,
+              "in": "query",
+              "schema": {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "enum": [
+                    "archived_date",
+                    "assignees",
+                    "attachment_count",
+                    "board_id",
+                    "column_id",
+                    "comment_count",
+                    "completed_task_count",
+                    "created_by",
+                    "created_date",
+                    "due_date",
+                    "description",
+                    "labels",
+                    "name",
+                    "total_task_count",
+                    "updated_date"
+                  ]
+                }
+              }
+            },
+            {
+              "name": "archived",
+              "description": "If set to `true`, returns archived cards instead of non-archived boards. Defaults to `false`.",
+              "required": false,
+              "in": "query",
+              "schema": {
+                "type": "boolean"
+              }
+            },
+            {
+              "name": "page",
+              "description": "The page number to return. Defaults to `1`.",
+              "required": false,
+              "in": "query",
+              "schema": {
+                "type": "int",
+                "minimum": 1
+              }
+            },
+            {
+              "name": "per_page",
+              "description": "The number of items per page to return. Defaults to `50`.",
+              "required": false,
+              "in": "query",
+              "schema": {
+                "type": "int",
+                "minimum": 1,
+                "maximum": 100
+              }
+            },
+            {
+              "name": "sort",
+              "description": "The sort direction. Defaults to `asc`.",
+              "required": false,
+              "in": "query",
+              "schema": {
+                "type": "string",
+                "enum": [
+                  "asc",
+                  "desc"
+                ]
+              }
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "The list of cards for the requested board",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/components/schemas/Card"
+                    }
+                  }
+                }
+              },
+              "headers": {
+                "has-more": {
+                  "description": "Whether or not there are any items on the next page.",
+                  "schema": {
+                    "type": "boolean"
+                  }
+                }
+              }
+            },
+            "400": {
+              "description": "Board ID not valid"
+            },
+            "404": {
+              "description": "Board not found"
+            }
+          },
+          "security": [
+            {
+              "api_oauth": [
+                "board:read"
+              ]
+            }
+          ]
+        },
+        "post": {
+          "summary": "Creates a new card in a column",
+          "tags": [
+            "Cards"
+          ],
+          "parameters": [
+            {
+              "name": "board_id",
+              "description": "ID of the board to post the card to",
+              "in": "path",
+              "required": true,
+              "schema": {
+                "type": "string"
+              }
+            }
+          ],
+          "requestBody": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/Card"
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "column_id": {
+                          "type": "string",
+                          "readOnly": false
+                        }
+                      }
+                    }
+                  ],
+                  "required": [
+                    "column_id",
+                    "name"
+                  ]
+                }
+              }
+            }
+          },
+          "responses": {
+            "201": {
+              "description": "The created card",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Card"
+                  }
+                }
+              }
+            },
+            "400": {
+              "description": "Board ID not valid, or invalid payload"
+            },
+            "404": {
+              "description": "Board not found"
+            }
+          },
+          "security": [
+            {
+              "api_oauth": [
+                "board:write"
+              ]
+            }
+          ]
+        }
+      },
+      "/boards/{board_id}/cards/{card_id}": {
+        "get": {
+          "summary": "Gets a card by ID",
+          "tags": [
+            "Cards"
+          ],
+          "parameters": [
+            {
+              "name": "board_id",
+              "description": "ID of the board the card belongs to",
+              "in": "path",
+              "required": true,
+              "schema": {
+                "type": "string"
+              }
+            },
+            {
+              "name": "card_id",
+              "description": "ID of the card to get",
+              "in": "path",
+              "required": true,
+              "schema": {
+                "type": "string"
+              }
+            },
+            {
+              "name": "fields",
+              "description": "Fields to return.  Defaults to `name, board_id, column_id`.",
+              "required": false,
+              "in": "query",
+              "schema": {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "enum": [
+                    "archived_date",
+                    "assignees",
+                    "attachment_count",
+                    "board_id",
+                    "column_id",
+                    "comment_count",
+                    "completed_task_count",
+                    "created_by",
+                    "created_date",
+                    "due_date",
+                    "description",
+                    "labels",
+                    "name",
+                    "total_task_count",
+                    "updated_date"
+                  ]
+                }
+              }
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "The requested card",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Card"
+                  }
+                }
+              }
+            },
+            "400": {
+              "description": "Board or card ID not valid"
+            },
+            "404": {
+              "description": "Board or card not found"
+            }
+          },
+          "security": [
+            {
+              "api_oauth": [
+                "board:read"
+              ]
+            }
+          ]
+        },
+        "post": {
+          "summary": "Edits a card",
+          "tags": [
+            "Cards"
+          ],
+          "parameters": [
+            {
+              "name": "board_id",
+              "description": "ID of the board the card belongs to",
+              "in": "path",
+              "required": true,
+              "schema": {
+                "type": "string"
+              }
+            },
+            {
+              "name": "card_id",
+              "description": "ID of the card to edit",
+              "in": "path",
+              "required": true,
+              "schema": {
+                "type": "string"
+              }
+            }
+          ],
+          "requestBody": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/Card"
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "column_id": {
+                          "type": "string",
+                          "readOnly": false
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "responses": {
+            "200": {
+              "description": "The edited card",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Card"
+                  }
+                }
+              }
+            },
+            "400": {
+              "description": "Board or card ID not valid, or invalid payload"
+            },
+            "404": {
+              "description": "Board or card not found"
+            }
+          },
+          "security": [
+            {
+              "api_oauth": [
+                "board:write"
+              ]
+            }
+          ]
+        },
+        "delete": {
+          "summary": "Deletes a card",
+          "tags": [
+            "Cards"
+          ],
+          "parameters": [
+            {
+              "name": "board_id",
+              "description": "ID of the board the card belongs to",
+              "in": "path",
+              "required": true,
+              "schema": {
+                "type": "string"
+              }
+            },
+            {
+              "name": "card_id",
+              "description": "ID of the card to delete",
+              "in": "path",
+              "required": true,
+              "schema": {
+                "type": "string"
+              }
+            }
+          ],
+          "responses": {
+            "204": {
+              "description": "Card successfully deleted"
+            },
+            "400": {
+              "description": "Board or card ID not valid"
+            },
+            "404": {
+              "description": "Board or card not found"
+            }
+          },
+          "security": [
+            {
+              "api_oauth": [
+                "board:write"
+              ]
+            }
+          ]
+        }
+      },
+      "/boards/{board_id}/cards/{card_id}/attachments": {
+        "get": {
+          "summary": "Gets a list of attachments for a card",
+          "tags": [
+            "Attachments"
+          ],
+          "parameters": [
+            {
+              "name": "board_id",
+              "description": "ID of the board the card belongs to",
+              "in": "path",
+              "required": true,
+              "schema": {
+                "type": "string"
+              }
+            },
+            {
+              "name": "card_id",
+              "description": "ID of the card for which to get attachments",
+              "in": "path",
+              "required": true,
+              "schema": {
+                "type": "string"
+              }
+            },
+            {
+              "name": "fields",
+              "description": "Fields to return.  Defaults to `filename, mime_type`.",
+              "required": false,
+              "in": "query",
+              "schema": {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "enum": [
+                    "created_date",
+                    "created_by",
+                    "filename",
+                    "mime_type"
+                  ]
+                }
+              }
+            },
+            {
+              "name": "page",
+              "description": "The page number to return. Defaults to `1`.",
+              "required": false,
+              "in": "query",
+              "schema": {
+                "type": "int",
+                "minimum": 1
+              }
+            },
+            {
+              "name": "per_page",
+              "description": "The number of items per page to return. Defaults to `50`.",
+              "required": false,
+              "in": "query",
+              "schema": {
+                "type": "int",
+                "minimum": 1,
+                "maximum": 100
+              }
+            },
+            {
+              "name": "sort",
+              "description": "The sort direction. Defaults to `asc`.",
+              "required": false,
+              "in": "query",
+              "schema": {
+                "type": "string",
+                "enum": [
+                  "asc",
+                  "desc"
+                ]
+              }
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "The list of attachments",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/components/schemas/Attachment"
+                    }
+                  }
+                }
+              },
+              "headers": {
+                "has-more": {
+                  "description": "Whether or not there are any items on the next page.",
+                  "schema": {
+                    "type": "boolean"
+                  }
+                }
+              }
+            },
+            "400": {
+              "description": "Board or card ID not valid"
+            },
+            "404": {
+              "description": "Board or card not found"
+            }
+          },
+          "security": [
+            {
+              "api_oauth": [
+                "board:read"
+              ]
+            }
+          ]
+        },
+        "post": {
+          "summary": "Creates an attachment for a card",
+          "description": "**⚠️ Important Note:**\n\nAfter making this call, you must make another call to either update the card's description or add/update one of the card's comments and include the attachment url (in markdown format) in the text.\n\nThe format must be `[ANY_TEXT](ATTACHMENT_URL)`.\n\nIf the attachment url is not in the card description or one of its comments within 1 hour of the attachment being created, it will be deleted.\n",
+          "tags": [
+            "Attachments"
+          ],
+          "parameters": [
+            {
+              "name": "board_id",
+              "description": "ID of the board the card belongs to",
+              "in": "path",
+              "required": true,
+              "schema": {
+                "type": "string"
+              }
+            },
+            {
+              "name": "card_id",
+              "description": "ID of the card to post the attachment to",
+              "in": "path",
+              "required": true,
+              "schema": {
+                "type": "string"
+              }
+            }
+          ],
+          "requestBody": {
+            "content": {
+              "multipart/form-data": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "file": {
+                      "type": "string",
+                      "format": "binary"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "responses": {
+            "201": {
+              "description": "The created attachment"
+            },
+            "400": {
+              "description": "Board or card ID not valid, or invalid payload"
+            },
+            "404": {
+              "description": "Board or card not found"
+            }
+          },
+          "security": [
+            {
+              "api_oauth": [
+                "board:write"
+              ]
+            }
+          ]
+        }
+      },
+      "/boards/{board_id}/cards/{card_id}/comments": {
+        "get": {
+          "summary": "Gets a list of comments for a card",
+          "tags": [
+            "Comments"
+          ],
+          "parameters": [
+            {
+              "name": "board_id",
+              "description": "ID of the board the card belongs to",
+              "in": "path",
+              "required": true,
+              "schema": {
+                "type": "string"
+              }
+            },
+            {
+              "name": "card_id",
+              "description": "ID of the card for which to get comments",
+              "in": "path",
+              "required": true,
+              "schema": {
+                "type": "string"
+              }
+            },
+            {
+              "name": "fields",
+              "description": "Fields to return.  Defaults to `text`.",
+              "required": false,
+              "in": "query",
+              "schema": {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "enum": [
+                    "board_id",
+                    "card_id",
+                    "created_date",
+                    "created_by",
+                    "updated_by",
+                    "updated_date",
+                    "text"
+                  ]
+                }
+              }
+            },
+            {
+              "name": "page",
+              "description": "The page number to return. Defaults to `1`.",
+              "required": false,
+              "in": "query",
+              "schema": {
+                "type": "int",
+                "minimum": 1
+              }
+            },
+            {
+              "name": "per_page",
+              "description": "The number of items per page to return. Defaults to `50`.",
+              "required": false,
+              "in": "query",
+              "schema": {
+                "type": "int",
+                "minimum": 1,
+                "maximum": 100
+              }
+            },
+            {
+              "name": "sort",
+              "description": "The sort direction. Defaults to `asc`.",
+              "required": false,
+              "in": "query",
+              "schema": {
+                "type": "string",
+                "enum": [
+                  "asc",
+                  "desc"
+                ]
+              }
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "The list of comments for the requested card",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/components/schemas/Comment"
+                    }
+                  }
+                }
+              },
+              "headers": {
+                "has-more": {
+                  "description": "Whether or not there are any items on the next page.",
+                  "schema": {
+                    "type": "boolean"
+                  }
+                }
+              }
+            },
+            "400": {
+              "description": "Board or card ID not valid"
+            },
+            "404": {
+              "description": "Board or card not found"
+            }
+          },
+          "security": [
+            {
+              "api_oauth": [
+                "board:read"
+              ]
+            }
+          ]
+        },
+        "post": {
+          "summary": "Creates a new comment in a card",
+          "tags": [
+            "Comments"
+          ],
+          "parameters": [
+            {
+              "name": "board_id",
+              "description": "ID of the board the card belongs to",
+              "in": "path",
+              "required": true,
+              "schema": {
+                "type": "string"
+              }
+            },
+            {
+              "name": "card_id",
+              "description": "ID of the card to post the comment to",
+              "in": "path",
+              "required": true,
+              "schema": {
+                "type": "string"
+              }
+            }
+          ],
+          "requestBody": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Comment",
+                  "required": [
+                    "text"
+                  ]
+                }
+              }
+            }
+          },
+          "responses": {
+            "201": {
+              "description": "The created comment",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Comment"
+                  }
+                }
+              }
+            },
+            "400": {
+              "description": "Board or card ID not valid, or invalid payload"
+            },
+            "404": {
+              "description": "Board or card not found"
+            }
+          },
+          "security": [
+            {
+              "api_oauth": [
+                "board:write"
+              ]
+            }
+          ]
+        }
+      },
+      "/boards/{board_id}/cards/{card_id}/comments/{comment_id}": {
+        "post": {
+          "summary": "Edits a comment by ID",
+          "tags": [
+            "Comments"
+          ],
+          "parameters": [
+            {
+              "name": "board_id",
+              "description": "ID of the board the comment belongs to",
+              "in": "path",
+              "required": true,
+              "schema": {
+                "type": "string"
+              }
+            },
+            {
+              "name": "card_id",
+              "description": "ID of the card the comment belongs to",
+              "in": "path",
+              "required": true,
+              "schema": {
+                "type": "string"
+              }
+            },
+            {
+              "name": "comment_id",
+              "description": "ID of the comment to edit",
+              "in": "path",
+              "required": true,
+              "schema": {
+                "type": "string"
+              }
+            }
+          ],
+          "requestBody": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Comment",
+                  "required": [
+                    "text"
+                  ]
+                }
+              }
+            }
+          },
+          "responses": {
+            "200": {
+              "description": "The edited comment",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Comment"
+                  }
+                }
+              }
+            },
+            "400": {
+              "description": "Board or card ID not valid, or invalid payload"
+            },
+            "404": {
+              "description": "Board or card not found"
+            }
+          },
+          "security": [
+            {
+              "api_oauth": [
+                "board:write"
+              ]
+            }
+          ]
+        },
+        "delete": {
+          "summary": "Deletes a comment by ID",
+          "tags": [
+            "Comments"
+          ],
+          "parameters": [
+            {
+              "name": "board_id",
+              "description": "ID of the board the comment belongs to",
+              "in": "path",
+              "required": true,
+              "schema": {
+                "type": "string"
+              }
+            },
+            {
+              "name": "card_id",
+              "description": "ID of the card the comment belongs to",
+              "in": "path",
+              "required": true,
+              "schema": {
+                "type": "string"
+              }
+            },
+            {
+              "name": "comment_id",
+              "description": "ID of the comment to delete",
+              "in": "path",
+              "required": true,
+              "schema": {
+                "type": "string"
+              }
+            }
+          ],
+          "responses": {
+            "204": {
+              "description": "Comment successfully deleted"
+            },
+            "400": {
+              "description": "Board, card, or comment ID not valid"
+            },
+            "404": {
+              "description": "Board, card, or comment not found"
+            }
+          },
+          "security": [
+            {
+              "api_oauth": [
+                "board:write"
+              ]
+            }
+          ]
+        }
+      },
+      "/boards/{board_id}/columns/{column_id}/cards": {
+        "get": {
+          "summary": "Gets a list of cards for a column",
+          "tags": [
+            "Cards"
+          ],
+          "parameters": [
+            {
+              "name": "board_id",
+              "description": "ID of the board the card belongs to",
+              "in": "path",
+              "required": true,
+              "schema": {
+                "type": "string"
+              }
+            },
+            {
+              "name": "column_id",
+              "description": "ID of the column for which to get cards",
+              "in": "path",
+              "required": true,
+              "schema": {
+                "type": "string"
+              }
+            },
+            {
+              "name": "fields",
+              "description": "Fields to return. Defaults to `name, board_id, column_id`.",
+              "required": false,
+              "in": "query",
+              "schema": {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "enum": [
+                    "archived_date",
+                    "assignees",
+                    "attachment_count",
+                    "board_id",
+                    "column_id",
+                    "comment_count",
+                    "completed_task_count",
+                    "created_by",
+                    "created_date",
+                    "due_date",
+                    "description",
+                    "labels",
+                    "name",
+                    "total_task_count",
+                    "updated_date"
+                  ]
+                }
+              }
+            },
+            {
+              "name": "archived",
+              "description": "If set to `true`, returns archived cards instead of non-archived boards. Defaults to `false`.",
+              "required": false,
+              "in": "query",
+              "schema": {
+                "type": "boolean"
+              }
+            },
+            {
+              "name": "page",
+              "description": "The page number to return. Defaults to `1`.",
+              "required": false,
+              "in": "query",
+              "schema": {
+                "type": "int",
+                "minimum": 1
+              }
+            },
+            {
+              "name": "per_page",
+              "description": "The number of items per page to return. Defaults to `50`.",
+              "required": false,
+              "in": "query",
+              "schema": {
+                "type": "int",
+                "minimum": 1,
+                "maximum": 100
+              }
+            },
+            {
+              "name": "sort",
+              "description": "The sort direction. Defaults to `asc`.",
+              "required": false,
+              "in": "query",
+              "schema": {
+                "type": "string",
+                "enum": [
+                  "asc",
+                  "desc"
+                ]
+              }
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "The list of cards for the requested column",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/components/schemas/Card"
+                    }
+                  }
+                }
+              },
+              "headers": {
+                "has-more": {
+                  "description": "Whether or not there are any items on the next page.",
+                  "schema": {
+                    "type": "boolean"
+                  }
+                }
+              }
+            },
+            "400": {
+              "description": "Board or column ID not valid"
+            },
+            "404": {
+              "description": "Board or column not found"
+            }
+          },
+          "security": [
+            {
+              "api_oauth": [
+                "board:read"
+              ]
+            }
+          ]
+        }
+      },
+      "/user": {
+        "get": {
+          "summary": "Gets data about the authenticated user",
+          "tags": [
+            "Users"
+          ],
+          "parameters": [
+            {
+              "name": "fields",
+              "description": "Fields to return. Defaults to `username`.",
+              "required": false,
+              "in": "query",
+              "schema": {
+                "type": "array",
+                "items": {
+                  "type": "string,",
+                  "enum": [
+                    "created_date",
+                    "email",
+                    "name",
+                    "username"
+                  ]
+                }
+              }
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "The authenticated user",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/User"
+                  }
+                }
+              }
+            }
+          },
+          "security": [
+            {
+              "api_oauth": [
+                "user:read"
+              ]
+            }
+          ]
+        }
+      }
+    }
+  },
+  "customOptions": {
+    "oauth2RedirectUrl": "https://gloapi.gitkraken.com/v1/docs/oauth2-redirect.html"
+  }
+
