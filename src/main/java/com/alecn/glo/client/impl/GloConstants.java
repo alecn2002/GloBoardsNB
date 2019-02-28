@@ -3,12 +3,13 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.alecn.glo.client;
+package com.alecn.glo.client.impl;
 
 /**
  *
  * @author anovitsk
  */
-public interface BoardsDAO {
+abstract class GloConstants {
+    protected static final String GLO_URL = "https://gloapi.gitkraken.com/v1/glo/";
 
 }
