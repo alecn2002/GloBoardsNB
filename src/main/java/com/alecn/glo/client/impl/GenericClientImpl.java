@@ -50,6 +50,8 @@ public abstract class GenericClientImpl<T> extends GloConstants {
 
     private Invocation.Builder prepareInvocationBuilder(Function<WebTarget, WebTarget> fixer) {
         WebTarget myWebTarget = webTarget.path(path);
+        // TODO replace with real authorizetion!
+        myWebTarget = myWebTarget.queryParam("access_token", "pcad84c0e279a1a233e1eb31a7a4b20b4ad3ea947");
         if (fixer != null) {
             myWebTarget = fixer.apply(myWebTarget);
         }

@@ -64,7 +64,7 @@ public final class GetBoardListAction implements ActionListener {
                 if (boards == null || boards.isEmpty()) {
                     io.getErr().println ("getBoardList() returned null or empty list");
                 }else {
-                    boards.forEach((board) -> {
+                    boards.forEach((Object board) -> {
                         io.getOut().println (board.toString());
                     });
                 }
