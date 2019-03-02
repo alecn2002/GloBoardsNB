@@ -21,13 +21,16 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.alecn.glo.client.impl;
+package com.alecn.glo.service;
+
+import com.alecn.glo.sojo.Board;
+import java.util.List;
 
 /**
  *
  * @author AlecN <alecn2002@gmail.com>
  */
-abstract class GloConstants {
-    protected static final String GLO_URL = "https://gloapi.gitkraken.com/v1/glo/";
-
+public interface BoardService {
+    List<Board> getBoardsList();
+    Board getBoard(String id);
 }
