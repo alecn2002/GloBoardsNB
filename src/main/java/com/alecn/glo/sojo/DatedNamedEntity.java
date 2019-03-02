@@ -7,11 +7,15 @@ package com.alecn.glo.sojo;
 
 import java.util.Date;
 import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.Setter;
 
 /**
  *
  * @author anovitsk
  */
+@Getter
+@Setter
 @EqualsAndHashCode(callSuper = true)
 public abstract class DatedNamedEntity extends NamedEntity {
     Date archived_date;

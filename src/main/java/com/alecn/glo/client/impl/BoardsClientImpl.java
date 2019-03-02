@@ -21,7 +21,7 @@ import lombok.Getter;
 public class BoardsClientImpl extends GenericClientImpl<Board> implements BoardsClient {
 
     @Getter
-    private enum EBoardsParams {
+    enum EBoardsParams {
         FIELDS("fields"),
         ARCHIVED("archived"),
         PAGE("page"),
@@ -36,7 +36,7 @@ public class BoardsClientImpl extends GenericClientImpl<Board> implements Boards
     }
 
     private static final EBoardFields[] DEFAULT_FIELDS_LIST = {EBoardFields.NAME};
-    private static final Collection<EBoardFields> DEFAULT_FIELDS = Arrays.asList(DEFAULT_FIELDS_LIST);
+    static final Collection<EBoardFields> DEFAULT_FIELDS = Arrays.asList(DEFAULT_FIELDS_LIST);
 
     public BoardsClientImpl() {
         super("boards", Board.class);
