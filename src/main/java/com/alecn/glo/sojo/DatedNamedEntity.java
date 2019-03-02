@@ -27,6 +27,7 @@ import java.util.Date;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 
 /**
  *
@@ -35,6 +36,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @EqualsAndHashCode(callSuper = true)
+@ToString
 public abstract class DatedNamedEntity extends NamedEntity {
     Date archived_date;
     Date created_date;

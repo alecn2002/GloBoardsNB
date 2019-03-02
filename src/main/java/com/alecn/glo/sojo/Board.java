@@ -29,6 +29,7 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.ToString;
 
 /**
  *
@@ -39,6 +40,7 @@ import lombok.Setter;
 @AllArgsConstructor
 @NoArgsConstructor
 @EqualsAndHashCode(callSuper = true)
+@ToString(exclude = {"columns", "archived_columns", "invited_members", "members"})
 public class Board extends DatedNamedEntity {
     private List<Column> columns;
     private List<Column> archived_columns;

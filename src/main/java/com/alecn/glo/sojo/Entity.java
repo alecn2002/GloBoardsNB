@@ -26,6 +26,7 @@ package com.alecn.glo.sojo;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 
 /**
  *
@@ -34,6 +35,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @EqualsAndHashCode
+@ToString
 public abstract class Entity {
 
     protected String id;

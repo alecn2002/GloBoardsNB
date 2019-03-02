@@ -23,14 +23,19 @@
  */
 package com.alecn.glo.action;
 
+import com.alecn.glo.service.BoardService;
+import com.alecn.glo.sojo.Board;
+import com.alecn.glo.wrappers.InputOutputCloseableWrapper;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.IOException;
+import java.util.Collection;
 import org.netbeans.api.io.IOProvider;
 import org.openide.awt.ActionID;
 import org.openide.awt.ActionReference;
 import org.openide.awt.ActionRegistration;
+import org.openide.util.Lookup;
 import org.openide.util.NbBundle.Messages;
-import org.netbeans.api.io.InputOutput;
 
 /**
  *
@@ -47,12 +52,25 @@ import org.netbeans.api.io.InputOutput;
 @Messages("CTL_GetBoardListAction=get Glo Boards list")
 public final class GetBoardListAction implements ActionListener {
 
+    private final BoardService boardService = Lookup.getDefault().lookup(BoardService.class);
+
     @Override
     public void actionPerformed(ActionEvent e) {
-        InputOutput io = IOProvider.getDefault().getIO ("Hello", true);
-        io.getOut().println ("Hello from standard out");
-        io.getErr().println ("Hello from standard err");  //this text should appear in red
-        io.getOut().close();
-        io.getErr().close();
+        try (InputOutputCloseableWrapper io = new InputOutputCloseableWrapper(IOProvider.getDefault().getIO ("Hello", true))) {
+            if (boardService == null) {
+                io.getErr().println ("boardService not initialized");
+            } else {
+                Collection<Board> boards = boardService.getBoardsList();
+                if (boards == null || boards.isEmpty()) {
+                    io.getErr().println ("getBoardList() returned null or empty list");
+                }else {
+                    boards.forEach((board) -> {
+                        io.getOut().println (board.toString());
+                    });
+                }
+            }
+        } catch (IOException ex) {
+
+        }
     }
 }

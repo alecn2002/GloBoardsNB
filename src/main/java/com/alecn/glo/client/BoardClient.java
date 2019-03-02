@@ -33,5 +33,9 @@ import java.util.Collection;
 public interface BoardClient {
     Board get(String board_id, final Collection<EBoardFields> fields);
 
+    Board get(String board_id);
+
     Board get(Board board, final Collection<EBoardFields> fields);
+
+    Board get(Board board);
 }

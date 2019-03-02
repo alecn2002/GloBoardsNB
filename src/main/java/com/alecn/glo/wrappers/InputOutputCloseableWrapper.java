@@ -21,21 +21,37 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.alecn.glo.sojo;
+package com.alecn.glo.wrappers;
 
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
+import java.io.Closeable;
+import java.io.IOException;
+import org.netbeans.api.io.InputOutput;
+import org.netbeans.api.io.OutputWriter;
 
 /**
  *
- * @author AlecN <alecn2002@gmail.com>
+ * @author alecn
  */
-@Getter
-@Setter
-@EqualsAndHashCode(callSuper = true)
-@ToString
-public abstract class NamedEntity extends Entity {
-    protected String name;
+public class InputOutputCloseableWrapper implements Closeable {
+
+    private final InputOutput inputOutput;
+
+    public InputOutputCloseableWrapper(InputOutput inputOutput) {
+        this.inputOutput = inputOutput;
+    }
+
+    @Override
+    public void close() throws IOException {
+        inputOutput.getOut().close();
+        inputOutput.getErr().close();
+    }
+
+    public OutputWriter getOut() {
+        return inputOutput.getOut();
+    }
+
+    public OutputWriter getErr() {
+        return inputOutput.getErr();
+    }
+
 }

@@ -21,54 +21,34 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.alecn.glo.client.impl;
+package com.alecn.glo.service.impl;
 
 import com.alecn.glo.client.BoardClient;
-import com.alecn.glo.client.EBoardFields;
+import com.alecn.glo.client.BoardsClient;
+import com.alecn.glo.service.BoardService;
 import com.alecn.glo.sojo.Board;
-import java.util.Arrays;
-import java.util.Collection;
-import javax.ws.rs.client.WebTarget;
+import java.util.List;
+import org.openide.util.Lookup;
 import org.openide.util.lookup.ServiceProvider;
 
 /**
  *
  * @author AlecN <alecn2002@gmail.com>
  */
-@ServiceProvider(service = BoardClient.class)
-public class BoardClientImpl extends GenericClientImpl<Board> implements BoardClient {
+@ServiceProvider(service = BoardService.class)
+public class BoardServiceImpl implements BoardService {
 
-    public BoardClientImpl() {
-        super("boards/", Board.class);
+    private static final BoardClient boardClient = Lookup.getDefault().lookup(BoardClient.class);
+    private static final BoardsClient boardsClient = Lookup.getDefault().lookup(BoardsClient.class);
+
+    @Override
+    public List<Board> getBoardsList() {
+        return boardsClient.get();
     }
 
     @Override
-    public Board get(String board_id, Collection<EBoardFields> fields) {
-        return super.get((WebTarget t) -> {
-            t = t.path(board_id);
-            Collection<EBoardFields> myFields = fields == null
-                    ? BoardsClientImpl.DEFAULT_FIELDS
-                    : fields;
-            for (EBoardFields field : myFields) {
-                t = t.queryParam(BoardsClientImpl.EBoardsParams.FIELDS.getQuery_str(), field.getRest_name());
-            }
-            return t;
-        });
-    }
-
-    @Override
-    public Board get(Board board, Collection<EBoardFields> fields) {
-        return get(board.getId(), fields);
-    }
-
-    @Override
-    public Board get(String board_id) {
-        return get(board_id, Arrays.asList(EBoardFields.values()));
-    }
-
-    @Override
-    public Board get(Board board) {
-        return get(board, Arrays.asList(EBoardFields.values()));
+    public Board getBoard(String id) {
+        return boardClient.get(id);
     }
 
 }
