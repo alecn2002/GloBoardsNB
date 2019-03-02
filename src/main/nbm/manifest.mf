@@ -1,3 +1,4 @@
 Manifest-Version: 1.0
 OpenIDE-Module-Localizing-Bundle: com/alecn/glo/Bundle.properties
-
+OpenIDE-Module-Needs: org.netbeans.spi.io.InputOutputProvide
+OpenIDE-Module-Needs: org.netbeans.api.io.InputOutput

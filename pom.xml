@@ -8,6 +8,7 @@
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <jersey.version>2.28</jersey.version>
+        <netbeans.version>RELEASE82</netbeans.version>
     </properties>
     <build>
         <plugins>
@@ -24,6 +25,9 @@
                 <configuration>
                     <source>1.8</source>
                     <target>1.8</target>
+                    <excludes>
+                        <exclude>resources/swagger.json</exclude>
+                    </excludes>
                 </configuration>
             </plugin>
             <plugin>
@@ -50,7 +54,7 @@
         <dependency>
             <groupId>org.netbeans.api</groupId>
             <artifactId>org-netbeans-api-annotations-common</artifactId>
-            <version>RELEASE81</version>
+            <version>${netbeans.version}</version>
         </dependency>
         <!-- https://mvnrepository.com/artifact/org.projectlombok/lombok -->
         <dependency>
@@ -72,12 +76,23 @@
         <dependency>
             <groupId>org.netbeans.api</groupId>
             <artifactId>org-openide-util</artifactId>
-            <version>RELEASE81</version>
+            <version>${netbeans.version}</version>
         </dependency>
         <dependency>
             <groupId>org.netbeans.api</groupId>
             <artifactId>org-openide-awt</artifactId>
-            <version>RELEASE81</version>
+            <version>${netbeans.version}</version>
+        </dependency>
+        <!-- https://mvnrepository.com/artifact/org.netbeans.api/org-openide-io -->
+        <dependency>
+            <groupId>org.netbeans.api</groupId>
+            <artifactId>org-openide-io</artifactId>
+            <version>${netbeans.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.netbeans.api</groupId>
+            <artifactId>org-netbeans-api-io</artifactId>
+            <version>${netbeans.version}</version>
         </dependency>
     </dependencies>
 </project>

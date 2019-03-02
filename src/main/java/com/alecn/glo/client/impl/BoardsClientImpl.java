@@ -13,11 +13,13 @@ import java.util.Collection;
 import java.util.List;
 import javax.ws.rs.client.WebTarget;
 import lombok.Getter;
+import org.openide.util.lookup.ServiceProvider;
 
 /**
  *
  * @author anovitsk
  */
+@ServiceProvider(service = BoardsClient.class)
 public class BoardsClientImpl extends GenericClientImpl<Board> implements BoardsClient {
 
     @Getter

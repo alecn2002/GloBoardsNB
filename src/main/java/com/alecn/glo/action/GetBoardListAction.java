@@ -7,10 +7,12 @@ package com.alecn.glo.action;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import org.netbeans.api.io.IOProvider;
 import org.openide.awt.ActionID;
 import org.openide.awt.ActionReference;
 import org.openide.awt.ActionRegistration;
 import org.openide.util.NbBundle.Messages;
+import org.netbeans.api.io.InputOutput;
 
 @ActionID(
         category = "Team",
@@ -25,6 +27,10 @@ public final class GetBoardListAction implements ActionListener {
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        // TODO implement action body
+        InputOutput io = IOProvider.getDefault().getIO ("Hello", true);
+        io.getOut().println ("Hello from standard out");
+        io.getErr().println ("Hello from standard err");  //this text should appear in red
+        io.getOut().close();
+        io.getErr().close();
     }
 }

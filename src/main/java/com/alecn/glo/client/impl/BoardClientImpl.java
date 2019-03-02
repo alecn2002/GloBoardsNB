@@ -10,11 +10,13 @@ import com.alecn.glo.client.EBoardFields;
 import com.alecn.glo.sojo.Board;
 import java.util.Collection;
 import javax.ws.rs.client.WebTarget;
+import org.openide.util.lookup.ServiceProvider;
 
 /**
  *
  * @author anovitsk
  */
+@ServiceProvider(service = BoardClient.class)
 public class BoardClientImpl extends GenericClientImpl<Board> implements BoardClient {
 
     public BoardClientImpl() {
