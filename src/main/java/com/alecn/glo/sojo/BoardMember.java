@@ -41,8 +41,6 @@ import lombok.ToString;
 @NoArgsConstructor
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
-public class UserName extends NamedEntity {
-    private String email;
-    private String username;
+public class BoardMember extends User {
     private String role;
 }

@@ -44,8 +44,8 @@ import lombok.ToString;
 public class Board extends DatedNamedEntity {
     private List<Column> columns;
     private List<Column> archived_columns;
-    private List<UserName> invited_members;
-    private List<UserName> members;
+    private List<BoardMember> invited_members;
+    private List<BoardMember> members;
     private List<Label> labels;
-    private UserName created_by;
+    private PartialUser created_by;
 }

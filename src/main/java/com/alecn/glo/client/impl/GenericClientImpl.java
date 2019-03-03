@@ -24,12 +24,13 @@
 package com.alecn.glo.client.impl;
 
 import static com.alecn.glo.client.impl.GloConstants.GLO_URL;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.function.Function;
 import javax.ws.rs.client.ClientBuilder;
 import javax.ws.rs.client.Invocation;
 import javax.ws.rs.client.WebTarget;
-import javax.ws.rs.core.GenericType;
 import javax.ws.rs.core.MediaType;
 
 /**
@@ -40,12 +41,18 @@ public abstract class GenericClientImpl<T> extends GloConstants {
     private final WebTarget webTarget;
     private final String path;
     private final Class<T> klass;
+    private final Class<T[]> arrayKlass;
 
-    protected GenericClientImpl(String path, Class<T> klass) {
+    protected GenericClientImpl(String path, Class<T> klass, Class<T[]> arrayKlass) {
         webTarget = ClientBuilder.newClient()
                 .target(GLO_URL);
         this.path = path;
         this.klass = klass;
+        this.arrayKlass = arrayKlass;
+    }
+
+    protected GenericClientImpl(String path, Class<T> klass) {
+        this(path, klass, null);
     }
 
     private Invocation.Builder prepareInvocationBuilder(Function<WebTarget, WebTarget> fixer) {
@@ -63,6 +70,6 @@ public abstract class GenericClientImpl<T> extends GloConstants {
     }
 
     public List<T> getList(Function<WebTarget, WebTarget> fixer) {
-        return prepareInvocationBuilder(fixer).get(new GenericType<List<T>> () {});
+        return Arrays.asList(prepareInvocationBuilder(fixer).get(arrayKlass));
     }
 }

@@ -42,5 +42,5 @@ import lombok.Setter;
 public class Label extends NamedEntity {
     private Color color;
     private Date created_date;
-    private UserName created_by;
+    private BoardMember created_by;
 }

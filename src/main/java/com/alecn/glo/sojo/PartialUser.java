@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright 2019 alecn.
+ * Copyright 2019 AlecN.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -23,23 +23,19 @@
  */
 package com.alecn.glo.sojo;
 
-import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
-import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
+
 /**
  *
  * @author AlecN <alecn2002@gmail.com>
  */
-// {"created_date":"2018-05-08T07:54:55.532Z","name":"Glo Essentials","created_by":{"id":"66cb0405-0eb3-4103-ab3b-f80fb5bfaab8"},"id":"5af157cf4f33b71500146e6b"}
 @Getter
 @Setter
-@AllArgsConstructor
-@RequiredArgsConstructor
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
-public class Column extends DatedNamedEntity {
-    private BoardMember created_by;
+public class PartialUser extends Entity {
+
 }

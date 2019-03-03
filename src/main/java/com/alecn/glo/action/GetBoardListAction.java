@@ -66,11 +66,11 @@ public final class GetBoardListAction implements ActionListener {
                 if (boards == null || boards.isEmpty()) {
                     io.getErr().println ("getBoardList() returned null or empty list");
                 }else {
-                    boards.forEach((Object board) -> {
+                    boards.forEach((board) -> {
                         io.getOut().println (board.toString());
                     });
                     io.getOut().println ("\n\nBoard #0:");
-                    Object b = boardService.getBoard((String)((LinkedHashMap)(Object)boards.get(0)).get("id"));
+                    Board b = boardService.getBoard((String)(boards.get(0).getId()));
                     io.getOut().println (b.toString());
                 }
             }
