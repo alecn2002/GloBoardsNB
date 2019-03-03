@@ -29,8 +29,6 @@ import com.alecn.glo.wrappers.InputOutputCloseableWrapper;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
-import java.util.Collection;
-import java.util.LinkedHashMap;
 import java.util.List;
 import org.netbeans.api.io.IOProvider;
 import org.openide.awt.ActionID;
