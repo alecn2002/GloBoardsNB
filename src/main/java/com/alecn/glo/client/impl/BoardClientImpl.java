@@ -39,7 +39,7 @@ import org.openide.util.lookup.ServiceProvider;
 public class BoardClientImpl extends GenericClientImpl<Board> implements BoardClient {
 
     public BoardClientImpl() {
-        super("boards/", Board.class);
+        super(GLO_PATH_BOARDS, Board.class);
     }
 
     @Override

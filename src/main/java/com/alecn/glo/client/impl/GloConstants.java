@@ -29,5 +29,10 @@ package com.alecn.glo.client.impl;
  */
 abstract class GloConstants {
     protected static final String GLO_URL = "https://gloapi.gitkraken.com/v1/glo/";
-
+    protected static final String GLO_PATH_BOARDS = "boards";
+    protected static final String GLO_PATH_COLUMNS = "columns";
+    protected static final String GLO_PATH_CARDS = "cards";
+    protected static final String GLO_PATH_ATTACHMENTS = "attachments";
+    protected static final String GLO_PATH_COMMENTS = "comments";
+    protected static final String GLO_PATH_USER = "user";
 }

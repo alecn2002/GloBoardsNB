@@ -59,7 +59,7 @@ public class BoardsClientImpl extends GenericClientImpl<Board> implements Boards
     static final Collection<EBoardFields> DEFAULT_FIELDS = Arrays.asList(DEFAULT_FIELDS_LIST);
 
     public BoardsClientImpl() {
-        super("boards", Board.class, Board[].class);
+        super(GLO_PATH_BOARDS, Board.class, Board[].class);
     }
 
     @Override
