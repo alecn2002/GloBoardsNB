@@ -30,6 +30,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
 import java.util.Collection;
+import java.util.LinkedHashMap;
+import java.util.List;
 import org.netbeans.api.io.IOProvider;
 import org.openide.awt.ActionID;
 import org.openide.awt.ActionReference;
@@ -60,13 +62,16 @@ public final class GetBoardListAction implements ActionListener {
             if (boardService == null) {
                 io.getErr().println ("boardService not initialized");
             } else {
-                Collection<Board> boards = boardService.getBoardsList();
+                List<Board> boards = boardService.getBoardsList();
                 if (boards == null || boards.isEmpty()) {
                     io.getErr().println ("getBoardList() returned null or empty list");
                 }else {
                     boards.forEach((Object board) -> {
                         io.getOut().println (board.toString());
                     });
+                    io.getOut().println ("\n\nBoard #0:");
+                    Object b = boardService.getBoard((String)((LinkedHashMap)(Object)boards.get(0)).get("id"));
+                    io.getOut().println (b.toString());
                 }
             }
         } catch (IOException ex) {

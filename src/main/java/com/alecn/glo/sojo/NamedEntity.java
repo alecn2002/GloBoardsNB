@@ -35,7 +35,7 @@ import lombok.ToString;
 @Getter
 @Setter
 @EqualsAndHashCode(callSuper = true)
-@ToString
+@ToString(callSuper = true)
 public abstract class NamedEntity extends Entity {
     protected String name;
 }

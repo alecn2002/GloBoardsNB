@@ -36,8 +36,9 @@ import lombok.ToString;
 @Getter
 @Setter
 @EqualsAndHashCode(callSuper = true)
-@ToString
+@ToString(callSuper = true)
 public abstract class DatedNamedEntity extends NamedEntity {
-    Date archived_date;
     Date created_date;
+    Date updated_date;
+    Date archived_date;
 }

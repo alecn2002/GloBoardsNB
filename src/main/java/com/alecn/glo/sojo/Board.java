@@ -40,11 +40,12 @@ import lombok.ToString;
 @AllArgsConstructor
 @NoArgsConstructor
 @EqualsAndHashCode(callSuper = true)
-@ToString(exclude = {"columns", "archived_columns", "invited_members", "members"})
+@ToString(callSuper = true)
 public class Board extends DatedNamedEntity {
     private List<Column> columns;
     private List<Column> archived_columns;
     private List<UserName> invited_members;
     private List<UserName> members;
+    private List<Label> labels;
     private UserName created_by;
 }

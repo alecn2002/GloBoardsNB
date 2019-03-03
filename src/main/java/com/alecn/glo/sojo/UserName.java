@@ -28,17 +28,21 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.ToString;
 
 /**
  *
  * @author AlecN <alecn2002@gmail.com>
  */
+// "username":"alecn2002","name":null,"email":"alecn2002@gmail.com","id":"66cb0405-0eb3-4103-ab3b-f80fb5bfaab8","role":"owner"
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
 @EqualsAndHashCode(callSuper = true)
-public class UserName extends Entity {
-    private String role;
+@ToString(callSuper = true)
+public class UserName extends NamedEntity {
+    private String email;
     private String username;
+    private String role;
 }
