@@ -23,24 +23,15 @@
  */
 package com.alecn.glo.client;
 
-import com.alecn.glo.sojo.Board;
-import java.util.Collection;
-import java.util.List;
-
 /**
  *
- * @author AlecN <alecn2002@gmail.com>
+ * @author alecn
  */
-public interface BoardClient {
-    List<Board> list(final Collection<BoardFieldsEnum> fields, boolean archived, Integer page, Integer per_page, boolean sort_desc);
+public enum ColumnFieldsEnum implements FieldsEnumI {
+    NONE;
 
-    List<Board> list();
-
-    Board get(String board_id, final Collection<BoardFieldsEnum> fields);
-
-    Board get(String board_id);
-
-    Board get(Board board, final Collection<BoardFieldsEnum> fields);
-
-    Board get(Board board);
+    @Override
+    public String getRestName() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
 }

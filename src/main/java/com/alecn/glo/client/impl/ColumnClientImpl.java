@@ -24,6 +24,7 @@
 package com.alecn.glo.client.impl;
 
 import com.alecn.glo.client.ColumnClient;
+import com.alecn.glo.client.FieldsEnumI;
 import com.alecn.glo.sojo.Column;
 import com.alecn.glo.sojo.ColumnRequest;
 import javax.ws.rs.client.Entity;
@@ -32,14 +33,10 @@ import javax.ws.rs.core.Response;
 import org.openide.util.lookup.ServiceProvider;
 
 @ServiceProvider(service = ColumnClient.class)
-public class ColumnClientImpl extends GenericClientImpl<Column, ColumnRequest> implements ColumnClient {
+public class ColumnClientImpl extends GenericClientImpl<Column, ColumnRequest, FieldsEnumI> implements ColumnClient {
 
     public ColumnClientImpl() {
         super(GLO_PATH_COLUMNS, Column.class);
-    }
-
-    private WebTarget apply_board_id(WebTarget target, String board_id) {
-        return target.resolveTemplate(GLO_PATH_BOARD_ID, board_id);
     }
 
     @Override

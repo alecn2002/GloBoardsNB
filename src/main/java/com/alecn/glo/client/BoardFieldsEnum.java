@@ -30,7 +30,7 @@ import lombok.Getter;
  * @author AlecN <alecn2002@gmail.com>
  */
 @Getter
-public enum EBoardFields {
+public enum BoardFieldsEnum implements FieldsEnumI {
     ARCHIVED_COLUMNS("archived_columns"),
     ARCHIVED_DATE("archived_date"),
     COLUMNS("columns"),
@@ -41,9 +41,9 @@ public enum EBoardFields {
     MEMBERS("members"),
     NAME("name");
 
-    private final String rest_name;
+    private final String restName;
 
-    EBoardFields(String _name) {
-        this.rest_name = _name;
+    BoardFieldsEnum(String _name) {
+        this.restName = _name;
     }
 }
