@@ -31,7 +31,11 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
 import java.util.List;
+import java.util.function.Consumer;
+import java.util.function.Function;
+import javax.ws.rs.core.Response;
 import org.netbeans.api.io.IOProvider;
+import org.netbeans.api.io.OutputWriter;
 import org.openide.awt.ActionID;
 import org.openide.awt.ActionReference;
 import org.openide.awt.ActionRegistration;
@@ -55,46 +59,89 @@ public final class GetBoardListAction implements ActionListener {
 
     private final BoardService boardService = Lookup.getDefault().lookup(BoardService.class);
 
-    @Override
-    public void actionPerformed(ActionEvent e) {
-        try (InputOutputCloseableWrapper io = new InputOutputCloseableWrapper(IOProvider.getDefault().getIO ("Hello", true))) {
-            if (boardService == null) {
-                io.getErr().println ("boardService not initialized");
-                return;
-            }
-            io.getErr().println (">>>> Retrieving board list...");
-            List<Board> boards = boardService.getBoardsList();
-            if (boards == null || boards.isEmpty()) {
-                io.getErr().println ("getBoardList() returned null or empty list");
-                return;
-            }
-            boards.forEach((board) -> {
-                io.getOut().println (board.toString());
-            });
-            io.getErr().println (">>>> Retrieving details for Board #0...");
-            String board0Id = boards.get(0).getId();
-            Board b = boardService.getBoard(board0Id);
-            io.getOut().println (b.toString());
-            io.getOut().println ("Current columns list:");
-            for (Column column : b.getColumns()) {
-                io.getOut().println ("    - " + column.toString());
-            }
-
-            io.getErr().println (">>>> Creating new column Abcde...");
-            Column abcdeColumn = boardService.createColumn(board0Id, "Abcde");
-            io.getOut().println ("Created column:");
-            io.getOut().println (abcdeColumn.toString());
-
-            io.getErr().println (">>>> Retrieving details for Board #0...");
-            b = boardService.getBoard(board0Id);
-            io.getOut().println ("Current columns list:");
-            for (Column column : b.getColumns()) {
-                io.getOut().println ("    - " + column.toString());
-            }
-
-
+    private void oeWrite(Consumer<OutputWriter> writer, Function<InputOutputCloseableWrapper, OutputWriter> writerGetter, boolean newOut) {
+        try (InputOutputCloseableWrapper io = new InputOutputCloseableWrapper(IOProvider.getDefault().getIO ("Hello", newOut))) {
+            writer.accept(writerGetter.apply(io));
         } catch (IOException ex) {
 
         }
+    }
+
+    private void outWrite(Consumer<OutputWriter> writer, boolean newOut) {
+        oeWrite(writer, (io) -> { return io.getOut();}, newOut);
+    }
+
+    private void outWrite(Consumer<OutputWriter> writer) {
+        outWrite(writer, false);
+    }
+
+
+    private void errWrite(Consumer<OutputWriter> writer, boolean newOut) {
+        oeWrite(writer, (io) -> { return io.getErr();}, newOut);
+    }
+
+    private void errWrite(Consumer<OutputWriter> writer) {
+        errWrite(writer, false);
+    }
+
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        errWrite((err) -> {err.println (">>>> Retrieving board list...");}, true);
+        if (boardService == null) {
+            errWrite((err) -> {err.println ("boardService not initialized");});
+            return;
+        }
+        final List<Board> boards = boardService.getBoardsList();
+        if (boards == null || boards.isEmpty()) {
+            errWrite((err) -> {err.println ("getBoardList() returned null or empty list");});
+            return;
+        }
+        outWrite((out) -> {
+            boards.forEach((board) -> {
+                out.println (board.toString());
+            });
+        });
+
+        final String board0Id = boards.get(0).getId();
+
+        retrieveBoardNListColumns(board0Id, true);
+
+        errWrite((err) -> {err.println (">>>> Creating new column Abcde...");});
+        Column abcdeColumn = boardService.createColumn(board0Id, "Abcde");
+        outWrite((out) -> {
+            out.println ("Created column:");
+            out.println (abcdeColumn.toString());
+        });
+
+        retrieveBoardNListColumns(board0Id, false);
+
+        errWrite((err) -> {err.println (">>>> Editing column Abcde to Abcde0 and moving to 0 position...");});
+        boardService.editColumn(board0Id, abcdeColumn.getId(), "Abcde0", 0);
+
+        retrieveBoardNListColumns(board0Id, false);
+
+        errWrite((err) -> {err.println (">>>> Deleting column Abcde0...");});
+        Response response = boardService.deleteColumn(board0Id, abcdeColumn.getId());
+        outWrite((out) -> {
+            out.println ("Column delete result:");
+            out.println (response.toString());
+        });
+
+        retrieveBoardNListColumns(board0Id, false);
+    }
+
+    private Board retrieveBoardNListColumns(final String board0Id, boolean printBoard) {
+        errWrite((err) -> {err.println (">>>> Retrieving details for Board #0...");});
+        final Board b = boardService.getBoard(board0Id);
+        outWrite((out) -> {
+            if (printBoard) {
+                out.println (b.toString());
+            }
+            out.println ("Current columns list:");
+            b.getColumns().forEach((column) -> {
+                out.println ("    - " + column.toString());
+            });
+        });
+        return b;
     }
 }

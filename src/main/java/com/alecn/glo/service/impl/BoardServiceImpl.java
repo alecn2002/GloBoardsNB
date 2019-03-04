@@ -31,6 +31,7 @@ import com.alecn.glo.sojo.Board;
 import com.alecn.glo.sojo.Column;
 import com.alecn.glo.sojo.ColumnRequest;
 import java.util.List;
+import javax.ws.rs.core.Response;
 import org.openide.util.Lookup;
 import org.openide.util.lookup.ServiceProvider;
 
@@ -73,6 +74,11 @@ public class BoardServiceImpl implements BoardService {
     @Override
     public Column editColumn(String boardId, String columnId, String columnName, Integer position) {
         return columnClient.edit(boardId, columnId, new ColumnRequest(columnName, position));
+    }
+
+    @Override
+    public Response deleteColumn(String boardId, String columnId) {
+        return columnClient.delete(boardId, columnId);
     }
 
 }
