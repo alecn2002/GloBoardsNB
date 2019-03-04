@@ -24,7 +24,6 @@
 package com.alecn.glo.service.impl;
 
 import com.alecn.glo.client.BoardClient;
-import com.alecn.glo.client.BoardsClient;
 import com.alecn.glo.client.ColumnClient;
 import com.alecn.glo.service.BoardService;
 import com.alecn.glo.sojo.Board;
@@ -43,12 +42,11 @@ import org.openide.util.lookup.ServiceProvider;
 public class BoardServiceImpl implements BoardService {
 
     private static final BoardClient boardClient = Lookup.getDefault().lookup(BoardClient.class);
-    private static final BoardsClient boardsClient = Lookup.getDefault().lookup(BoardsClient.class);
     private static final ColumnClient columnClient = Lookup.getDefault().lookup(ColumnClient.class);
 
     @Override
     public List<Board> getBoardsList() {
-        return boardsClient.get();
+        return boardClient.list();
     }
 
     @Override

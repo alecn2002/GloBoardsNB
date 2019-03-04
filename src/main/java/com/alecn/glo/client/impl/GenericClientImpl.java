@@ -70,7 +70,7 @@ public abstract class GenericClientImpl<T, R> extends GloConstants {
         return prepareInvocationBuilder(fixer).get(klass);
     }
 
-    protected List<T> getList(Function<WebTarget, WebTarget> fixer) {
+    protected List<T> list(Function<WebTarget, WebTarget> fixer) {
         return Arrays.asList(prepareInvocationBuilder(fixer).get(arrayKlass));
     }
 
