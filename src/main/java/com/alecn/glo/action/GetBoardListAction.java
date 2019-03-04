@@ -25,6 +25,7 @@ package com.alecn.glo.action;
 
 import com.alecn.glo.service.BoardService;
 import com.alecn.glo.sojo.Board;
+import com.alecn.glo.sojo.Column;
 import com.alecn.glo.wrappers.InputOutputCloseableWrapper;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -59,19 +60,39 @@ public final class GetBoardListAction implements ActionListener {
         try (InputOutputCloseableWrapper io = new InputOutputCloseableWrapper(IOProvider.getDefault().getIO ("Hello", true))) {
             if (boardService == null) {
                 io.getErr().println ("boardService not initialized");
-            } else {
-                List<Board> boards = boardService.getBoardsList();
-                if (boards == null || boards.isEmpty()) {
-                    io.getErr().println ("getBoardList() returned null or empty list");
-                }else {
-                    boards.forEach((board) -> {
-                        io.getOut().println (board.toString());
-                    });
-                    io.getOut().println ("\n\nBoard #0:");
-                    Board b = boardService.getBoard((String)(boards.get(0).getId()));
-                    io.getOut().println (b.toString());
-                }
+                return;
             }
+            io.getErr().println (">>>> Retrieving board list...");
+            List<Board> boards = boardService.getBoardsList();
+            if (boards == null || boards.isEmpty()) {
+                io.getErr().println ("getBoardList() returned null or empty list");
+                return;
+            }
+            boards.forEach((board) -> {
+                io.getOut().println (board.toString());
+            });
+            io.getErr().println (">>>> Retrieving details for Board #0...");
+            String board0Id = boards.get(0).getId();
+            Board b = boardService.getBoard(board0Id);
+            io.getOut().println (b.toString());
+            io.getOut().println ("Current columns list:");
+            for (Column column : b.getColumns()) {
+                io.getOut().println ("    - " + column.toString());
+            }
+
+            io.getErr().println (">>>> Creating new column Abcde...");
+            Column abcdeColumn = boardService.createColumn(board0Id, "Abcde");
+            io.getOut().println ("Created column:");
+            io.getOut().println (abcdeColumn.toString());
+
+            io.getErr().println (">>>> Retrieving details for Board #0...");
+            b = boardService.getBoard(board0Id);
+            io.getOut().println ("Current columns list:");
+            for (Column column : b.getColumns()) {
+                io.getOut().println ("    - " + column.toString());
+            }
+
+
         } catch (IOException ex) {
 
         }

@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright 2019 alecn.
+ * Copyright 2019 anovitsk.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -21,26 +21,24 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.alecn.glo.service;
+package com.alecn.glo.sojo;
 
-import com.alecn.glo.sojo.Board;
-import com.alecn.glo.sojo.Column;
-import java.util.List;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
+import lombok.Setter;
 
 /**
  *
- * @author AlecN <alecn2002@gmail.com>
+ * @author anovitsk
  */
-public interface BoardService {
-    List<Board> getBoardsList();
-
-    Board getBoard(String id);
-
-    Column createColumn(String boardId, String columnName);
-
-    Column createColumn(String boardId, String columnName, Integer position);
-
-    Column editColumn(String boardId, String columnId, String columnName);
-
-    Column editColumn(String boardId, String columnId, String columnName, Integer position);
+@Getter
+@Setter
+@AllArgsConstructor
+@RequiredArgsConstructor
+public class ColumnRequest {
+    @NonNull
+    private String name;
+    private Integer position;
 }

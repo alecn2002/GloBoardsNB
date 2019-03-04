@@ -25,8 +25,11 @@ package com.alecn.glo.service.impl;
 
 import com.alecn.glo.client.BoardClient;
 import com.alecn.glo.client.BoardsClient;
+import com.alecn.glo.client.ColumnClient;
 import com.alecn.glo.service.BoardService;
 import com.alecn.glo.sojo.Board;
+import com.alecn.glo.sojo.Column;
+import com.alecn.glo.sojo.ColumnRequest;
 import java.util.List;
 import org.openide.util.Lookup;
 import org.openide.util.lookup.ServiceProvider;
@@ -40,6 +43,7 @@ public class BoardServiceImpl implements BoardService {
 
     private static final BoardClient boardClient = Lookup.getDefault().lookup(BoardClient.class);
     private static final BoardsClient boardsClient = Lookup.getDefault().lookup(BoardsClient.class);
+    private static final ColumnClient columnClient = Lookup.getDefault().lookup(ColumnClient.class);
 
     @Override
     public List<Board> getBoardsList() {
@@ -49,6 +53,26 @@ public class BoardServiceImpl implements BoardService {
     @Override
     public Board getBoard(String id) {
         return boardClient.get(id);
+    }
+
+    @Override
+    public Column createColumn(String boardId, String columnName) {
+        return columnClient.create(boardId, new ColumnRequest(columnName));
+    }
+
+    @Override
+    public Column createColumn(String boardId, String columnName, Integer position) {
+        return columnClient.create(boardId, new ColumnRequest(columnName, position));
+    }
+
+    @Override
+    public Column editColumn(String boardId, String columnId, String columnName) {
+        return columnClient.edit(boardId, columnId, new ColumnRequest(columnName));
+    }
+
+    @Override
+    public Column editColumn(String boardId, String columnId, String columnName, Integer position) {
+        return columnClient.edit(boardId, columnId, new ColumnRequest(columnName, position));
     }
 
 }

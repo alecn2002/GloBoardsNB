@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright 2019 alecn.
+ * Copyright 2019 anovitsk.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -23,52 +23,46 @@
  */
 package com.alecn.glo.client.impl;
 
-import com.alecn.glo.client.BoardClient;
-import com.alecn.glo.client.EBoardFields;
-import com.alecn.glo.sojo.Board;
-import java.util.Arrays;
-import java.util.Collection;
+import com.alecn.glo.client.ColumnClient;
+import com.alecn.glo.sojo.Column;
+import com.alecn.glo.sojo.ColumnRequest;
+import javax.ws.rs.client.Entity;
 import javax.ws.rs.client.WebTarget;
+import javax.ws.rs.core.Response;
 import org.openide.util.lookup.ServiceProvider;
 
-/**
- *
- * @author AlecN <alecn2002@gmail.com>
- */
-@ServiceProvider(service = BoardClient.class)
-public class BoardClientImpl extends GenericClientImpl<Board, Board> implements BoardClient {
+@ServiceProvider(service = ColumnClient.class)
+public class ColumnClientImpl extends GenericClientImpl<Column, ColumnRequest> implements ColumnClient {
 
-    public BoardClientImpl() {
-        super(GLO_PATH_BOARDS, Board.class);
+    public ColumnClientImpl() {
+        super(GLO_PATH_COLUMNS, Column.class);
+    }
+
+    private WebTarget apply_board_id(WebTarget target, String board_id) {
+        return target.resolveTemplate(GLO_PATH_BOARD_ID, board_id);
     }
 
     @Override
-    public Board get(String board_id, Collection<EBoardFields> fields) {
-        return super.get((WebTarget t) -> {
-            t = t.path(board_id);
-            Collection<EBoardFields> myFields = fields == null
-                    ? BoardsClientImpl.DEFAULT_FIELDS
-                    : fields;
-            for (EBoardFields field : myFields) {
-                t = t.queryParam(BoardsClientImpl.EBoardsParams.FIELDS.getQuery_str(), field.getRest_name());
-            }
-            return t;
+    public Column create(final String board_id, ColumnRequest column_request) {
+        return super.post(Entity.json(column_request), (WebTarget t) -> {
+            return apply_board_id(t, board_id);
         });
     }
 
     @Override
-    public Board get(Board board, Collection<EBoardFields> fields) {
-        return get(board.getId(), fields);
+    public Column edit(String board_id, String column_id, ColumnRequest column_request) {
+        return super.post(Entity.json(column_request), (WebTarget t) -> {
+            return apply_board_id(t, board_id)
+                    .path(column_id);
+        });
     }
 
     @Override
-    public Board get(String board_id) {
-        return get(board_id, Arrays.asList(EBoardFields.values()));
-    }
-
-    @Override
-    public Board get(Board board) {
-        return get(board, Arrays.asList(EBoardFields.values()));
+    public Response delete(String board_id, String column_id) {
+        return super.delete((WebTarget t) -> {
+            return apply_board_id(t, board_id)
+                    .path(column_id);
+        });
     }
 
 }

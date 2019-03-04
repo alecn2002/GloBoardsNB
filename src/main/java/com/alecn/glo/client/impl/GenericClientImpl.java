@@ -24,20 +24,21 @@
 package com.alecn.glo.client.impl;
 
 import static com.alecn.glo.client.impl.GloConstants.GLO_URL;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.function.Function;
 import javax.ws.rs.client.ClientBuilder;
+import javax.ws.rs.client.Entity;
 import javax.ws.rs.client.Invocation;
 import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 
 /**
  *
  * @author AlecN <alecn2002@gmail.com>
  */
-public abstract class GenericClientImpl<T> extends GloConstants {
+public abstract class GenericClientImpl<T, R> extends GloConstants {
     private final WebTarget webTarget;
     private final String path;
     private final Class<T> klass;
@@ -65,11 +66,19 @@ public abstract class GenericClientImpl<T> extends GloConstants {
         return myWebTarget.request(MediaType.APPLICATION_JSON);
     }
 
-    public T get(Function<WebTarget, WebTarget> fixer) {
+    protected T get(Function<WebTarget, WebTarget> fixer) {
         return prepareInvocationBuilder(fixer).get(klass);
     }
 
-    public List<T> getList(Function<WebTarget, WebTarget> fixer) {
+    protected List<T> getList(Function<WebTarget, WebTarget> fixer) {
         return Arrays.asList(prepareInvocationBuilder(fixer).get(arrayKlass));
+    }
+
+    protected T post(Entity<R> entity, Function<WebTarget, WebTarget> fixer) {
+        return prepareInvocationBuilder(fixer).post(entity, klass);
+    }
+
+    protected Response delete(Function<WebTarget, WebTarget> fixer) {
+        return prepareInvocationBuilder(fixer).delete(Response.class);
     }
 }

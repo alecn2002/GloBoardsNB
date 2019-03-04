@@ -38,7 +38,7 @@ import org.openide.util.lookup.ServiceProvider;
  * @author AlecN <alecn2002@gmail.com>
  */
 @ServiceProvider(service = BoardsClient.class)
-public class BoardsClientImpl extends GenericClientImpl<Board> implements BoardsClient {
+public class BoardsClientImpl extends GenericClientImpl<Board, Board> implements BoardsClient {
 
     @Getter
     enum EBoardsParams {
