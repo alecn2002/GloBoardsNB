@@ -36,8 +36,9 @@ import javax.ws.rs.client.Entity;
 import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.Response;
 import lombok.AllArgsConstructor;
+import org.openide.util.lookup.ServiceProvider;
 
-
+@ServiceProvider(service = CommentClient.class)
 public class CommentClientImpl extends GenericClientImpl<Comment, CommentRequest, CommentFieldsEnum> implements CommentClient {
 
     private static final CommentFieldsEnum[] DEFAULT_FIELDS_LIST = {CommentFieldsEnum.TEXT};
@@ -90,7 +91,7 @@ public class CommentClientImpl extends GenericClientImpl<Comment, CommentRequest
 
     @Override
     public List<Comment> list(String board_id, String card_id, Collection<CommentFieldsEnum> fields, Integer page, Integer per_page, boolean sort_desc) {
-        return super.list(fields, false, page, per_page, sort_desc, new BoardCardIdResolver(board_id, card_id));
+        return super.list(fieldsOrDefaults(fields), false, page, per_page, sort_desc, new BoardCardIdResolver(board_id, card_id));
     }
 
     @Override

@@ -24,9 +24,11 @@
 package com.alecn.glo.action;
 
 import com.alecn.glo.service.BoardService;
+import com.alecn.glo.service.CommentService;
 import com.alecn.glo.sojo.Board;
 import com.alecn.glo.sojo.Card;
 import com.alecn.glo.sojo.Column;
+import com.alecn.glo.sojo.Comment;
 import com.alecn.glo.wrappers.InputOutputCloseableWrapper;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -59,6 +61,7 @@ import org.openide.util.NbBundle.Messages;
 public final class GetBoardListAction implements ActionListener {
 
     private final BoardService boardService = Lookup.getDefault().lookup(BoardService.class);
+    private final CommentService commentService = Lookup.getDefault().lookup(CommentService.class);
 
     private void oeWrite(Consumer<OutputWriter> writer, Function<InputOutputCloseableWrapper, OutputWriter> writerGetter, boolean newOut) {
         try (InputOutputCloseableWrapper io = new InputOutputCloseableWrapper(IOProvider.getDefault().getIO ("Hello", newOut))) {
@@ -133,9 +136,17 @@ public final class GetBoardListAction implements ActionListener {
         errWrite((err) -> {err.println (">>>> Retrieving all cards...");});
         List<Card> cards = boardService.listCards(board0Id);
         outWrite((out) -> {
-            for (Card card : cards) {
+            cards.forEach((card) -> {
                 out.println (card.toString());
-            }
+            });
+        });
+
+        errWrite((err) -> {err.println (">>>> Retrieving comments for the first card...");});
+        List<Comment> comments = commentService.list(board0Id, cards.get(0).getId());
+        outWrite((out) -> {
+            comments.forEach((comment) -> {
+                out.println (comment.toString());
+            });
         });
 
     }

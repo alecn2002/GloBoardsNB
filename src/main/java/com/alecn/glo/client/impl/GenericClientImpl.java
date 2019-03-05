@@ -84,13 +84,12 @@ public abstract class GenericClientImpl<T, R, F extends FieldsEnumI> extends Glo
     }
 
     private WebTarget prepareWebTarget(Function<WebTarget, WebTarget> fixer) {
-        WebTarget myWebTarget = webTarget.path(path);
         // TODO replace with real authorizetion!
-        myWebTarget = myWebTarget.queryParam("access_token", "pcad84c0e279a1a233e1eb31a7a4b20b4ad3ea947");
-        if (fixer != null) {
-            myWebTarget = fixer.apply(myWebTarget);
-        }
-        return myWebTarget;
+        WebTarget myWebTarget = webTarget.path(path)
+                .queryParam("access_token", "pcad84c0e279a1a233e1eb31a7a4b20b4ad3ea947");
+        return fixer == null
+                ? myWebTarget
+                : fixer.apply(myWebTarget);
     }
 
     private WebTarget prepareWebTarget(String id, Collection<F> fields, Function<WebTarget, WebTarget> fixer) {

@@ -21,32 +21,30 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.alecn.glo.sojo;
+package com.alecn.glo.service;
 
-import java.util.Date;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-import lombok.ToString;
-import lombok.experimental.SuperBuilder;
+import com.alecn.glo.client.CommentFieldsEnum;
+import com.alecn.glo.sojo.Comment;
+import java.util.Collection;
+import java.util.List;
+import javax.ws.rs.core.Response;
 
 /**
  *
  * @author alecn
  */
-@Getter
-@Setter
-@NoArgsConstructor
-@SuperBuilder
-@EqualsAndHashCode(callSuper = true)
-@ToString(callSuper = true)
-public class Comment extends Entity {
-    private String boardId;
-    private String cardId;
-    private String text;
-    private Date createdDate;
-    private Date updatedDate;
-    private PartialUser createdBy;
-    private PartialUser updatedBy;
+public interface CommentService {
+    List<Comment> list(String board_id, String card_id, Collection<CommentFieldsEnum> fields, Integer page, Integer per_page, boolean sort_desc);
+
+    List<Comment> list(String board_id, String card_id);
+
+    Comment create(String board_id, String card_id, String text);
+
+    Comment edit(Comment comment);
+
+    Comment edit(String board_id, String card_id, String id, String text);
+
+    Response delete(Comment comment);
+
+    Response delete(String board_id, String card_id, String id);
 }
