@@ -25,8 +25,10 @@ package com.alecn.glo.sojo;
 
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
+import lombok.experimental.SuperBuilder;
 
 /**
  *
@@ -34,6 +36,8 @@ import lombok.ToString;
  */
 @Getter
 @Setter
+@NoArgsConstructor
+@SuperBuilder
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
 public class PartialUser extends Entity {

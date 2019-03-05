@@ -23,9 +23,10 @@
  */
 package com.alecn.glo.client.impl;
 
-import com.alecn.glo.client.BoardFieldsEnum;
 import com.alecn.glo.client.FieldsEnumI;
 import static com.alecn.glo.client.impl.GloConstants.GLO_URL;
+import com.alecn.glo.wrappers.InputOutputCloseableWrapper;
+import java.io.IOException;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
@@ -37,6 +38,7 @@ import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import lombok.Getter;
+import org.netbeans.api.io.IOProvider;
 
 /**
  *
@@ -139,8 +141,15 @@ public abstract class GenericClientImpl<T, R, F extends FieldsEnumI> extends Glo
         if (sort_desc) {
             myWebTarget = myWebTarget.queryParam(EBoardsParams.SORT.getQueryStr(), "desc");
         }
-        return Arrays.asList(myWebTarget.request(MediaType.APPLICATION_JSON)
-                .get(arrayKlass));
+        Invocation.Builder invocationBuilder = myWebTarget.request(MediaType.APPLICATION_JSON);
+        try (InputOutputCloseableWrapper io = new InputOutputCloseableWrapper(IOProvider.getDefault().getIO ("Hello", false))) {
+            io.getOut().print("Going to issue request: '");
+            io.getOut().print(invocationBuilder.toString());
+            io.getOut().println("'");
+        } catch (IOException ex) {
+
+        }
+        return Arrays.asList(invocationBuilder.get(arrayKlass));
     }
 
     protected List<T> list(Collection<F> fields, boolean archived, Integer page, Integer per_page, boolean sort_desc) {

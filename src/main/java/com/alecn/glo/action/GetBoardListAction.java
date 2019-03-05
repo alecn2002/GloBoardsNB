@@ -25,6 +25,7 @@ package com.alecn.glo.action;
 
 import com.alecn.glo.service.BoardService;
 import com.alecn.glo.sojo.Board;
+import com.alecn.glo.sojo.Card;
 import com.alecn.glo.sojo.Column;
 import com.alecn.glo.wrappers.InputOutputCloseableWrapper;
 import java.awt.event.ActionEvent;
@@ -128,6 +129,15 @@ public final class GetBoardListAction implements ActionListener {
         });
 
         retrieveBoardNListColumns(board0Id, false);
+
+        errWrite((err) -> {err.println (">>>> Retrieving all cards...");});
+        List<Card> cards = boardService.listCards(board0Id);
+        outWrite((out) -> {
+            for (Card card : cards) {
+                out.println (card.toString());
+            }
+        });
+
     }
 
     private Board retrieveBoardNListColumns(final String board0Id, boolean printBoard) {

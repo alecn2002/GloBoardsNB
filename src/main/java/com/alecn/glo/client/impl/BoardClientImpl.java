@@ -30,7 +30,6 @@ import com.alecn.glo.sojo.Board;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
-import javax.ws.rs.client.WebTarget;
 import org.openide.util.lookup.ServiceProvider;
 
 /**
@@ -49,16 +48,9 @@ public class BoardClientImpl extends GenericClientImpl<Board, Board, BoardFields
 
     @Override
     public Board get(String board_id, Collection<BoardFieldsEnum> fields) {
-//        return super.get((WebTarget t) -> {
-//            t = t.path(board_id);
             Collection<BoardFieldsEnum> myFields = fields == null
                     ? DEFAULT_FIELDS
                     : fields;
-//            for (BoardFieldsEnum field : myFields) {
-//                t = t.queryParam(EBoardsParams.FIELDS.getQueryStr(), field.getRestName());
-//            }
-//            return t;
-//        });
         return super.get(board_id, myFields);
     }
 
@@ -79,25 +71,9 @@ public class BoardClientImpl extends GenericClientImpl<Board, Board, BoardFields
 
     @Override
     public List<Board> list(final Collection<BoardFieldsEnum> fields, boolean archived, Integer page, Integer per_page, boolean sort_desc) {
-//        return super.list((WebTarget t) -> {
             Collection<BoardFieldsEnum> myFields = fields == null
                     ? DEFAULT_FIELDS
                     : fields;
-//            for (BoardFieldsEnum field : myFields) {
-//                t = t.queryParam(EBoardsParams.FIELDS.getQueryStr(), field.getRestName());
-//            }
-//            if (archived) {
-//                t = t.queryParam(EBoardsParams.ARCHIVED.getQueryStr(), "true");
-//            }
-//            if (page != null && per_page != null) {
-//                t = t.queryParam(EBoardsParams.PAGE.getQueryStr(), page)
-//                        .queryParam(EBoardsParams.PER_PAGE.getQueryStr(), per_page);
-//            }
-//            if (sort_desc) {
-//                t = t.queryParam(EBoardsParams.SORT.getQueryStr(), "desc");
-//            }
-//            return t;
-//        });
         return super.list(myFields, archived, page, per_page, sort_desc);
     }
 

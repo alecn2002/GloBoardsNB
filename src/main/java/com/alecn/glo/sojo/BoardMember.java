@@ -23,12 +23,12 @@
  */
 package com.alecn.glo.sojo;
 
-import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
+import lombok.experimental.SuperBuilder;
 
 /**
  *
@@ -37,8 +37,8 @@ import lombok.ToString;
 // "username":"alecn2002","name":null,"email":"alecn2002@gmail.com","id":"66cb0405-0eb3-4103-ab3b-f80fb5bfaab8","role":"owner"
 @Getter
 @Setter
-@AllArgsConstructor
 @NoArgsConstructor
+@SuperBuilder
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
 public class BoardMember extends User {

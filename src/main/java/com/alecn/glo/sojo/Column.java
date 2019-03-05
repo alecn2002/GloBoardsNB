@@ -23,12 +23,12 @@
  */
 package com.alecn.glo.sojo;
 
-import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
-import lombok.RequiredArgsConstructor;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
+import lombok.experimental.SuperBuilder;
 /**
  *
  * @author AlecN <alecn2002@gmail.com>
@@ -36,8 +36,8 @@ import lombok.ToString;
 // {"created_date":"2018-05-08T07:54:55.532Z","name":"Glo Essentials","created_by":{"id":"66cb0405-0eb3-4103-ab3b-f80fb5bfaab8"},"id":"5af157cf4f33b71500146e6b"}
 @Getter
 @Setter
-@AllArgsConstructor
-@RequiredArgsConstructor
+@NoArgsConstructor
+@SuperBuilder
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
 public class Column extends DatedNamedEntity {

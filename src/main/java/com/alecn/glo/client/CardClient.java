@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright 2019 alecn.
+ * Copyright 2019 anovitsk.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -21,26 +21,28 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.alecn.glo.sojo;
+package com.alecn.glo.client;
 
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-import lombok.ToString;
-import lombok.experimental.SuperBuilder;
+import com.alecn.glo.sojo.Card;
+import com.alecn.glo.sojo.PartialLabel;
+import com.alecn.glo.sojo.PartialUser;
+import java.util.Collection;
+import java.util.Date;
+import java.util.List;
+import javax.ws.rs.core.Response;
 
 /**
  *
- * @author AlecN <alecn2002@gmail.com>
+ * @author anovitsk
  */
-@Getter
-@Setter
-@NoArgsConstructor
-@SuperBuilder
-@EqualsAndHashCode
-@ToString
-public abstract class Entity {
+public interface CardClient {
+    List<Card> list(String board_id, Collection<CardFieldsEnum> fields, boolean archived, Integer page, Integer per_page, boolean sort_desc);
 
-    protected String id;
+    Card create(String board_id, String column_id, String name, Integer position, String description, List<PartialUser> assignees, List<PartialLabel> labels, Date due_date);
+
+    Card get(String board_id, String id, Collection<CardFieldsEnum> fields);
+
+    Card edit(String board_id, String column_id, String id, String name, Integer position, String description, List<PartialUser> assignees, List<PartialLabel> labels, Date due_date);
+
+    Response delete(String board_id, String id);
 }

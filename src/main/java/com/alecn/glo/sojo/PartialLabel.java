@@ -23,11 +23,12 @@
  */
 package com.alecn.glo.sojo;
 
-import lombok.AllArgsConstructor;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
-import lombok.NonNull;
-import lombok.RequiredArgsConstructor;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.ToString;
+import lombok.experimental.SuperBuilder;
 
 /**
  *
@@ -35,10 +36,10 @@ import lombok.Setter;
  */
 @Getter
 @Setter
-@AllArgsConstructor
-@RequiredArgsConstructor
-public class ColumnRequest {
-    @NonNull
-    private String name;
-    private Integer position;
+@NoArgsConstructor
+@SuperBuilder
+@EqualsAndHashCode(callSuper = true)
+@ToString(callSuper = true)
+public class PartialLabel extends NamedEntity {
+
 }

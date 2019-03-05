@@ -24,6 +24,7 @@
 package com.alecn.glo.service;
 
 import com.alecn.glo.sojo.Board;
+import com.alecn.glo.sojo.Card;
 import com.alecn.glo.sojo.Column;
 import java.util.List;
 import javax.ws.rs.core.Response;
@@ -46,4 +47,6 @@ public interface BoardService {
     Column editColumn(String boardId, String columnId, String columnName, Integer position);
 
     Response deleteColumn(String boardId, String columnId);
+
+    List<Card> listCards(String boardId);
 }

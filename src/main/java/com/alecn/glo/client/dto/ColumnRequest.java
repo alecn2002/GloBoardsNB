@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright 2019 alecn.
+ * Copyright 2019 anovitsk.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -21,26 +21,26 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.alecn.glo.sojo;
+package com.alecn.glo.client.dto;
 
-import lombok.EqualsAndHashCode;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
 import lombok.Setter;
-import lombok.ToString;
-import lombok.experimental.SuperBuilder;
 
 /**
  *
- * @author AlecN <alecn2002@gmail.com>
+ * @author anovitsk
  */
 @Getter
 @Setter
 @NoArgsConstructor
-@SuperBuilder
-@EqualsAndHashCode
-@ToString
-public abstract class Entity {
-
-    protected String id;
+@AllArgsConstructor
+@RequiredArgsConstructor
+public class ColumnRequest {
+    @NonNull
+    private String name;
+    private Integer position;
 }

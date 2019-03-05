@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright 2019 alecn.
+ * Copyright 2019 anovitsk.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -21,26 +21,36 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.alecn.glo.sojo;
+package com.alecn.glo.client;
 
-import lombok.EqualsAndHashCode;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-import lombok.ToString;
-import lombok.experimental.SuperBuilder;
 
 /**
  *
- * @author AlecN <alecn2002@gmail.com>
+ * @author anovitsk
  */
 @Getter
-@Setter
-@NoArgsConstructor
-@SuperBuilder
-@EqualsAndHashCode
-@ToString
-public abstract class Entity {
+public enum CardFieldsEnum implements FieldsEnumI {
 
-    protected String id;
+    ARCHIVED_DATE("archived_date"),
+    ASSIGNEES("assignees"),
+    ATTACHMENT_COUNT("attachment_count"),
+    BOARD_ID("board_id"),
+    COLUMN_ID("column_id"),
+    COMMENT_COUNT("comment_count"),
+    COMPLETED_TASK_COUNT("completed_task_count"),
+    CREATED_BY("created_by"),
+    CREATED_DATE("created_date"),
+    DUE_DATE("due_date"),
+    DESCRIPTION("description"),
+    LABELS("labels"),
+    NAME("name"),
+    TOTAL_TASK_COUNT("total_task_count"),
+    UPDATED_DATE("updated_date");
+
+    private final String restName;
+
+    private CardFieldsEnum(String restName) {
+        this.restName = restName;
+    }
 }

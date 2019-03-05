@@ -26,6 +26,9 @@ package com.alecn.glo.sojo;
 import java.util.Date;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
@@ -35,9 +38,12 @@ import lombok.ToString;
  */
 @Getter
 @Setter
+@NoArgsConstructor
+@RequiredArgsConstructor
 @EqualsAndHashCode
 @ToString
 public class Description {
+    @NonNull
     private String text;
     private Date created_date;
     private Date updated_date;

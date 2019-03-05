@@ -24,11 +24,13 @@
 package com.alecn.glo.service.impl;
 
 import com.alecn.glo.client.BoardClient;
+import com.alecn.glo.client.CardClient;
 import com.alecn.glo.client.ColumnClient;
 import com.alecn.glo.service.BoardService;
 import com.alecn.glo.sojo.Board;
 import com.alecn.glo.sojo.Column;
-import com.alecn.glo.sojo.ColumnRequest;
+import com.alecn.glo.client.dto.ColumnRequest;
+import com.alecn.glo.sojo.Card;
 import java.util.List;
 import javax.ws.rs.core.Response;
 import org.openide.util.Lookup;
@@ -43,6 +45,7 @@ public class BoardServiceImpl implements BoardService {
 
     private static final BoardClient boardClient = Lookup.getDefault().lookup(BoardClient.class);
     private static final ColumnClient columnClient = Lookup.getDefault().lookup(ColumnClient.class);
+    private static final CardClient cardClient = Lookup.getDefault().lookup(CardClient.class);
 
     @Override
     public List<Board> getBoardsList() {
@@ -77,6 +80,11 @@ public class BoardServiceImpl implements BoardService {
     @Override
     public Response deleteColumn(String boardId, String columnId) {
         return columnClient.delete(boardId, columnId);
+    }
+
+    @Override
+    public List<Card> listCards(String boardId) {
+        return cardClient.list(boardId, null, false, null, null, false);
     }
 
 }

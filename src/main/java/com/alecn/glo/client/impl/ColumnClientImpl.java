@@ -26,7 +26,7 @@ package com.alecn.glo.client.impl;
 import com.alecn.glo.client.ColumnClient;
 import com.alecn.glo.client.FieldsEnumI;
 import com.alecn.glo.sojo.Column;
-import com.alecn.glo.sojo.ColumnRequest;
+import com.alecn.glo.client.dto.ColumnRequest;
 import javax.ws.rs.client.Entity;
 import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.Response;

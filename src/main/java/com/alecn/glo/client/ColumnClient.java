@@ -24,7 +24,7 @@
 package com.alecn.glo.client;
 
 import com.alecn.glo.sojo.Column;
-import com.alecn.glo.sojo.ColumnRequest;
+import com.alecn.glo.client.dto.ColumnRequest;
 import javax.ws.rs.core.Response;
 
 /**
