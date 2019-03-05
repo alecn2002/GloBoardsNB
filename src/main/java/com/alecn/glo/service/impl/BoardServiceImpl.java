@@ -24,6 +24,7 @@
 package com.alecn.glo.service.impl;
 
 import com.alecn.glo.client.BoardClient;
+import com.alecn.glo.client.BoardFieldsEnum;
 import com.alecn.glo.client.CardClient;
 import com.alecn.glo.client.ColumnClient;
 import com.alecn.glo.service.BoardService;
@@ -31,6 +32,7 @@ import com.alecn.glo.sojo.Board;
 import com.alecn.glo.sojo.Column;
 import com.alecn.glo.client.dto.ColumnRequest;
 import com.alecn.glo.sojo.Card;
+import java.util.Arrays;
 import java.util.List;
 import javax.ws.rs.core.Response;
 import org.openide.util.Lookup;
@@ -43,18 +45,26 @@ import org.openide.util.lookup.ServiceProvider;
 @ServiceProvider(service = BoardService.class)
 public class BoardServiceImpl implements BoardService {
 
+    private static final BoardFieldsEnum[] FIELDS_FOR_BOARD_COLUMNS_LIST = {BoardFieldsEnum.COLUMNS};
+    private static final List<BoardFieldsEnum> FIELDS_FOR_BOARD_COLUMNS = Arrays.asList(FIELDS_FOR_BOARD_COLUMNS_LIST);
+
     private static final BoardClient boardClient = Lookup.getDefault().lookup(BoardClient.class);
     private static final ColumnClient columnClient = Lookup.getDefault().lookup(ColumnClient.class);
     private static final CardClient cardClient = Lookup.getDefault().lookup(CardClient.class);
 
     @Override
-    public List<Board> getBoardsList() {
+    public List<Board> listBoards() {
         return boardClient.list();
     }
 
     @Override
     public Board getBoard(String id) {
         return boardClient.get(id);
+    }
+
+    @Override
+    public List<Column> listBoardColumns(String board_id) {
+        return boardClient.get(board_id, FIELDS_FOR_BOARD_COLUMNS).getColumns();
     }
 
     @Override

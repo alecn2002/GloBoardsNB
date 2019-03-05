@@ -92,7 +92,7 @@ public final class GetBoardListAction implements ActionListener {
             errWrite((err) -> {err.println ("boardService not initialized");});
             return;
         }
-        final List<Board> boards = boardService.getBoardsList();
+        final List<Board> boards = boardService.listBoards();
         if (boards == null || boards.isEmpty()) {
             errWrite((err) -> {err.println ("getBoardList() returned null or empty list");});
             return;

@@ -34,9 +34,11 @@ import javax.ws.rs.core.Response;
  * @author AlecN <alecn2002@gmail.com>
  */
 public interface BoardService {
-    List<Board> getBoardsList();
+    List<Board> listBoards();
 
     Board getBoard(String id);
+
+    List<Column> listBoardColumns(String board_id);
 
     Column createColumn(String boardId, String columnName);
 
