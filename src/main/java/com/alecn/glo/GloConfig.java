@@ -21,37 +21,12 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.alecn.glo.action;
-
-import org.netbeans.modules.bugtracking.api.Repository;
-import org.netbeans.modules.bugtracking.spi.BugtrackingConnector;
-import org.netbeans.modules.bugtracking.spi.RepositoryInfo;
-import org.openide.util.NbBundle;
+package com.alecn.glo;
 
 /**
  *
  * @author anovitsk
  */
-@NbBundle.Messages({
-    "LBL_ConnectorTooltip=NetBeans plugin for integration with GLO Boards"
-})
-@BugtrackingConnector.Registration(id = GloConnector.ID,
-        displayName = GloConnector.NAME,
-        tooltip = "#LBL_ConnectorTooltip",
-        iconPath = "com/alecn/glo/icons/globoard16x16.png")
-public class GloConnector implements BugtrackingConnector {
-
-    public static final String ID = "com.alecn.glo";
-    public static final String NAME = "GLO Boards";
-
-    @Override
-    public Repository createRepository() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public Repository createRepository(RepositoryInfo ri) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
+public class GloConfig {
 
 }
