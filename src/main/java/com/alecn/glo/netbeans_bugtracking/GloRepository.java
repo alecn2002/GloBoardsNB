@@ -27,6 +27,8 @@ import com.alecn.glo.service.BoardService;
 import com.alecn.glo.service.CommentService;
 import com.alecn.glo.service.impl.BoardServiceImpl;
 import com.alecn.glo.service.impl.CommentServiceImpl;
+import java.beans.PropertyChangeListener;
+import java.beans.PropertyChangeSupport;
 import java.lang.ref.WeakReference;
 import java.util.Collections;
 import java.util.Iterator;
@@ -119,5 +121,17 @@ public class GloRepository {
 
     public String getAccessKey() {
         return getNonNull((ri) -> ri.getValue(PROPERTY_ACCESS_KEY));
+    }
+    //
+    // Change Support
+    //
+    private transient final PropertyChangeSupport propertyChangeSupport = new PropertyChangeSupport(this);
+
+    public void addPropertyChangeListener(PropertyChangeListener listener) {
+        propertyChangeSupport.addPropertyChangeListener(listener);
+    }
+
+    public void removePropertyChangeListener(PropertyChangeListener listener) {
+        propertyChangeSupport.removePropertyChangeListener(listener);
     }
 }

@@ -94,12 +94,12 @@ public class GloRepositoryProviderImpl implements GloRepositoryProvider {
 
     @Override
     public void removePropertyChangeListener(GloRepository r, PropertyChangeListener listener) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        r.removePropertyChangeListener(listener);
     }
 
     @Override
     public void addPropertyChangeListener(GloRepository r, PropertyChangeListener listener) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        r.addPropertyChangeListener(listener);
     }
 
 }
