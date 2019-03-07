@@ -41,9 +41,14 @@ public class BoardClientImpl extends GenericClientImpl<Board, Board, BoardFields
 
     private static final BoardFieldsEnum[] DEFAULT_FIELDS_LIST = {BoardFieldsEnum.NAME};
     static final Collection<BoardFieldsEnum> DEFAULT_FIELDS = Arrays.asList(DEFAULT_FIELDS_LIST);
+    static final Collection<BoardFieldsEnum> ALL_FIELDS = Arrays.asList(BoardFieldsEnum.values());
 
     public BoardClientImpl() {
         super(GLO_PATH_BOARDS, Board.class, Board[].class);
+    }
+
+    public BoardClientImpl(String glo_api_url) {
+        super(glo_api_url, GLO_PATH_BOARDS, Board.class, Board[].class);
     }
 
     @Override
@@ -61,12 +66,12 @@ public class BoardClientImpl extends GenericClientImpl<Board, Board, BoardFields
 
     @Override
     public Board get(String board_id) {
-        return get(board_id, Arrays.asList(BoardFieldsEnum.values()));
+        return get(board_id, ALL_FIELDS);
     }
 
     @Override
     public Board get(Board board) {
-        return get(board, Arrays.asList(BoardFieldsEnum.values()));
+        return get(board, ALL_FIELDS);
     }
 
     @Override

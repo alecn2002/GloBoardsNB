@@ -110,11 +110,5 @@
             <artifactId>org-netbeans-modules-bugtracking</artifactId>
             <version>${netbeans.version}</version>
         </dependency>
-
-        <dependency>
-            <groupId>org.zeromq</groupId>
-            <artifactId>jeromq</artifactId>
-            <version>${zeromq.version}</version>
-          </dependency>
     </dependencies>
 </project>

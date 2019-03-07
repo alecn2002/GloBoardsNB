@@ -89,6 +89,10 @@ public class CommentClientImpl extends GenericClientImpl<Comment, CommentRequest
         super(GLO_PATH_COMMENTS, Comment.class, Comment[].class);
     }
 
+    public CommentClientImpl(String glo_api_url) {
+        super(glo_api_url, GLO_PATH_COMMENTS, Comment.class, Comment[].class);
+    }
+
     @Override
     public List<Comment> list(String board_id, String card_id, Collection<CommentFieldsEnum> fields, Integer page, Integer per_page, boolean sort_desc) {
         return super.list(fieldsOrDefaults(fields), false, page, per_page, sort_desc, new BoardCardIdResolver(board_id, card_id));

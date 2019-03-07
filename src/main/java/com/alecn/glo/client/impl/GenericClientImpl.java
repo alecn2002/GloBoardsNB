@@ -25,8 +25,6 @@ package com.alecn.glo.client.impl;
 
 import com.alecn.glo.client.FieldsEnumI;
 import static com.alecn.glo.client.impl.GloConstants.GLO_URL;
-import com.alecn.glo.wrappers.InputOutputCloseableWrapper;
-import java.io.IOException;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
@@ -38,7 +36,6 @@ import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import lombok.Getter;
-import org.netbeans.api.io.IOProvider;
 
 /**
  *
@@ -52,7 +49,8 @@ public abstract class GenericClientImpl<T, R, F extends FieldsEnumI> extends Glo
         ARCHIVED("archived"),
         PAGE("page"),
         PER_PAGE("per_page"),
-        SORT("sort");
+        SORT("sort"),
+        ACCESS_TOKEN("access_token");
 
         private final String queryStr;
 
@@ -71,12 +69,16 @@ public abstract class GenericClientImpl<T, R, F extends FieldsEnumI> extends Glo
     private final Class<T> klass;
     private final Class<T[]> arrayKlass;
 
-    protected GenericClientImpl(String path, Class<T> klass, Class<T[]> arrayKlass) {
+    protected GenericClientImpl(String url, String path, Class<T> klass, Class<T[]> arrayKlass) {
         webTarget = ClientBuilder.newClient()
-                .target(GLO_URL);
+                .target(url);
         this.path = path;
         this.klass = klass;
         this.arrayKlass = arrayKlass;
+    }
+
+    protected GenericClientImpl(String path, Class<T> klass, Class<T[]> arrayKlass) {
+        this(GLO_URL, path, klass, arrayKlass);
     }
 
     protected GenericClientImpl(String path, Class<T> klass) {
@@ -86,7 +88,7 @@ public abstract class GenericClientImpl<T, R, F extends FieldsEnumI> extends Glo
     private WebTarget prepareWebTarget(Function<WebTarget, WebTarget> fixer) {
         // TODO replace with real authorizetion!
         WebTarget myWebTarget = webTarget.path(path)
-                .queryParam("access_token", "pcad84c0e279a1a233e1eb31a7a4b20b4ad3ea947");
+                .queryParam(EBoardsParams.ACCESS_TOKEN.getQueryStr(), "pcad84c0e279a1a233e1eb31a7a4b20b4ad3ea947");
         return fixer == null
                 ? myWebTarget
                 : fixer.apply(myWebTarget);
@@ -135,19 +137,12 @@ public abstract class GenericClientImpl<T, R, F extends FieldsEnumI> extends Glo
         }
         if (page != null && per_page != null) {
             myWebTarget = myWebTarget.queryParam(EBoardsParams.PAGE.getQueryStr(), page)
-                    .queryParam(EBoardsParams.PER_PAGE.getQueryStr(), per_page);
+                                     .queryParam(EBoardsParams.PER_PAGE.getQueryStr(), per_page);
         }
         if (sort_desc) {
             myWebTarget = myWebTarget.queryParam(EBoardsParams.SORT.getQueryStr(), "desc");
         }
         Invocation.Builder invocationBuilder = myWebTarget.request(MediaType.APPLICATION_JSON);
-        try (InputOutputCloseableWrapper io = new InputOutputCloseableWrapper(IOProvider.getDefault().getIO ("Hello", false))) {
-            io.getOut().print("Going to issue request: '");
-            io.getOut().print(invocationBuilder.toString());
-            io.getOut().println("'");
-        } catch (IOException ex) {
-
-        }
         return Arrays.asList(invocationBuilder.get(arrayKlass));
     }
 

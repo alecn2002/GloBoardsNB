@@ -25,6 +25,7 @@ package com.alecn.glo.service.impl;
 
 import com.alecn.glo.client.CommentClient;
 import com.alecn.glo.client.CommentFieldsEnum;
+import com.alecn.glo.client.impl.CommentClientImpl;
 import com.alecn.glo.service.CommentService;
 import com.alecn.glo.sojo.Comment;
 import java.util.Collection;
@@ -36,7 +37,17 @@ import org.openide.util.lookup.ServiceProvider;
 @ServiceProvider(service = CommentService.class)
 public class CommentServiceImpl implements CommentService {
 
-    private static final CommentClient commentClient = Lookup.getDefault().lookup(CommentClient.class);
+    private static final CommentClient COMMENT_CLIENT = Lookup.getDefault().lookup(CommentClient.class);
+
+    private final CommentClient commentClient;
+
+    public CommentServiceImpl() {
+        commentClient = COMMENT_CLIENT;
+    }
+
+    public CommentServiceImpl(String glo_api_url) {
+        commentClient = new CommentClientImpl(glo_api_url);
+    }
 
     @Override
     public List<Comment> list(String board_id, String card_id, Collection<CommentFieldsEnum> fields, Integer page, Integer per_page, boolean sort_desc) {

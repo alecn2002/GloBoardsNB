@@ -31,6 +31,9 @@ import com.alecn.glo.service.BoardService;
 import com.alecn.glo.sojo.Board;
 import com.alecn.glo.sojo.Column;
 import com.alecn.glo.client.dto.ColumnRequest;
+import com.alecn.glo.client.impl.BoardClientImpl;
+import com.alecn.glo.client.impl.CardClientImpl;
+import com.alecn.glo.client.impl.ColumnClientImpl;
 import com.alecn.glo.sojo.Card;
 import java.util.Arrays;
 import java.util.List;
@@ -48,9 +51,25 @@ public class BoardServiceImpl implements BoardService {
     private static final BoardFieldsEnum[] FIELDS_FOR_BOARD_COLUMNS_LIST = {BoardFieldsEnum.COLUMNS};
     private static final List<BoardFieldsEnum> FIELDS_FOR_BOARD_COLUMNS = Arrays.asList(FIELDS_FOR_BOARD_COLUMNS_LIST);
 
-    private static final BoardClient boardClient = Lookup.getDefault().lookup(BoardClient.class);
-    private static final ColumnClient columnClient = Lookup.getDefault().lookup(ColumnClient.class);
-    private static final CardClient cardClient = Lookup.getDefault().lookup(CardClient.class);
+    private static final BoardClient BOARD_CLIENT = Lookup.getDefault().lookup(BoardClient.class);
+    private static final ColumnClient COLUMN_CLIENT = Lookup.getDefault().lookup(ColumnClient.class);
+    private static final CardClient CARD_CLIENT = Lookup.getDefault().lookup(CardClient.class);
+
+    private final BoardClient boardClient;
+    private final ColumnClient columnClient;
+    private final CardClient cardClient;
+
+    public BoardServiceImpl() {
+        this.boardClient = BOARD_CLIENT;
+        this.columnClient = COLUMN_CLIENT;
+        this.cardClient = CARD_CLIENT;
+    }
+
+    public BoardServiceImpl(String glo_api_url) {
+        this.boardClient = new BoardClientImpl(glo_api_url);
+        this.columnClient = new ColumnClientImpl(glo_api_url);
+        this.cardClient = new CardClientImpl(glo_api_url);
+    }
 
     @Override
     public List<Board> listBoards() {

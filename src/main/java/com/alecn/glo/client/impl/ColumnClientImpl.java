@@ -39,6 +39,10 @@ public class ColumnClientImpl extends GenericClientImpl<Column, ColumnRequest, F
         super(GLO_PATH_COLUMNS, Column.class);
     }
 
+    public ColumnClientImpl(String glo_api_url) {
+        super(glo_api_url, GLO_PATH_COLUMNS, Column.class, Column[].class);
+    }
+
     @Override
     public Column create(final String board_id, ColumnRequest column_request) {
         return super.post(Entity.json(column_request), (WebTarget t) -> {

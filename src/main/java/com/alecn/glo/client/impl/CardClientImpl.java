@@ -52,6 +52,10 @@ public class CardClientImpl extends GenericClientImpl<Card, CardRequest, CardFie
         super(GLO_PATH_CARDS, Card.class, Card[].class);
     }
 
+    public CardClientImpl(String glo_api_url) {
+        super(glo_api_url, GLO_PATH_CARDS, Card.class, Card[].class);
+    }
+
     @AllArgsConstructor
     private static class BoardIdResolver implements Function<WebTarget, WebTarget> {
         private final String board_id;

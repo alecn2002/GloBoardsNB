@@ -23,9 +23,11 @@
  */
 package com.alecn.glo;
 
+import com.alecn.glo.netbeans_bugtracking.GloRepository;
 import org.netbeans.modules.bugtracking.api.Repository;
 import org.netbeans.modules.bugtracking.spi.BugtrackingConnector;
 import org.netbeans.modules.bugtracking.spi.RepositoryInfo;
+import org.openide.util.Lookup;
 import org.openide.util.NbBundle;
 
 /**
@@ -41,17 +43,30 @@ import org.openide.util.NbBundle;
         iconPath = "com/alecn/glo/icons/globoard16x16.png")
 public class GloConnector implements BugtrackingConnector {
 
+    private static final GloConfig gloConfig = Lookup.getDefault().lookup(GloConfig.class);
+
     public static final String ID = "com.alecn.glo";
     public static final String NAME = "GLO Boards";
 
     @Override
     public Repository createRepository() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        GloRepository repo = new GloRepository();
+        return createRepository(repo);
     }
 
     @Override
     public Repository createRepository(RepositoryInfo ri) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        GloRepository repo = new GloRepository(ri);
+        return createRepository(repo);
+    }
+
+    private Repository createRepository(GloRepository repo) {
+        return gloConfig.getSupport().createRepository(
+                repo,
+                null, // Status provider needs a persistent cache
+                null, // gloConfig.getIssueScheduleProvider(),
+                null, // new RedmineIssuePriorityProvider(repo),
+                null);
     }
 
 }
