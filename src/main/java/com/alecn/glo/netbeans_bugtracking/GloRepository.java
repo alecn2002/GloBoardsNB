@@ -35,9 +35,11 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.function.Function;
+import java.util.function.Supplier;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
 import org.netbeans.modules.bugtracking.spi.RepositoryInfo;
 import org.openide.util.lookup.InstanceContent;
 
@@ -58,6 +60,20 @@ public class GloRepository {
 
     {
         repositoryList.add(new WeakReference<>(this));
+    }
+
+    @RequiredArgsConstructor
+    private static class LazyValue<T> {
+        @NonNull
+        private final Supplier<T> supplier;
+        private T value;
+
+        public T get() {
+            if (value == null) {
+                value = supplier.get();
+            }
+            return value;
+        }
     }
 
     public static GloRepository getInstanceById(@NonNull String id) {
@@ -85,6 +101,8 @@ public class GloRepository {
     private transient BoardService boardService;
     private transient CommentService commentService;
 
+    private final transient LazyValue<GloRepositoryController> gloRepositoryController = new LazyValue<>(() -> new GloRepositoryController(this));
+
     public GloRepository() {
         this.ic = new InstanceContent();
     }
@@ -97,30 +115,34 @@ public class GloRepository {
         this.commentService = new CommentServiceImpl(repositoryInfo.getUrl());
     }
 
-    private String getNonNull(Function<RepositoryInfo, String> provider, String defaultValue) {
+    private String getNonNullRepoInfoValue(Function<RepositoryInfo, String> provider, String defaultValue) {
         return (repositoryInfo == null)
                 ? defaultValue
                 : provider.apply(repositoryInfo);
     }
 
-    private String getNonNull(Function<RepositoryInfo, String> provider) {
-        return getNonNull(provider, "");
+    private String getNonNullRepoInfoValue(Function<RepositoryInfo, String> provider) {
+        return getNonNullRepoInfoValue(provider, "");
     }
 
     public String getId() {
-        return getNonNull((ri) -> ri.getID());
+        return getNonNullRepoInfoValue((ri) -> ri.getID());
     }
 
     public String getDisplayName() {
-        return getNonNull((ri) -> ri.getDisplayName());
+        return getNonNullRepoInfoValue((ri) -> ri.getDisplayName());
     }
 
     public String getUrl() {
-        return getNonNull((ri) -> ri.getUrl());
+        return getNonNullRepoInfoValue((ri) -> ri.getUrl());
     }
 
     public String getAccessKey() {
-        return getNonNull((ri) -> ri.getValue(PROPERTY_ACCESS_KEY));
+        return getNonNullRepoInfoValue((ri) -> ri.getValue(PROPERTY_ACCESS_KEY));
+    }
+
+    public GloRepositoryController getController() {
+        return gloRepositoryController.get();
     }
     //
     // Change Support

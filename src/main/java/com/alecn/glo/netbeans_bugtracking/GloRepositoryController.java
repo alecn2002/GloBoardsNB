@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright 2019 anovitsk.
+ * Copyright 2019 alecn.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -21,85 +21,74 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.alecn.glo.netbeans_bugtracking.providers.impl;
+package com.alecn.glo.netbeans_bugtracking;
 
-import com.alecn.glo.netbeans_bugtracking.GloRepository;
-import com.alecn.glo.netbeans_bugtracking.issue.GloIssue;
-import com.alecn.glo.netbeans_bugtracking.providers.GloRepositoryProvider;
-import com.alecn.glo.netbeans_bugtracking.query.GloQuery;
-import java.awt.Image;
-import java.beans.PropertyChangeListener;
-import java.util.Collection;
+import javax.swing.JComponent;
+import javax.swing.event.ChangeListener;
+import lombok.Getter;
 import org.netbeans.modules.bugtracking.spi.RepositoryController;
-import org.netbeans.modules.bugtracking.spi.RepositoryInfo;
-import org.openide.util.lookup.ServiceProvider;
+import org.openide.util.ChangeSupport;
+import org.openide.util.HelpCtx;
 
-@ServiceProvider(service = GloRepositoryProvider.class)
-public class GloRepositoryProviderImpl implements GloRepositoryProvider {
+/**
+ *
+ * @author alecn
+ */
+@Getter
+public class GloRepositoryController implements RepositoryController {
 
-    @Override
-    public RepositoryInfo getInfo(GloRepository r) {
-        return r.getRepositoryInfo();
+    private final transient GloRepository gloRepository;
+
+    GloRepositoryController(GloRepository gloRepository) {
+        this.gloRepository = gloRepository;
     }
 
     @Override
-    public Image getIcon(GloRepository r) {
+    public JComponent getComponent() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
-    public Collection<GloIssue> getIssues(GloRepository r, String... ids) {
+    public HelpCtx getHelpCtx() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
-    public void removed(GloRepository r) {
+    public boolean isValid() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
-    public RepositoryController getController(GloRepository r) {
-        return r.getController();
-    }
-
-    @Override
-    public GloQuery createQuery(GloRepository r) {
+    public void populate() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
-    public GloIssue createIssue(GloRepository r) {
+    public String getErrorMessage() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
-    public GloIssue createIssue(GloRepository r, String summary, String description) {
+    public void applyChanges() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
-    public Collection<GloQuery> getQueries(GloRepository r) {
+    public void cancelChanges() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
-
+    //
+    // Change Support
+    //
+    private transient final ChangeSupport changeSupport = new ChangeSupport(this);
     @Override
-    public Collection<GloIssue> simpleSearch(GloRepository r, String criteria) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public void addChangeListener(ChangeListener cl) {
+        changeSupport.addChangeListener(cl);
     }
 
     @Override
-    public boolean canAttachFiles(GloRepository r) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public void removePropertyChangeListener(GloRepository r, PropertyChangeListener listener) {
-        r.removePropertyChangeListener(listener);
-    }
-
-    @Override
-    public void addPropertyChangeListener(GloRepository r, PropertyChangeListener listener) {
-        r.addPropertyChangeListener(listener);
+    public void removeChangeListener(ChangeListener cl) {
+        changeSupport.removeChangeListener(cl);
     }
 
 }
