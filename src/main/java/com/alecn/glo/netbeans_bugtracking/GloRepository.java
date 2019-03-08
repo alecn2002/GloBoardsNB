@@ -166,6 +166,6 @@ public class GloRepository {
     }
 
     public GloQuery createQuery() {
-        return new GloQuery();
+        return new GloQuery(this);
     }
 }
