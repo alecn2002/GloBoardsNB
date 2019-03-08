@@ -45,8 +45,8 @@ public class CommentServiceImpl implements CommentService {
         commentClient = COMMENT_CLIENT;
     }
 
-    public CommentServiceImpl(String glo_api_url) {
-        commentClient = new CommentClientImpl(glo_api_url);
+    public CommentServiceImpl(String access_key) {
+        commentClient = new CommentClientImpl(access_key);
     }
 
     @Override

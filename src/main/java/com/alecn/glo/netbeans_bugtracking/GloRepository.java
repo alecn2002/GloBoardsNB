@@ -31,11 +31,14 @@ import com.alecn.glo.service.BoardService;
 import com.alecn.glo.service.CommentService;
 import com.alecn.glo.service.impl.BoardServiceImpl;
 import com.alecn.glo.service.impl.CommentServiceImpl;
+import com.alecn.glo.sojo.Board;
 import com.alecn.glo.util.LazyValue;
+import com.alecn.glo.util.OeWriter;
 import java.awt.Image;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 import java.lang.ref.WeakReference;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -59,7 +62,13 @@ public class GloRepository {
 
     static final String PROPERTY_ACCESS_KEY = "accessKey";              // NOI18N
 
+    static final String PROPERTY_BOARD_ID = "boardId";              // NOI18N
+
+    static final String PROPERTY_BOARD_NAME = "boardName";              // NOI18N
+
     private static final GloConfig gloConfig = Lookup.getDefault().lookup(GloConfig.class);
+
+    private static final OeWriter oeWriter = gloConfig.getOeWriter();
 
     // Make sure we know all instances we created - a crude hack, but API does
     // not allow ourselves ....
@@ -104,9 +113,19 @@ public class GloRepository {
     public GloRepository(RepositoryInfo repositoryInfo) {
         this();
         this.repositoryInfo = repositoryInfo;
+        createServices();
+    }
 
-        this.boardService = new BoardServiceImpl(repositoryInfo.getUrl());
-        this.commentService = new CommentServiceImpl(repositoryInfo.getUrl());
+    private void createServices() {
+        oeWriter.outWrite(o -> o.println(">>>> createServices()"));
+        String access_key = getNonNullRepoInfoValue((r) -> r.getValue(PROPERTY_ACCESS_KEY), "");
+        if (access_key.isEmpty()) {
+            oeWriter.errWrite(e -> e.println("access_key.isEmpty"));
+            return;
+        }
+        this.boardService = new BoardServiceImpl(access_key);
+        this.commentService = new CommentServiceImpl(access_key);
+        oeWriter.outWrite(o -> o.println("<<<< createServices() - services created"));
     }
 
     private String getNonNullRepoInfoValue(Function<RepositoryInfo, String> provider, String defaultValue) {
@@ -139,17 +158,35 @@ public class GloRepository {
         return gloRepositoryController.get();
     }
 
-    public void setInfoValues() {
+    public void setInfoValues(String name, String access_key) {
         this.repositoryInfo = new RepositoryInfo(UUID.randomUUID().toString(),
                 GloConnector.ID,
                 GloConstants.GLO_URL,
-                "GLO board",  // TODO replace it with real name
-                "GLO board"   // TODO replace it with real name
+                name,
+                name
         );
+        repositoryInfo.putValue(PROPERTY_ACCESS_KEY, access_key);
+
+        createServices();
     }
 
     public Image getIconImage() {
         return gloConfig.getIconImage();
+    }
+
+    public GloQuery createQuery() {
+        return new GloQuery(this);
+    }
+
+    public List<Board> getBoardsList() {
+        oeWriter.outWrite(o -> o.println(">>>> getBoardsList()"));
+        if (boardService == null) {
+            oeWriter.errWrite(o -> o.println("boardService == null"));
+            return new ArrayList<>();
+        }
+        List<Board> list = boardService.listBoards(); // TODO caching
+        oeWriter.outWrite(o -> o.printf("list of boards contains %d items\n", list.size()));
+        return list;
     }
 
     //
@@ -163,9 +200,5 @@ public class GloRepository {
 
     public void removePropertyChangeListener(PropertyChangeListener listener) {
         propertyChangeSupport.removePropertyChangeListener(listener);
-    }
-
-    public GloQuery createQuery() {
-        return new GloQuery(this);
     }
 }

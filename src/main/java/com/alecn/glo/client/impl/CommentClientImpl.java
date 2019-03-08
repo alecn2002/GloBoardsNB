@@ -85,12 +85,12 @@ public class CommentClientImpl extends GenericClientImpl<Comment, CommentRequest
                 : fields;
     }
 
-    public CommentClientImpl() {
-        super(GLO_PATH_COMMENTS, Comment.class, Comment[].class);
+    public CommentClientImpl(String access_key) {
+        super(access_key, GLO_PATH_COMMENTS, Comment.class, Comment[].class);
     }
 
-    public CommentClientImpl(String glo_api_url) {
-        super(glo_api_url, GLO_PATH_COMMENTS, Comment.class, Comment[].class);
+    public CommentClientImpl() {
+        this("pcad84c0e279a1a233e1eb31a7a4b20b4ad3ea947"); // TODO remove default access key!
     }
 
     @Override

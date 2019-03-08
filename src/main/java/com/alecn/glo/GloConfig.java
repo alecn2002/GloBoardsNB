@@ -30,6 +30,7 @@ import com.alecn.glo.netbeans_bugtracking.providers.GloQueryProvider;
 import com.alecn.glo.netbeans_bugtracking.providers.GloIssueProvider;
 import com.alecn.glo.netbeans_bugtracking.providers.GloRepositoryProvider;
 import com.alecn.glo.netbeans_bugtracking.query.GloQuery;
+import com.alecn.glo.util.OeWriter;
 import java.awt.Image;
 import org.netbeans.modules.bugtracking.spi.BugtrackingSupport;
 import org.openide.util.ImageUtilities;
@@ -59,6 +60,8 @@ public class GloConfig {
 
     private static final BugtrackingSupport<GloRepository, GloQuery, GloIssue> support = new BugtrackingSupport<>(gloRepositoryProvider, gloQueryProvider, gloIssueProvider);
 
+    private static final OeWriter oeWriter = new OeWriter("GLO Connector");
+
     public GloIssueProvider getIssueProvider() {
         return gloIssueProvider;
     }
@@ -85,5 +88,9 @@ public class GloConfig {
 
     public Image getIconImage() {
         return getImage(GLO_ICON_16x16);
+    }
+
+    public OeWriter getOeWriter() {
+        return oeWriter;
     }
 }

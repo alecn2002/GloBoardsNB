@@ -69,26 +69,27 @@ public abstract class GenericClientImpl<T, R, F extends FieldsEnumI> extends Glo
     private final Class<T> klass;
     private final Class<T[]> arrayKlass;
 
-    protected GenericClientImpl(String url, String path, Class<T> klass, Class<T[]> arrayKlass) {
+    protected GenericClientImpl(String url, String access_key, String path, Class<T> klass, Class<T[]> arrayKlass) {
         webTarget = ClientBuilder.newClient()
-                .target(url);
+                .target(url)
+                .queryParam(EBoardsParams.ACCESS_TOKEN.getQueryStr(), access_key);
+//                .queryParam(EBoardsParams.ACCESS_TOKEN.getQueryStr(), "pcad84c0e279a1a233e1eb31a7a4b20b4ad3ea947");
         this.path = path;
         this.klass = klass;
         this.arrayKlass = arrayKlass;
     }
 
-    protected GenericClientImpl(String path, Class<T> klass, Class<T[]> arrayKlass) {
-        this(GLO_URL, path, klass, arrayKlass);
+    protected GenericClientImpl(String access_key, String path, Class<T> klass, Class<T[]> arrayKlass) {
+        this(GLO_URL, access_key, path, klass, arrayKlass);
     }
 
-    protected GenericClientImpl(String path, Class<T> klass) {
-        this(path, klass, null);
+    protected GenericClientImpl(String access_key, String path, Class<T> klass) {
+        this(access_key, path, klass, null);
     }
 
     private WebTarget prepareWebTarget(Function<WebTarget, WebTarget> fixer) {
         // TODO replace with real authorizetion!
-        WebTarget myWebTarget = webTarget.path(path)
-                .queryParam(EBoardsParams.ACCESS_TOKEN.getQueryStr(), "pcad84c0e279a1a233e1eb31a7a4b20b4ad3ea947");
+        WebTarget myWebTarget = webTarget.path(path);
         return fixer == null
                 ? myWebTarget
                 : fixer.apply(myWebTarget);

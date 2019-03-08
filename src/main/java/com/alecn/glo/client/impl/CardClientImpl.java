@@ -48,12 +48,12 @@ public class CardClientImpl extends GenericClientImpl<Card, CardRequest, CardFie
     private static final CardFieldsEnum[] DEFAULT_FIELDS_LIST = {CardFieldsEnum.BOARD_ID, CardFieldsEnum.COLUMN_ID, CardFieldsEnum.NAME};
     static final Collection<CardFieldsEnum> DEFAULT_FIELDS = Arrays.asList(DEFAULT_FIELDS_LIST);
 
-    public CardClientImpl() {
-        super(GLO_PATH_CARDS, Card.class, Card[].class);
+    public CardClientImpl(String access_key) {
+        super(access_key, GLO_PATH_CARDS, Card.class, Card[].class);
     }
 
-    public CardClientImpl(String glo_api_url) {
-        super(glo_api_url, GLO_PATH_CARDS, Card.class, Card[].class);
+    public CardClientImpl() {
+        this("pcad84c0e279a1a233e1eb31a7a4b20b4ad3ea947"); // TODO remove default access key!
     }
 
     @AllArgsConstructor

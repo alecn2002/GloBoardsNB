@@ -23,6 +23,8 @@
  */
 package com.alecn.glo.netbeans_bugtracking;
 
+import com.alecn.glo.sojo.Board;
+
 /**
  *
  * @author anovitsk
@@ -47,19 +49,103 @@ public class GloRepositoryPanel extends javax.swing.JPanel {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        jLabel1 = new javax.swing.JLabel();
+        gloRepositoryName = new javax.swing.JTextField();
+        jLabel2 = new javax.swing.JLabel();
+        gloRepoAccessKey = new javax.swing.JTextField();
+        verifyButton = new javax.swing.JButton();
+        jLabel3 = new javax.swing.JLabel();
+        gloRepoBoard = new javax.swing.JComboBox<>();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        errorArea = new javax.swing.JTextArea();
+
+        org.openide.awt.Mnemonics.setLocalizedText(jLabel1, org.openide.util.NbBundle.getMessage(GloRepositoryPanel.class, "GloRepositoryPanel.jLabel1.text")); // NOI18N
+
+        gloRepositoryName.setText(org.openide.util.NbBundle.getMessage(GloRepositoryPanel.class, "GloRepositoryPanel.gloRepositoryName.text")); // NOI18N
+        gloRepositoryName.setToolTipText(org.openide.util.NbBundle.getMessage(GloRepositoryPanel.class, "GloRepositoryPanel.gloRepositoryName.toolTipText")); // NOI18N
+
+        org.openide.awt.Mnemonics.setLocalizedText(jLabel2, org.openide.util.NbBundle.getMessage(GloRepositoryPanel.class, "GloRepositoryPanel.jLabel2.text")); // NOI18N
+
+        gloRepoAccessKey.setText(org.openide.util.NbBundle.getMessage(GloRepositoryPanel.class, "GloRepositoryPanel.gloRepoAccessKey.text")); // NOI18N
+
+        org.openide.awt.Mnemonics.setLocalizedText(verifyButton, org.openide.util.NbBundle.getMessage(GloRepositoryPanel.class, "GloRepositoryPanel.verifyButton.text")); // NOI18N
+        verifyButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                verifyButtonActionPerformed(evt);
+            }
+        });
+
+        org.openide.awt.Mnemonics.setLocalizedText(jLabel3, org.openide.util.NbBundle.getMessage(GloRepositoryPanel.class, "GloRepositoryPanel.jLabel3.text")); // NOI18N
+
+        jScrollPane1.setEnabled(false);
+        jScrollPane1.setFocusable(false);
+
+        errorArea.setColumns(20);
+        errorArea.setRows(5);
+        jScrollPane1.setViewportView(errorArea);
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 400, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 817, Short.MAX_VALUE)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jLabel1)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(gloRepositoryName))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jLabel2)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(gloRepoAccessKey))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jLabel3)
+                        .addGap(18, 18, 18)
+                        .addComponent(gloRepoBoard, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(verifyButton, javax.swing.GroupLayout.PREFERRED_SIZE, 83, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 0, Short.MAX_VALUE)))
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 300, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(gloRepositoryName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel1))
+                .addGap(18, 18, 18)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel2)
+                    .addComponent(gloRepoAccessKey, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
+                .addComponent(verifyButton)
+                .addGap(18, 18, 18)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel3)
+                    .addComponent(gloRepoBoard, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 126, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
 
+    private void verifyButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_verifyButtonActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_verifyButtonActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    javax.swing.JTextArea errorArea;
+    javax.swing.JTextField gloRepoAccessKey;
+    javax.swing.JComboBox<Board> gloRepoBoard;
+    javax.swing.JTextField gloRepositoryName;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
+    private javax.swing.JScrollPane jScrollPane1;
+    javax.swing.JButton verifyButton;
     // End of variables declaration//GEN-END:variables
 }

@@ -65,10 +65,10 @@ public class BoardServiceImpl implements BoardService {
         this.cardClient = CARD_CLIENT;
     }
 
-    public BoardServiceImpl(String glo_api_url) {
-        this.boardClient = new BoardClientImpl(glo_api_url);
-        this.columnClient = new ColumnClientImpl(glo_api_url);
-        this.cardClient = new CardClientImpl(glo_api_url);
+    public BoardServiceImpl(String access_key) {
+        this.boardClient = new BoardClientImpl(access_key);
+        this.columnClient = new ColumnClientImpl(access_key);
+        this.cardClient = new CardClientImpl(access_key);
     }
 
     @Override

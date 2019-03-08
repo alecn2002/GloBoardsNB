@@ -35,12 +35,12 @@ import org.openide.util.lookup.ServiceProvider;
 @ServiceProvider(service = ColumnClient.class)
 public class ColumnClientImpl extends GenericClientImpl<Column, ColumnRequest, FieldsEnumI> implements ColumnClient {
 
-    public ColumnClientImpl() {
-        super(GLO_PATH_COLUMNS, Column.class);
+    public ColumnClientImpl(String access_key) {
+        super(access_key, GLO_PATH_COLUMNS, Column.class, Column[].class);
     }
 
-    public ColumnClientImpl(String glo_api_url) {
-        super(glo_api_url, GLO_PATH_COLUMNS, Column.class, Column[].class);
+    public ColumnClientImpl() {
+        this("pcad84c0e279a1a233e1eb31a7a4b20b4ad3ea947"); // TODO remove default access key!
     }
 
     @Override

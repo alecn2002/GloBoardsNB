@@ -23,20 +23,35 @@
  */
 package com.alecn.glo.netbeans_bugtracking;
 
+import com.alecn.glo.GloConfig;
+import com.alecn.glo.sojo.Board;
+import com.alecn.glo.ui.NameIdListModel;
+import com.alecn.glo.util.OeWriter;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.List;
 import javax.swing.JComponent;
 import javax.swing.SwingUtilities;
 import javax.swing.event.ChangeListener;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 import lombok.Getter;
 import org.netbeans.modules.bugtracking.spi.RepositoryController;
 import org.openide.util.ChangeSupport;
 import org.openide.util.HelpCtx;
+import org.openide.util.Lookup;
 
 /**
  *
  * @author alecn
  */
 @Getter
-public class GloRepositoryController implements RepositoryController {
+public class GloRepositoryController implements RepositoryController, DocumentListener, ActionListener {
+
+
+    private static final GloConfig gloConfig = Lookup.getDefault().lookup(GloConfig.class);
+
+    private static final OeWriter oeWriter = gloConfig.getOeWriter();
 
     private final transient GloRepository gloRepository;
     private final transient GloRepositoryPanel panel;
@@ -47,6 +62,11 @@ public class GloRepositoryController implements RepositoryController {
     GloRepositoryController(GloRepository gloRepository) {
         this.gloRepository = gloRepository;
         this.panel = new GloRepositoryPanel(this);
+
+        panel.gloRepoAccessKey.getDocument().addDocumentListener(this);
+        panel.gloRepositoryName.getDocument().addDocumentListener(this);
+
+        panel.verifyButton.addActionListener(this);
     }
 
     @Override
@@ -61,16 +81,26 @@ public class GloRepositoryController implements RepositoryController {
 
     @Override
     public boolean isValid() {
-        // TODO perform a real check here!
+        StringBuilder sb = new StringBuilder();
 
-        return true;
+        if (panel.gloRepositoryName.getText().isEmpty()) {
+            sb.append("Name can not be empty\n");
+        }
+        if (panel.gloRepoAccessKey.getText().isEmpty()) {
+            sb.append("Access key can not be empty\n");
+        }
+        errorMessage = sb.toString();
+        return errorMessage.isEmpty();
     }
 
     @Override
     public void populate() {
         assert SwingUtilities.isEventDispatchThread();
 
-        // TODO populate the panel here!!!
+        panel.gloRepositoryName.setText(gloRepository.getDisplayName());
+        panel.gloRepoAccessKey.setText(gloRepository.getAccessKey());
+
+//        panel.gloRepoBoard.setSelectedItem(gloRepository.);
     }
 
     @Override
@@ -80,7 +110,8 @@ public class GloRepositoryController implements RepositoryController {
 
     @Override
     public void applyChanges() {
-        gloRepository.setInfoValues();
+        gloRepository.setInfoValues(panel.gloRepositoryName.getText(),
+                panel.gloRepoAccessKey.getText());
     }
 
     @Override
@@ -99,6 +130,46 @@ public class GloRepositoryController implements RepositoryController {
     @Override
     public void removeChangeListener(ChangeListener cl) {
         changeSupport.removeChangeListener(cl);
+    }
+
+    @Override
+    public void insertUpdate(DocumentEvent e) {
+        changeSupport.fireChange();
+    }
+
+    @Override
+    public void removeUpdate(DocumentEvent e) {
+        changeSupport.fireChange();
+    }
+
+    @Override
+    public void changedUpdate(DocumentEvent e) {
+        changeSupport.fireChange();
+    }
+
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        oeWriter.outWrite(o -> o.printf("GloRepositoryController: actionPerformed(%s)\n", e.getActionCommand()));
+        if (e.getSource().equals(panel.verifyButton)) {
+            onVerify();
+        }
+    }
+
+    private void onVerify() {
+        if (!isValid()) {
+            return;
+        }
+        applyChanges();
+        // TODO make it async
+        errorMessage = "";
+        try {
+            List<Board> boards = gloRepository.getBoardsList();
+            panel.gloRepoBoard.setModel(new NameIdListModel<>(boards, b -> b.getName(), b -> b.getId()));
+
+        } catch (Error e) {
+            errorMessage = "Couldn't fetch boards list: " + e.getMessage();
+        }
+        changeSupport.fireChange();
     }
 
 }

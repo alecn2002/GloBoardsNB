@@ -43,12 +43,12 @@ public class BoardClientImpl extends GenericClientImpl<Board, Board, BoardFields
     static final Collection<BoardFieldsEnum> DEFAULT_FIELDS = Arrays.asList(DEFAULT_FIELDS_LIST);
     static final Collection<BoardFieldsEnum> ALL_FIELDS = Arrays.asList(BoardFieldsEnum.values());
 
-    public BoardClientImpl() {
-        super(GLO_PATH_BOARDS, Board.class, Board[].class);
+    public BoardClientImpl(String access_key) {
+        super(access_key, GLO_PATH_BOARDS, Board.class, Board[].class);
     }
 
-    public BoardClientImpl(String glo_api_url) {
-        super(glo_api_url, GLO_PATH_BOARDS, Board.class, Board[].class);
+    public BoardClientImpl() {
+        this("pcad84c0e279a1a233e1eb31a7a4b20b4ad3ea947"); // TODO remove default access key!
     }
 
     @Override

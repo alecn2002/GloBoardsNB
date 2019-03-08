@@ -23,22 +23,18 @@
  */
 package com.alecn.glo.action;
 
+import com.alecn.glo.GloConfig;
 import com.alecn.glo.service.BoardService;
 import com.alecn.glo.service.CommentService;
 import com.alecn.glo.sojo.Board;
 import com.alecn.glo.sojo.Card;
 import com.alecn.glo.sojo.Column;
 import com.alecn.glo.sojo.Comment;
-import com.alecn.glo.wrappers.InputOutputCloseableWrapper;
+import com.alecn.glo.util.OeWriter;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.IOException;
 import java.util.List;
-import java.util.function.Consumer;
-import java.util.function.Function;
 import javax.ws.rs.core.Response;
-import org.netbeans.api.io.IOProvider;
-import org.netbeans.api.io.OutputWriter;
 import org.openide.awt.ActionID;
 import org.openide.awt.ActionReference;
 import org.openide.awt.ActionRegistration;
@@ -63,44 +59,23 @@ public final class GetBoardListAction implements ActionListener {
     private final BoardService boardService = Lookup.getDefault().lookup(BoardService.class);
     private final CommentService commentService = Lookup.getDefault().lookup(CommentService.class);
 
-    private void oeWrite(Consumer<OutputWriter> writer, Function<InputOutputCloseableWrapper, OutputWriter> writerGetter, boolean newOut) {
-        try (InputOutputCloseableWrapper io = new InputOutputCloseableWrapper(IOProvider.getDefault().getIO ("Hello", newOut))) {
-            writer.accept(writerGetter.apply(io));
-        } catch (IOException ex) {
+    private final GloConfig gloConfig = Lookup.getDefault().lookup(GloConfig.class);
 
-        }
-    }
-
-    private void outWrite(Consumer<OutputWriter> writer, boolean newOut) {
-        oeWrite(writer, (io) -> { return io.getOut();}, newOut);
-    }
-
-    private void outWrite(Consumer<OutputWriter> writer) {
-        outWrite(writer, false);
-    }
-
-
-    private void errWrite(Consumer<OutputWriter> writer, boolean newOut) {
-        oeWrite(writer, (io) -> { return io.getErr();}, newOut);
-    }
-
-    private void errWrite(Consumer<OutputWriter> writer) {
-        errWrite(writer, false);
-    }
+    private final OeWriter oeWriter = gloConfig.getOeWriter();
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        errWrite((err) -> {err.println (">>>> Retrieving board list...");}, true);
+        oeWriter.errWrite((err) -> {err.println (">>>> Retrieving board list...");});
         if (boardService == null) {
-            errWrite((err) -> {err.println ("boardService not initialized");});
+            oeWriter.errWrite((err) -> {err.println ("boardService not initialized");});
             return;
         }
         final List<Board> boards = boardService.listBoards();
         if (boards == null || boards.isEmpty()) {
-            errWrite((err) -> {err.println ("getBoardList() returned null or empty list");});
+            oeWriter.errWrite((err) -> {err.println ("getBoardList() returned null or empty list");});
             return;
         }
-        outWrite((out) -> {
+        oeWriter.outWrite((out) -> {
             boards.forEach((board) -> {
                 out.println (board.toString());
             });
@@ -110,40 +85,40 @@ public final class GetBoardListAction implements ActionListener {
 
         retrieveBoardNListColumns(board0Id, true);
 
-        errWrite((err) -> {err.println (">>>> Creating new column Abcde...");});
+        oeWriter.errWrite((err) -> {err.println (">>>> Creating new column Abcde...");});
         Column abcdeColumn = boardService.createColumn(board0Id, "Abcde");
-        outWrite((out) -> {
+        oeWriter.outWrite((out) -> {
             out.println ("Created column:");
             out.println (abcdeColumn.toString());
         });
 
         retrieveBoardNListColumns(board0Id, false);
 
-        errWrite((err) -> {err.println (">>>> Editing column Abcde to Abcde0 and moving to 0 position...");});
+        oeWriter.errWrite((err) -> {err.println (">>>> Editing column Abcde to Abcde0 and moving to 0 position...");});
         boardService.editColumn(board0Id, abcdeColumn.getId(), "Abcde0", 0);
 
         retrieveBoardNListColumns(board0Id, false);
 
-        errWrite((err) -> {err.println (">>>> Deleting column Abcde0...");});
+        oeWriter.errWrite((err) -> {err.println (">>>> Deleting column Abcde0...");});
         Response response = boardService.deleteColumn(board0Id, abcdeColumn.getId());
-        outWrite((out) -> {
+        oeWriter.outWrite((out) -> {
             out.println ("Column delete result:");
             out.println (response.toString());
         });
 
         retrieveBoardNListColumns(board0Id, false);
 
-        errWrite((err) -> {err.println (">>>> Retrieving all cards...");});
+        oeWriter.errWrite((err) -> {err.println (">>>> Retrieving all cards...");});
         List<Card> cards = boardService.listCards(board0Id);
-        outWrite((out) -> {
+        oeWriter.outWrite((out) -> {
             cards.forEach((card) -> {
                 out.println (card.toString());
             });
         });
 
-        errWrite((err) -> {err.println (">>>> Retrieving comments for the first card...");});
+        oeWriter.errWrite((err) -> {err.println (">>>> Retrieving comments for the first card...");});
         List<Comment> comments = commentService.list(board0Id, cards.get(0).getId());
-        outWrite((out) -> {
+        oeWriter.outWrite((out) -> {
             comments.forEach((comment) -> {
                 out.println (comment.toString());
             });
@@ -152,9 +127,9 @@ public final class GetBoardListAction implements ActionListener {
     }
 
     private Board retrieveBoardNListColumns(final String board0Id, boolean printBoard) {
-        errWrite((err) -> {err.println (">>>> Retrieving details for Board #0...");});
+        oeWriter.errWrite((err) -> {err.println (">>>> Retrieving details for Board #0...");});
         final Board b = boardService.getBoard(board0Id);
-        outWrite((out) -> {
+        oeWriter.outWrite((out) -> {
             if (printBoard) {
                 out.println (b.toString());
             }
