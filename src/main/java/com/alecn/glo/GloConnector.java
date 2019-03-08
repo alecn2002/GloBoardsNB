@@ -24,6 +24,7 @@
 package com.alecn.glo;
 
 import com.alecn.glo.netbeans_bugtracking.GloRepository;
+import com.alecn.glo.netbeans_bugtracking.issue.GloIssuePriorityProvider;
 import org.netbeans.modules.bugtracking.api.Repository;
 import org.netbeans.modules.bugtracking.spi.BugtrackingConnector;
 import org.netbeans.modules.bugtracking.spi.RepositoryInfo;
@@ -40,10 +41,12 @@ import org.openide.util.NbBundle;
 @BugtrackingConnector.Registration(id = GloConnector.ID,
         displayName = GloConnector.NAME,
         tooltip = "#LBL_ConnectorTooltip",
-        iconPath = "com/alecn/glo/icons/globoard16x16.png")
+        iconPath = GloConfig.GLO_ICON_16x16_FULL)
 public class GloConnector implements BugtrackingConnector {
 
     private static final GloConfig gloConfig = Lookup.getDefault().lookup(GloConfig.class);
+
+    private static final GloIssuePriorityProvider gloIssuePriorityProvider = Lookup.getDefault().lookup(GloIssuePriorityProvider.class);
 
     public static final String ID = "com.alecn.glo";
     public static final String NAME = "GLO Boards";
@@ -64,8 +67,8 @@ public class GloConnector implements BugtrackingConnector {
         return gloConfig.getSupport().createRepository(
                 repo,
                 null, // Status provider needs a persistent cache
-                null, // gloConfig.getIssueScheduleProvider(),
-                null, // new RedmineIssuePriorityProvider(repo),
+                gloConfig.getIssueScheduleProvider(),
+                gloIssuePriorityProvider, // new GloIssuePriorityProvider(repo),
                 null);
     }
 

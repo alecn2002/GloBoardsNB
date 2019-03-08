@@ -21,34 +21,34 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.alecn.glo.netbeans_bugtracking.query;
+package com.alecn.glo.netbeans_bugtracking.issue;
 
-import com.alecn.glo.netbeans_bugtracking.issue.GloIssue;
-import org.netbeans.modules.bugtracking.spi.QueryController;
-import org.netbeans.modules.bugtracking.spi.QueryProvider;
+import java.util.Date;
+import org.netbeans.modules.bugtracking.spi.IssueScheduleInfo;
+import org.netbeans.modules.bugtracking.spi.IssueScheduleProvider;
+import org.openide.util.lookup.ServiceProvider;
 
 /**
  *
  * @author anovitsk
  */
-public class GloQuery {
+@ServiceProvider(service = GloIssueScheduleProvider.class)
+public class GloIssueScheduleProvider implements IssueScheduleProvider<GloIssue> {
 
-    private QueryProvider.IssueContainer<GloIssue> delegateContainer;
-
-    public void setIssueContainer(QueryProvider.IssueContainer<GloIssue> ic) {
-        delegateContainer = ic;
+    @Override
+    public void setSchedule(GloIssue i, IssueScheduleInfo scheduleInfo) {
+        i.setSchedule(scheduleInfo);
     }
 
-    public String getDisplayName() {
-        return "GLo Query"; // FIXME !!! GloQuery.getDisplayName()
+    @Override
+    public Date getDueDate(GloIssue i) {
+        return i.getDueDate();
+//        return Calendar.getInstance().getTime();
     }
 
-    public String getTooltip() {
-        return "GLO Query Tooltip"; // FIXME !!! GloQuery.getTooltip()
-    }
-
-    public QueryController getController() {
-        return null; // FIXME !!!!!! GloQuery.getController()
+    @Override
+    public IssueScheduleInfo getSchedule(GloIssue i) {
+        return i.getSchedule();
     }
 
 }

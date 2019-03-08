@@ -37,6 +37,8 @@ import org.openide.util.lookup.ServiceProvider;
 @ServiceProvider(service = GloRepositoryProvider.class)
 public class GloRepositoryProviderImpl implements GloRepositoryProvider {
 
+//    private static final GloConfig gloConfig = Lookup.getDefault().lookup(GloConfig.class);
+
     @Override
     public RepositoryInfo getInfo(GloRepository r) {
         return r.getRepositoryInfo();
@@ -44,7 +46,7 @@ public class GloRepositoryProviderImpl implements GloRepositoryProvider {
 
     @Override
     public Image getIcon(GloRepository r) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return r.getIconImage();
     }
 
     @Override
@@ -64,7 +66,7 @@ public class GloRepositoryProviderImpl implements GloRepositoryProvider {
 
     @Override
     public GloQuery createQuery(GloRepository r) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return r.createQuery();
     }
 
     @Override

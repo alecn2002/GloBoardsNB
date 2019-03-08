@@ -25,11 +25,14 @@ package com.alecn.glo;
 
 import com.alecn.glo.netbeans_bugtracking.GloRepository;
 import com.alecn.glo.netbeans_bugtracking.issue.GloIssue;
+import com.alecn.glo.netbeans_bugtracking.issue.GloIssueScheduleProvider;
 import com.alecn.glo.netbeans_bugtracking.providers.GloQueryProvider;
 import com.alecn.glo.netbeans_bugtracking.providers.GloIssueProvider;
 import com.alecn.glo.netbeans_bugtracking.providers.GloRepositoryProvider;
 import com.alecn.glo.netbeans_bugtracking.query.GloQuery;
+import java.awt.Image;
 import org.netbeans.modules.bugtracking.spi.BugtrackingSupport;
+import org.openide.util.ImageUtilities;
 import org.openide.util.Lookup;
 import org.openide.util.lookup.ServiceProvider;
 
@@ -40,7 +43,15 @@ import org.openide.util.lookup.ServiceProvider;
 @ServiceProvider(service = GloConfig.class)
 public class GloConfig {
 
+    public static final String GLO_ICON_PATH = "com/alecn/glo/icons/";
+
+    public static final String GLO_ICON_16x16 = "globoard16x16.png";
+
+    public static final String GLO_ICON_16x16_FULL = GLO_ICON_PATH + GLO_ICON_16x16;
+
     private static final GloIssueProvider gloIssueProvider = Lookup.getDefault().lookup(GloIssueProvider.class);
+
+    private static final GloIssueScheduleProvider gloIssueScheduleProvider = Lookup.getDefault().lookup(GloIssueScheduleProvider.class);
 
     private static final GloQueryProvider gloQueryProvider = Lookup.getDefault().lookup(GloQueryProvider.class);
 
@@ -50,6 +61,10 @@ public class GloConfig {
 
     public GloIssueProvider getIssueProvider() {
         return gloIssueProvider;
+    }
+
+    public GloIssueScheduleProvider getIssueScheduleProvider() {
+        return gloIssueScheduleProvider;
     }
 
     public GloQueryProvider getQueryProvider() {
@@ -62,5 +77,13 @@ public class GloConfig {
 
     public BugtrackingSupport<GloRepository, GloQuery, GloIssue> getSupport() {
         return support;
+    }
+
+    public Image getImage(String imageName) {
+        return ImageUtilities.loadImage(GLO_ICON_PATH + imageName);
+    }
+
+    public Image getIconImage() {
+        return getImage(GLO_ICON_16x16);
     }
 }

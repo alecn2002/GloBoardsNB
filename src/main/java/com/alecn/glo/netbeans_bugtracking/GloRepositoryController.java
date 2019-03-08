@@ -24,6 +24,7 @@
 package com.alecn.glo.netbeans_bugtracking;
 
 import javax.swing.JComponent;
+import javax.swing.SwingUtilities;
 import javax.swing.event.ChangeListener;
 import lombok.Getter;
 import org.netbeans.modules.bugtracking.spi.RepositoryController;
@@ -38,44 +39,53 @@ import org.openide.util.HelpCtx;
 public class GloRepositoryController implements RepositoryController {
 
     private final transient GloRepository gloRepository;
+    private final transient GloRepositoryPanel panel;
 
+    private String errorMessage = "";
+
+    @SuppressWarnings("LeakingThisInConstructor")
     GloRepositoryController(GloRepository gloRepository) {
         this.gloRepository = gloRepository;
+        this.panel = new GloRepositoryPanel(this);
     }
 
     @Override
     public JComponent getComponent() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return panel;
     }
 
     @Override
     public HelpCtx getHelpCtx() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return new HelpCtx(getClass().getName());
     }
 
     @Override
     public boolean isValid() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        // TODO perform a real check here!
+
+        return true;
     }
 
     @Override
     public void populate() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        assert SwingUtilities.isEventDispatchThread();
+
+        // TODO populate the panel here!!!
     }
 
     @Override
     public String getErrorMessage() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return errorMessage;
     }
 
     @Override
     public void applyChanges() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        gloRepository.setInfoValues();
     }
 
     @Override
     public void cancelChanges() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        // FIXME is anything to do here?
     }
     //
     // Change Support

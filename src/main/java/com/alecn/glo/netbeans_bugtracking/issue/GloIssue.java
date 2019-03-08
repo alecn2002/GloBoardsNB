@@ -25,8 +25,10 @@ package com.alecn.glo.netbeans_bugtracking.issue;
 
 import com.alecn.glo.netbeans_bugtracking.GloRepository;
 import com.alecn.glo.sojo.Card;
+import java.util.Date;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import org.netbeans.modules.bugtracking.spi.IssueScheduleInfo;
 
 /**
  *
@@ -55,5 +57,17 @@ public class GloIssue {
 
     public boolean isFinished() {
         return _isFinished(card);
+    }
+
+    void setSchedule(IssueScheduleInfo scheduleInfo) {
+        // TODO is anything to do here?
+    }
+
+    Date getDueDate() {
+        return null; // Calendar.getInstance().getTime(); // FIXME hmmmmmm...
+    }
+
+    IssueScheduleInfo getSchedule() {
+        return null;
     }
 }

@@ -21,34 +21,26 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.alecn.glo.netbeans_bugtracking.query;
+package com.alecn.glo.util;
 
-import com.alecn.glo.netbeans_bugtracking.issue.GloIssue;
-import org.netbeans.modules.bugtracking.spi.QueryController;
-import org.netbeans.modules.bugtracking.spi.QueryProvider;
+import java.util.function.Supplier;
+import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
 
 /**
  *
  * @author anovitsk
  */
-public class GloQuery {
+@RequiredArgsConstructor
+public class LazyValue<T> {
+    @NonNull
+    private final Supplier<T> supplier;
+    private T value;
 
-    private QueryProvider.IssueContainer<GloIssue> delegateContainer;
-
-    public void setIssueContainer(QueryProvider.IssueContainer<GloIssue> ic) {
-        delegateContainer = ic;
+    public T get() {
+        if (value == null) {
+            value = supplier.get();
+        }
+        return value;
     }
-
-    public String getDisplayName() {
-        return "GLo Query"; // FIXME !!! GloQuery.getDisplayName()
-    }
-
-    public String getTooltip() {
-        return "GLO Query Tooltip"; // FIXME !!! GloQuery.getTooltip()
-    }
-
-    public QueryController getController() {
-        return null; // FIXME !!!!!! GloQuery.getController()
-    }
-
 }

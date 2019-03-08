@@ -21,34 +21,27 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.alecn.glo.netbeans_bugtracking.query;
+package com.alecn.glo.netbeans_bugtracking.issue;
 
-import com.alecn.glo.netbeans_bugtracking.issue.GloIssue;
-import org.netbeans.modules.bugtracking.spi.QueryController;
-import org.netbeans.modules.bugtracking.spi.QueryProvider;
+import org.netbeans.modules.bugtracking.spi.IssuePriorityInfo;
+import org.netbeans.modules.bugtracking.spi.IssuePriorityProvider;
+import org.openide.util.lookup.ServiceProvider;
 
 /**
  *
  * @author anovitsk
  */
-public class GloQuery {
+@ServiceProvider(service = GloIssuePriorityProvider.class)
+public class GloIssuePriorityProvider implements IssuePriorityProvider<GloIssue> {
 
-    private QueryProvider.IssueContainer<GloIssue> delegateContainer;
-
-    public void setIssueContainer(QueryProvider.IssueContainer<GloIssue> ic) {
-        delegateContainer = ic;
+    @Override
+    public String getPriorityID(GloIssue i) {
+        return ""; // FIXME do we support priorities???
     }
 
-    public String getDisplayName() {
-        return "GLo Query"; // FIXME !!! GloQuery.getDisplayName()
-    }
-
-    public String getTooltip() {
-        return "GLO Query Tooltip"; // FIXME !!! GloQuery.getTooltip()
-    }
-
-    public QueryController getController() {
-        return null; // FIXME !!!!!! GloQuery.getController()
+    @Override
+    public IssuePriorityInfo[] getPriorityInfos() {
+        return new IssuePriorityInfo[0]; // No, we don't at the moment
     }
 
 }

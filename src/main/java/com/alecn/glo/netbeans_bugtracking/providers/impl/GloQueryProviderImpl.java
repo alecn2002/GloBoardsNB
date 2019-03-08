@@ -34,17 +34,17 @@ public class GloQueryProviderImpl implements GloQueryProvider {
 
     @Override
     public String getDisplayName(GloQuery q) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return q.getDisplayName();
     }
 
     @Override
     public String getTooltip(GloQuery q) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return q.getTooltip();
     }
 
     @Override
     public QueryController getController(GloQuery q) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return q.getController();
     }
 
     @Override
@@ -69,7 +69,7 @@ public class GloQueryProviderImpl implements GloQueryProvider {
 
     @Override
     public void setIssueContainer(GloQuery q, IssueContainer<GloIssue> c) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        q.setIssueContainer(c);
     }
 
     @Override

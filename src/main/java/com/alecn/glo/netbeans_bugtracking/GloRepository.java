@@ -23,10 +23,16 @@
  */
 package com.alecn.glo.netbeans_bugtracking;
 
+import com.alecn.glo.GloConfig;
+import com.alecn.glo.GloConnector;
+import com.alecn.glo.client.impl.GloConstants;
+import com.alecn.glo.netbeans_bugtracking.query.GloQuery;
 import com.alecn.glo.service.BoardService;
 import com.alecn.glo.service.CommentService;
 import com.alecn.glo.service.impl.BoardServiceImpl;
 import com.alecn.glo.service.impl.CommentServiceImpl;
+import com.alecn.glo.util.LazyValue;
+import java.awt.Image;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 import java.lang.ref.WeakReference;
@@ -34,13 +40,13 @@ import java.util.Collections;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.UUID;
 import java.util.function.Function;
-import java.util.function.Supplier;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NonNull;
-import lombok.RequiredArgsConstructor;
 import org.netbeans.modules.bugtracking.spi.RepositoryInfo;
+import org.openide.util.Lookup;
 import org.openide.util.lookup.InstanceContent;
 
 /**
@@ -53,6 +59,8 @@ public class GloRepository {
 
     static final String PROPERTY_ACCESS_KEY = "accessKey";              // NOI18N
 
+    private static final GloConfig gloConfig = Lookup.getDefault().lookup(GloConfig.class);
+
     // Make sure we know all instances we created - a crude hack, but API does
     // not allow ourselves ....
     private static final List<WeakReference<GloRepository>> repositoryList
@@ -60,20 +68,6 @@ public class GloRepository {
 
     {
         repositoryList.add(new WeakReference<>(this));
-    }
-
-    @RequiredArgsConstructor
-    private static class LazyValue<T> {
-        @NonNull
-        private final Supplier<T> supplier;
-        private T value;
-
-        public T get() {
-            if (value == null) {
-                value = supplier.get();
-            }
-            return value;
-        }
     }
 
     public static GloRepository getInstanceById(@NonNull String id) {
@@ -144,6 +138,20 @@ public class GloRepository {
     public GloRepositoryController getController() {
         return gloRepositoryController.get();
     }
+
+    public void setInfoValues() {
+        this.repositoryInfo = new RepositoryInfo(UUID.randomUUID().toString(),
+                GloConnector.ID,
+                GloConstants.GLO_URL,
+                "GLO board",  // TODO replace it with real name
+                "GLO board"   // TODO replace it with real name
+        );
+    }
+
+    public Image getIconImage() {
+        return gloConfig.getIconImage();
+    }
+
     //
     // Change Support
     //
@@ -155,5 +163,9 @@ public class GloRepository {
 
     public void removePropertyChangeListener(PropertyChangeListener listener) {
         propertyChangeSupport.removePropertyChangeListener(listener);
+    }
+
+    public GloQuery createQuery() {
+        return new GloQuery();
     }
 }
