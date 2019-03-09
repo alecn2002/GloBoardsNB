@@ -23,16 +23,37 @@
  */
 package com.alecn.glo.ui;
 
+import java.awt.Component;
 import java.util.List;
 import java.util.function.Function;
 import javax.swing.AbstractListModel;
 import javax.swing.ComboBoxModel;
+import javax.swing.JList;
+import javax.swing.plaf.basic.BasicComboBoxRenderer;
 
 /**
  *
  * @author alecn
  */
 public class NameIdListModel<T> extends AbstractListModel<T> implements ComboBoxModel<T> {
+
+    public class NameRenderer extends BasicComboBoxRenderer {
+        @Override
+        public Component getListCellRendererComponent(
+            JList list, Object value, int index,
+            boolean isSelected, boolean cellHasFocus)
+        {
+            super.getListCellRendererComponent(list, value, index,
+                isSelected, cellHasFocus);
+
+            if (value == null) {
+                setText("");
+            } else {
+                setText(getDisplayName((T)value));
+            }
+            return this;
+        }
+    }
 
     private final List<T> list;
 
@@ -43,11 +64,15 @@ public class NameIdListModel<T> extends AbstractListModel<T> implements ComboBox
     private Integer selectionId;
 
 
-    public NameIdListModel(List<T> list, Function<T, String> nameVisitor, Function<T, String> idVisitor) {
+    public NameIdListModel(List<T> list, Function<T, String> nameVisitor, Function<T, String> idVisitor, Integer selectionId) {
         this.list = list;
         this.nameVisitor = nameVisitor;
         this.idVisitor = idVisitor;
-        this.selectionId = null;
+        this.selectionId = selectionId;
+    }
+
+    public NameIdListModel(List<T> list, Function<T, String> nameVisitor, Function<T, String> idVisitor) {
+        this(list, nameVisitor, idVisitor, null);
     }
 
     @Override
@@ -66,6 +91,15 @@ public class NameIdListModel<T> extends AbstractListModel<T> implements ComboBox
 
     public String getName(T v) {
         return nameVisitor.apply(v);
+    }
+
+    public String getDisplayName(T v) {
+        StringBuilder sb = new StringBuilder();
+        return sb.append(nameVisitor.apply(v))
+                .append(" (")
+                .append(idVisitor.apply(v))
+                .append(")")
+                .toString();
     }
 
     @Override
@@ -87,5 +121,9 @@ public class NameIdListModel<T> extends AbstractListModel<T> implements ComboBox
         return selectionId == null
                 ? null
                 : list.get(selectionId);
+    }
+
+    public BasicComboBoxRenderer rendererFactory() {
+        return new NameRenderer();
     }
 }

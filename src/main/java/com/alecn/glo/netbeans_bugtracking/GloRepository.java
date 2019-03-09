@@ -158,14 +158,16 @@ public class GloRepository {
         return gloRepositoryController.get();
     }
 
-    public void setInfoValues(String name, String access_key) {
+    public void setInfoValues(String name, String access_key, String boardId, String boardName) {
         this.repositoryInfo = new RepositoryInfo(UUID.randomUUID().toString(),
                 GloConnector.ID,
                 GloConstants.GLO_URL,
                 name,
-                name
+                name + " (" + boardName + ")"
         );
         repositoryInfo.putValue(PROPERTY_ACCESS_KEY, access_key);
+        repositoryInfo.putValue(PROPERTY_BOARD_ID, boardId);
+        repositoryInfo.putValue(PROPERTY_BOARD_NAME, boardName);
 
         createServices();
     }
@@ -187,6 +189,14 @@ public class GloRepository {
         List<Board> list = boardService.listBoards(); // TODO caching
         oeWriter.outWrite(o -> o.printf("list of boards contains %d items\n", list.size()));
         return list;
+    }
+
+    public String getBoardId() {
+        return repositoryInfo.getValue(PROPERTY_BOARD_ID);
+    }
+
+    public void removed() {
+
     }
 
     //

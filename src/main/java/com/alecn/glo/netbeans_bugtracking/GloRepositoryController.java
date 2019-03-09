@@ -110,8 +110,17 @@ public class GloRepositoryController implements RepositoryController, DocumentLi
 
     @Override
     public void applyChanges() {
+        String boardId = null;
+        String boardName = null;
+        Board selectedBoard = (Board)panel.gloRepoBoard.getSelectedItem();
+        if (selectedBoard != null) {
+            boardId = selectedBoard.getId();
+            boardName = selectedBoard.getName();
+        }
         gloRepository.setInfoValues(panel.gloRepositoryName.getText(),
-                panel.gloRepoAccessKey.getText());
+                panel.gloRepoAccessKey.getText(),
+                boardId,
+                boardName);
     }
 
     @Override
@@ -164,7 +173,9 @@ public class GloRepositoryController implements RepositoryController, DocumentLi
         errorMessage = "";
         try {
             List<Board> boards = gloRepository.getBoardsList();
-            panel.gloRepoBoard.setModel(new NameIdListModel<>(boards, b -> b.getName(), b -> b.getId()));
+            NameIdListModel<Board> model = new NameIdListModel<>(boards, b -> b.getName(), b -> b.getId());
+            panel.gloRepoBoard.setModel(model);
+            panel.gloRepoBoard.setRenderer(model.rendererFactory());
 
         } catch (Error e) {
             errorMessage = "Couldn't fetch boards list: " + e.getMessage();

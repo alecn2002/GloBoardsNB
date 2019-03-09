@@ -30,6 +30,7 @@ import com.alecn.glo.netbeans_bugtracking.query.GloQuery;
 import java.awt.Image;
 import java.beans.PropertyChangeListener;
 import java.util.Collection;
+import java.util.stream.Collectors;
 import org.netbeans.modules.bugtracking.spi.RepositoryController;
 import org.netbeans.modules.bugtracking.spi.RepositoryInfo;
 import org.openide.util.lookup.ServiceProvider;
@@ -56,7 +57,7 @@ public class GloRepositoryProviderImpl implements GloRepositoryProvider {
 
     @Override
     public void removed(GloRepository r) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        r.removed();
     }
 
     @Override
@@ -86,7 +87,10 @@ public class GloRepositoryProviderImpl implements GloRepositoryProvider {
 
     @Override
     public Collection<GloIssue> simpleSearch(GloRepository r, String criteria) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return r.getBoardService().listCards(r.getBoardId())
+                .stream()
+                .map(c -> new GloIssue(c, r))
+                .collect(Collectors.toList());
     }
 
     @Override

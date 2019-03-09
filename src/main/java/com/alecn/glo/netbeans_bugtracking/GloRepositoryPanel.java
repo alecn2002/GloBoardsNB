@@ -56,8 +56,6 @@ public class GloRepositoryPanel extends javax.swing.JPanel {
         verifyButton = new javax.swing.JButton();
         jLabel3 = new javax.swing.JLabel();
         gloRepoBoard = new javax.swing.JComboBox<>();
-        jScrollPane1 = new javax.swing.JScrollPane();
-        errorArea = new javax.swing.JTextArea();
 
         org.openide.awt.Mnemonics.setLocalizedText(jLabel1, org.openide.util.NbBundle.getMessage(GloRepositoryPanel.class, "GloRepositoryPanel.jLabel1.text")); // NOI18N
 
@@ -77,13 +75,6 @@ public class GloRepositoryPanel extends javax.swing.JPanel {
 
         org.openide.awt.Mnemonics.setLocalizedText(jLabel3, org.openide.util.NbBundle.getMessage(GloRepositoryPanel.class, "GloRepositoryPanel.jLabel3.text")); // NOI18N
 
-        jScrollPane1.setEnabled(false);
-        jScrollPane1.setFocusable(false);
-
-        errorArea.setColumns(20);
-        errorArea.setRows(5);
-        jScrollPane1.setViewportView(errorArea);
-
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
@@ -91,7 +82,6 @@ public class GloRepositoryPanel extends javax.swing.JPanel {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 817, Short.MAX_VALUE)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jLabel1)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -103,7 +93,7 @@ public class GloRepositoryPanel extends javax.swing.JPanel {
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jLabel3)
                         .addGap(18, 18, 18)
-                        .addComponent(gloRepoBoard, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addComponent(gloRepoBoard, 0, 753, Short.MAX_VALUE))
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(verifyButton, javax.swing.GroupLayout.PREFERRED_SIZE, 83, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(0, 0, Short.MAX_VALUE)))
@@ -126,9 +116,7 @@ public class GloRepositoryPanel extends javax.swing.JPanel {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel3)
                     .addComponent(gloRepoBoard, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 126, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(27, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
 
@@ -138,14 +126,12 @@ public class GloRepositoryPanel extends javax.swing.JPanel {
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    javax.swing.JTextArea errorArea;
     javax.swing.JTextField gloRepoAccessKey;
     javax.swing.JComboBox<Board> gloRepoBoard;
     javax.swing.JTextField gloRepositoryName;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
-    private javax.swing.JScrollPane jScrollPane1;
     javax.swing.JButton verifyButton;
     // End of variables declaration//GEN-END:variables
 }
