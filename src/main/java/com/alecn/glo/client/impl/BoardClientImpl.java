@@ -25,7 +25,6 @@ package com.alecn.glo.client.impl;
 
 import com.alecn.glo.client.BoardClient;
 import com.alecn.glo.client.BoardFieldsEnum;
-import static com.alecn.glo.client.impl.GloConstants.GLO_PATH_BOARDS;
 import com.alecn.glo.sojo.Board;
 import com.alecn.glo.util.GloLogger;
 import java.util.Arrays;
@@ -47,7 +46,7 @@ public class BoardClientImpl extends GenericClientImpl<Board, Board, BoardFields
     static final Collection<BoardFieldsEnum> ALL_FIELDS = Arrays.asList(BoardFieldsEnum.values());
 
     public BoardClientImpl(String access_key) {
-        super(access_key, GLO_PATH_BOARDS, Board.class, Board[].class);
+        super(access_key, GloConstants.GLO_PATH_BOARDS, Board.class, Board[].class);
     }
 
     public BoardClientImpl() {

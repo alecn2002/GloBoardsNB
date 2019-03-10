@@ -28,6 +28,7 @@ import com.alecn.glo.client.CommentFieldsEnum;
 import com.alecn.glo.client.dto.CommentRequest;
 import static com.alecn.glo.client.impl.GloConstants.GLO_PATH_COMMENT_ID;
 import com.alecn.glo.sojo.Comment;
+import com.alecn.glo.util.GloLogger;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
@@ -40,6 +41,8 @@ import org.openide.util.lookup.ServiceProvider;
 
 @ServiceProvider(service = CommentClient.class)
 public class CommentClientImpl extends GenericClientImpl<Comment, CommentRequest, CommentFieldsEnum> implements CommentClient {
+
+    private static final GloLogger LOGGER = new GloLogger(CommentClientImpl.class);
 
     private static final CommentFieldsEnum[] DEFAULT_FIELDS_LIST = {CommentFieldsEnum.TEXT};
     static final Collection<CommentFieldsEnum> DEFAULT_FIELDS = Arrays.asList(DEFAULT_FIELDS_LIST);
@@ -95,7 +98,7 @@ public class CommentClientImpl extends GenericClientImpl<Comment, CommentRequest
 
     @Override
     public List<Comment> list(String board_id, String card_id, Collection<CommentFieldsEnum> fields, Integer page, Integer per_page, boolean sort_desc) {
-        return super.list(fieldsOrDefaults(fields), false, page, per_page, sort_desc, new BoardCardIdResolver(board_id, card_id));
+        return super.list(fieldsOrDefaults(fields), false, page, per_page, sort_desc, new BoardCardIdResolver(board_id, card_id), LOGGER, "comments");
     }
 
     @Override

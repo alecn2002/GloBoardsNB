@@ -26,11 +26,11 @@ package com.alecn.glo.client.impl;
 import com.alecn.glo.client.CardClient;
 import com.alecn.glo.client.CardFieldsEnum;
 import com.alecn.glo.client.dto.CardRequest;
-import static com.alecn.glo.client.impl.GloConstants.GLO_PATH_BOARD_ID;
 import com.alecn.glo.sojo.Card;
 import com.alecn.glo.sojo.Description;
 import com.alecn.glo.sojo.PartialLabel;
 import com.alecn.glo.sojo.PartialUser;
+import com.alecn.glo.util.GloLogger;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Date;
@@ -44,6 +44,8 @@ import org.openide.util.lookup.ServiceProvider;
 
 @ServiceProvider(service = CardClient.class)
 public class CardClientImpl extends GenericClientImpl<Card, CardRequest, CardFieldsEnum> implements CardClient {
+
+    private static final GloLogger LOGGER = new GloLogger(CardClientImpl.class);
 
     private static final CardFieldsEnum[] DEFAULT_FIELDS_LIST = {CardFieldsEnum.BOARD_ID, CardFieldsEnum.COLUMN_ID, CardFieldsEnum.NAME};
     static final Collection<CardFieldsEnum> DEFAULT_FIELDS = Arrays.asList(DEFAULT_FIELDS_LIST);
@@ -61,7 +63,7 @@ public class CardClientImpl extends GenericClientImpl<Card, CardRequest, CardFie
         private final String board_id;
 
         public static WebTarget apply(WebTarget t, String board_id) {
-            return t.resolveTemplate(GLO_PATH_BOARD_ID, board_id);
+            return t.resolveTemplate(GloConstants.GLO_PATH_BOARD_ID, board_id);
         }
 
         @Override
@@ -90,7 +92,7 @@ public class CardClientImpl extends GenericClientImpl<Card, CardRequest, CardFie
 
     @Override
     public List<Card> list(String board_id, Collection<CardFieldsEnum> fields, boolean archived, Integer page, Integer per_page, boolean sort_desc) {
-        return super.list(fieldsOrDefaults(fields), archived, page, per_page, sort_desc, new BoardIdResolver(board_id));
+        return super.list(fieldsOrDefaults(fields), archived, page, per_page, sort_desc, new BoardIdResolver(board_id), LOGGER, "cards");
     }
 
     @Override
@@ -101,7 +103,7 @@ public class CardClientImpl extends GenericClientImpl<Card, CardRequest, CardFie
 
     @Override
     public Card get(String board_id, String id, Collection<CardFieldsEnum> fields) {
-        return super.get(id, fieldsOrDefaults(fields), new BoardIdResolver(board_id));
+        return super.get(id, fieldsOrDefaults(fields), new BoardIdResolver(board_id), LOGGER, "card");
     }
 
     @Override
