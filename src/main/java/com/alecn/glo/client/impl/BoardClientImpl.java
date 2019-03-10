@@ -27,6 +27,7 @@ import com.alecn.glo.client.BoardClient;
 import com.alecn.glo.client.BoardFieldsEnum;
 import static com.alecn.glo.client.impl.GloConstants.GLO_PATH_BOARDS;
 import com.alecn.glo.sojo.Board;
+import com.alecn.glo.util.GloLogger;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
@@ -38,6 +39,8 @@ import org.openide.util.lookup.ServiceProvider;
  */
 @ServiceProvider(service = BoardClient.class)
 public class BoardClientImpl extends GenericClientImpl<Board, Board, BoardFieldsEnum> implements BoardClient {
+
+    private static final GloLogger LOGGER = new GloLogger(BoardClientImpl.class);
 
     private static final BoardFieldsEnum[] DEFAULT_FIELDS_LIST = {BoardFieldsEnum.NAME};
     static final Collection<BoardFieldsEnum> DEFAULT_FIELDS = Arrays.asList(DEFAULT_FIELDS_LIST);
@@ -53,10 +56,9 @@ public class BoardClientImpl extends GenericClientImpl<Board, Board, BoardFields
 
     @Override
     public Board get(String board_id, Collection<BoardFieldsEnum> fields) {
-            Collection<BoardFieldsEnum> myFields = fields == null
-                    ? DEFAULT_FIELDS
-                    : fields;
-        return super.get(board_id, myFields);
+        return execWithDefault(fields,
+                DEFAULT_FIELDS,
+                f -> super.get(board_id, f, LOGGER, "board"));
     }
 
     @Override
@@ -76,10 +78,9 @@ public class BoardClientImpl extends GenericClientImpl<Board, Board, BoardFields
 
     @Override
     public List<Board> list(final Collection<BoardFieldsEnum> fields, boolean archived, Integer page, Integer per_page, boolean sort_desc) {
-            Collection<BoardFieldsEnum> myFields = fields == null
-                    ? DEFAULT_FIELDS
-                    : fields;
-        return super.list(myFields, archived, page, per_page, sort_desc);
+        return execWithDefault(fields,
+                DEFAULT_FIELDS,
+                f -> super.list(f, archived, page, per_page, sort_desc, LOGGER, "board"));
     }
 
     @Override

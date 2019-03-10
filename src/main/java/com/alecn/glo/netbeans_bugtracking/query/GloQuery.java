@@ -25,6 +25,7 @@ package com.alecn.glo.netbeans_bugtracking.query;
 
 import com.alecn.glo.netbeans_bugtracking.GloRepository;
 import com.alecn.glo.netbeans_bugtracking.issue.GloIssue;
+import lombok.Getter;
 import org.netbeans.modules.bugtracking.spi.QueryController;
 import org.netbeans.modules.bugtracking.spi.QueryProvider;
 
@@ -32,6 +33,7 @@ import org.netbeans.modules.bugtracking.spi.QueryProvider;
  *
  * @author anovitsk
  */
+@Getter
 public class GloQuery {
 
     private QueryProvider.IssueContainer<GloIssue> delegateContainer;

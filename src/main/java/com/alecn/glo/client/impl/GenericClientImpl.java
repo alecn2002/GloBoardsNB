@@ -25,6 +25,7 @@ package com.alecn.glo.client.impl;
 
 import com.alecn.glo.client.FieldsEnumI;
 import static com.alecn.glo.client.impl.GloConstants.GLO_URL;
+import com.alecn.glo.util.GloLogger;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
@@ -122,9 +123,23 @@ public abstract class GenericClientImpl<T, R, F extends FieldsEnumI> extends Glo
                 .get(klass);
     }
 
+    protected T get(String id, Collection<F> fields, Function<WebTarget, WebTarget> fixer, GloLogger logger, String name) {
+        logger.info("Fetching %s id=%s with %d fields (%s)",
+                    name,
+                    id,
+                    fields.size(),
+                    GloLogger.join(fields, ff -> ff.getRestName()));
+        return prepareWebTarget(id, fields, fixer)
+                .request(MediaType.APPLICATION_JSON)
+                .get(klass);
+    }
 
     protected T get(String id, Collection<F> fields) {
         return get(id, fields, null);
+    }
+
+    protected T get(String id, Collection<F> fields, GloLogger logger, String name) {
+        return get(id, fields, null, logger, name);
     }
 
     protected List<T> list(Function<WebTarget, WebTarget> fixer) {
@@ -147,15 +162,40 @@ public abstract class GenericClientImpl<T, R, F extends FieldsEnumI> extends Glo
         return Arrays.asList(invocationBuilder.get(arrayKlass));
     }
 
+    protected List<T> list(Collection<F> fields, boolean archived, Integer page, Integer per_page, boolean sort_desc, Function<WebTarget, WebTarget> fixer, GloLogger logger, String name) {
+        logger.info("Fetching %s list with %d fields (%s), %s archived, page=%d, per_page=%d, sort=%s",
+                    name,
+                    fields.size(),
+                    GloLogger.join(fields, ff -> ff.getRestName()),
+                    archived ? "" : "NOT",
+                    page,
+                    per_page,
+                    sort_desc ? "DESC" : "ASC");
+        return list(fields, archived, page, per_page, sort_desc, fixer);
+    }
+
     protected List<T> list(Collection<F> fields, boolean archived, Integer page, Integer per_page, boolean sort_desc) {
         return list(fields, archived, page, per_page, sort_desc, null);
     }
 
+    protected List<T> list(Collection<F> fields, boolean archived, Integer page, Integer per_page, boolean sort_desc, GloLogger logger, String name) {
+        return list(fields, archived, page, per_page, sort_desc, null, logger, name);
+    }
+
     protected T post(Entity<R> entity, Function<WebTarget, WebTarget> fixer) {
+        // TODO logger
         return prepareInvocationBuilder(fixer).post(entity, klass);
     }
 
     protected Response delete(Function<WebTarget, WebTarget> fixer) {
+        // TODO logger
         return prepareInvocationBuilder(fixer).delete(Response.class);
+    }
+
+    protected <R, P> R execWithDefault(P param, P default_param, Function<P, R> toExec) {
+        P toUse = param == null
+                ? default_param
+                : param;
+        return toExec.apply(toUse);
     }
 }

@@ -44,7 +44,7 @@ import org.openide.util.HelpCtx;
 @AllArgsConstructor
 public class GloQueryController implements QueryController, ActionListener {
 
-    private static final QueryMode[] PROVIDED_MODES_ARRAY = {QueryMode.EDIT, QueryMode.VIEW}; // TODO clarify
+    private static final QueryMode[] PROVIDED_MODES_ARRAY = {QueryMode.VIEW}; // {QueryMode.EDIT, QueryMode.VIEW}; // TODO clarify
     private static final Set<QueryMode> PROVIDED_MODES = new HashSet<>(Arrays.asList(PROVIDED_MODES_ARRAY));
 
     private static final LazyValue<GloQueryPanel> gloQueryPanel = new LazyValue<>(() -> new GloQueryPanel());
