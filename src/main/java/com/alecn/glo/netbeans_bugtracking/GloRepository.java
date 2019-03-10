@@ -32,6 +32,7 @@ import com.alecn.glo.service.CommentService;
 import com.alecn.glo.service.impl.BoardServiceImpl;
 import com.alecn.glo.service.impl.CommentServiceImpl;
 import com.alecn.glo.sojo.Board;
+import com.alecn.glo.sojo.Column;
 import com.alecn.glo.util.LazyValue;
 import com.alecn.glo.util.OeWriter;
 import java.awt.Image;
@@ -210,5 +211,16 @@ public class GloRepository {
 
     public void removePropertyChangeListener(PropertyChangeListener listener) {
         propertyChangeSupport.removePropertyChangeListener(listener);
+    }
+
+    public List<Column> listColumns() {
+        oeWriter.outWrite(o -> o.println(">>>> getBoardsList()"));
+        if (boardService == null) {
+            oeWriter.errWrite(o -> o.println("boardService == null"));
+            return new ArrayList<>();
+        }
+        List<Column> list = boardService.listBoardColumns(getBoardId()); // TODO caching
+        oeWriter.outWrite(o -> o.printf("list of columns contains %d items\n", list.size()));
+        return list;
     }
 }

@@ -44,19 +44,59 @@ public class GloQueryPanel extends javax.swing.JPanel {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        qSearchButton = new javax.swing.JButton();
+        qResultTable = new javax.swing.JScrollPane();
+        resultTable = new javax.swing.JTable();
+
+        org.openide.awt.Mnemonics.setLocalizedText(qSearchButton, org.openide.util.NbBundle.getMessage(GloQueryPanel.class, "GloQueryPanel.qSearchButton.text")); // NOI18N
+        qSearchButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                qSearchButtonActionPerformed(evt);
+            }
+        });
+
+        resultTable.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+
+            },
+            new String [] {
+
+            }
+        ));
+        qResultTable.setViewportView(resultTable);
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 400, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(qResultTable, javax.swing.GroupLayout.DEFAULT_SIZE, 938, Short.MAX_VALUE)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(qSearchButton)
+                        .addGap(0, 0, Short.MAX_VALUE)))
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 300, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(qSearchButton)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(qResultTable, javax.swing.GroupLayout.DEFAULT_SIZE, 491, Short.MAX_VALUE)
+                .addContainerGap())
         );
     }// </editor-fold>//GEN-END:initComponents
 
+    private void qSearchButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_qSearchButtonActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_qSearchButtonActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JScrollPane qResultTable;
+    javax.swing.JButton qSearchButton;
+    javax.swing.JTable resultTable;
     // End of variables declaration//GEN-END:variables
 }

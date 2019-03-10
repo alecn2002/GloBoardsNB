@@ -24,6 +24,7 @@
 package com.alecn.glo.netbeans_bugtracking.query;
 
 import com.alecn.glo.netbeans_bugtracking.GloRepository;
+import com.alecn.glo.sojo.Column;
 import com.alecn.glo.util.LazyValue;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -31,8 +32,11 @@ import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 import java.util.Arrays;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 import javax.swing.JComponent;
+import javax.swing.JTable;
+import javax.swing.table.TableColumn;
 import lombok.AllArgsConstructor;
 import org.netbeans.modules.bugtracking.spi.QueryController;
 import org.openide.util.HelpCtx;
@@ -69,7 +73,13 @@ public class GloQueryController implements QueryController, ActionListener {
 
     @Override
     public void opened() {
-        // TODO GloQueryController.opened()
+        List<Column> columns = gloRepository.listColumns();
+        JTable resultTable = gloQueryPanel.get().resultTable;
+        for (Column column: columns) {
+            TableColumn tableColumn = new TableColumn();
+            tableColumn.setHeaderValue(column.getName());
+            resultTable.addColumn(tableColumn);
+        }
     }
 
     @Override
