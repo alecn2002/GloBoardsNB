@@ -24,6 +24,8 @@
 package com.alecn.glo.netbeans_bugtracking.query;
 
 import com.alecn.glo.netbeans_bugtracking.GloRepository;
+import com.alecn.glo.netbeans_bugtracking.issue.GloIssue;
+import com.alecn.glo.sojo.Card;
 import com.alecn.glo.sojo.Column;
 import com.alecn.glo.util.LazyValue;
 import java.awt.event.ActionEvent;
@@ -34,6 +36,7 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 import javax.swing.JComponent;
 import javax.swing.JTable;
 import javax.swing.table.TableColumn;
@@ -75,11 +78,15 @@ public class GloQueryController implements QueryController, ActionListener {
     public void opened() {
         List<Column> columns = gloRepository.listColumns();
         JTable resultTable = gloQueryPanel.get().resultTable;
-        for (Column column: columns) {
-            TableColumn tableColumn = new TableColumn();
-            tableColumn.setHeaderValue(column.getName());
-            resultTable.addColumn(tableColumn);
-        }
+        GloQueryResultTableModel tableModel = new GloQueryResultTableModel(columns.stream().map(c -> c.getName()).collect(Collectors.toList()));
+        resultTable.setModel(tableModel);
+        List<Card> cards = gloRepository.listCards();
+        columns.forEach(column -> {
+            tableModel.addColumnValues(cards.stream()
+            .filter(c -> c.getColumn_id().equals(column.getId()))
+            .map(c -> new GloIssue(c, gloRepository))
+            .collect(Collectors.toList()));
+        });
     }
 
     @Override
