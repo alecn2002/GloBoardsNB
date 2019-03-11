@@ -27,9 +27,11 @@ import com.alecn.glo.netbeans_bugtracking.GloRepository;
 import com.alecn.glo.netbeans_bugtracking.issue.GloIssue;
 import com.alecn.glo.sojo.Card;
 import com.alecn.glo.sojo.Column;
+import com.alecn.glo.util.GloLogger;
 import com.alecn.glo.util.LazyValue;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 import java.util.Arrays;
@@ -49,6 +51,8 @@ import org.openide.util.HelpCtx;
  */
 @AllArgsConstructor
 public class GloQueryController implements QueryController, ActionListener {
+
+    private static final GloLogger LOGGER = new GloLogger(GloQueryController.class);
 
     private static final QueryMode[] PROVIDED_MODES_ARRAY = {QueryMode.VIEW}; // {QueryMode.EDIT, QueryMode.VIEW}; // TODO clarify
     private static final Set<QueryMode> PROVIDED_MODES = new HashSet<>(Arrays.asList(PROVIDED_MODES_ARRAY));
@@ -75,17 +79,7 @@ public class GloQueryController implements QueryController, ActionListener {
 
     @Override
     public void opened() {
-        List<Column> columns = gloRepository.listColumns();
-        JTable resultTable = gloQueryPanel.get().resultTable;
-        GloQueryResultTableModel tableModel = new GloQueryResultTableModel(columns.stream().map(c -> c.getName()).collect(Collectors.toList()));
-        resultTable.setModel(tableModel);
-        List<Card> cards = gloRepository.listCards();
-        columns.forEach(column -> {
-            tableModel.addColumnValues(cards.stream()
-            .filter(c -> c.getColumn_id().equals(column.getId()))
-            .map(c -> new GloIssue(c, gloRepository))
-            .collect(Collectors.toList()));
-        });
+        gloQueryPanel.get().qSearchButton.addActionListener(this);
     }
 
     @Override
@@ -125,7 +119,28 @@ public class GloQueryController implements QueryController, ActionListener {
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        LOGGER.info("GloQueryController: actionPerformed(%s)\n", e.getActionCommand());
+        if (e.getSource().equals(gloQueryPanel.get().qSearchButton)) {
+            onSearch();
+        }
+    }
+
+    private void onSearch() {
+        LOGGER.info("Retrieving list of columns...\n");
+        List<Column> columns = gloRepository.listColumns();
+        LOGGER.info("Got %d columns\n", columns.size());
+        JTable resultTable = gloQueryPanel.get().resultTable;
+        GloQueryResultTableModel tableModel = new GloQueryResultTableModel(columns.stream().map(c -> c.getName()).collect(Collectors.toList()));
+        resultTable.setModel(tableModel);
+        LOGGER.info("Retrieving list of cards...\n");
+        List<Card> cards = gloRepository.listCards();
+        LOGGER.info("Got %d cards\n", cards.size());
+        columns.forEach(column -> {
+            tableModel.addColumnValues(cards.stream()
+            .filter(c -> c.getColumn_id().equals(column.getId()))
+            .map(c -> new GloIssue(c, gloRepository))
+            .collect(Collectors.toList()));
+        });
     }
 
 }
