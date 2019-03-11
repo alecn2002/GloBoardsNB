@@ -63,6 +63,8 @@ public class GloQueryResultTableModel implements TableModel {
 
             setText(displayVisitor.apply((GloIssue)value));
 
+            setToolTipText(tooltipVisitor.apply((GloIssue)value));
+
             return this;
         }
 

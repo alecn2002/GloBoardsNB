@@ -136,21 +136,19 @@ public class GloQueryController implements QueryController, ActionListener {
             if (card == null) {
                 return "";
             }
-            StringBuilder sb = new StringBuilder("<html>");
-            sb.append(card.getName())
-                    .append(" (id=")
-                    .append(card.getId())
-                    .append(")<br>");
+            StringBuilder sb = new StringBuilder("<html><body>");
+            sb.append("<H1>").append(card.getName()).append("</H1>")
+                    .append(" <H2>(id=") .append(card.getId()) .append(")</H2><br>");
             if (card.getAssignees() == null || card.getAssignees().isEmpty()) {
-                sb.append("Not assigned<br>");
+                sb.append("<i>Not assigned</i><br>");
             } else {
-                sb.append("Assigned to: ")
+                sb.append("<i>Assigned to: ")
                         .append(String.join(", ", card.getAssignees().stream().map(pu -> pu.getId()).collect(Collectors.toList())))
-                        .append("<br>");
+                        .append("</i><br>");
             }
             Integer tasksNo = card.getTotal_task_count();
             sb.append(String.format("Tasks: %d", tasksNo == null ? 0 : tasksNo));
-            sb.append("</html>");
+            sb.append("</body></html>");
             return sb.toString();
         }
 

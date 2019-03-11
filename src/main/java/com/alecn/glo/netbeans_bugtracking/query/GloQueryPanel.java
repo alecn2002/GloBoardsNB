@@ -63,6 +63,9 @@ public class GloQueryPanel extends javax.swing.JPanel {
 
             }
         ));
+        resultTable.setAutoResizeMode(javax.swing.JTable.AUTO_RESIZE_ALL_COLUMNS);
+        resultTable.setCellSelectionEnabled(true);
+        resultTable.setDragEnabled(true);
         resultTable.setRowHeight(64);
         qResultTable.setViewportView(resultTable);
 
