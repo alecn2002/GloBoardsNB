@@ -24,10 +24,15 @@
 package com.alecn.glo.netbeans_bugtracking.query;
 
 import com.alecn.glo.netbeans_bugtracking.issue.GloIssue;
+import com.alecn.glo.util.LazyValue;
+import java.awt.Component;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Function;
+import javax.swing.JTable;
 import javax.swing.event.TableModelEvent;
 import javax.swing.event.TableModelListener;
+import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.TableModel;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
@@ -44,6 +49,26 @@ public class GloQueryResultTableModel implements TableModel {
     private List<List<GloIssue>> issues = new ArrayList<>();
     private int rowCount = 0;
     private List<TableModelListener> tableModelListeners = new ArrayList<>();
+
+    @NonNull
+    private final Function<GloIssue, String> displayVisitor;
+    @NonNull
+    private final Function<GloIssue, String> tooltipVisitor;
+
+    private class GloIssueTableRenderer extends DefaultTableCellRenderer {
+
+        @Override
+        public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
+            super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
+
+            setText(displayVisitor.apply((GloIssue)value));
+
+            return this;
+        }
+
+    }
+
+    private final LazyValue<GloIssueTableRenderer> gloIssueTableRenderer = new LazyValue<>(() -> new GloIssueTableRenderer());
 
     @Override
     public int getRowCount() {
@@ -105,6 +130,11 @@ public class GloQueryResultTableModel implements TableModel {
 
     public void notifyTableModelListeners(TableModelEvent e) {
         tableModelListeners.forEach(c -> c.tableChanged(e));
+    }
+
+    public void setThisModelToTable(JTable table) {
+        table.setModel(this);
+        table.setDefaultRenderer(GloIssue.class, gloIssueTableRenderer.get());
     }
 
 }

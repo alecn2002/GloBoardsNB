@@ -28,6 +28,7 @@ import java.util.List;
 import java.util.function.Function;
 import javax.swing.AbstractListModel;
 import javax.swing.ComboBoxModel;
+import javax.swing.JComboBox;
 import javax.swing.JList;
 import javax.swing.plaf.basic.BasicComboBoxRenderer;
 
@@ -125,5 +126,10 @@ public class NameIdListModel<T> extends AbstractListModel<T> implements ComboBox
 
     public BasicComboBoxRenderer rendererFactory() {
         return new NameRenderer();
+    }
+
+    public void setThisModelToControl(JComboBox<T> control) {
+            control.setModel(this);
+            control.setRenderer(rendererFactory());
     }
 }

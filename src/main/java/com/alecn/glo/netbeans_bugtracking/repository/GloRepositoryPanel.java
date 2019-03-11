@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.alecn.glo.netbeans_bugtracking;
+package com.alecn.glo.netbeans_bugtracking.repository;
 
 import com.alecn.glo.sojo.Board;
 

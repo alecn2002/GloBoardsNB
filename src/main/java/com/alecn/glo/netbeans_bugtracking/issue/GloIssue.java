@@ -23,7 +23,7 @@
  */
 package com.alecn.glo.netbeans_bugtracking.issue;
 
-import com.alecn.glo.netbeans_bugtracking.GloRepository;
+import com.alecn.glo.netbeans_bugtracking.repository.GloRepository;
 import com.alecn.glo.sojo.Card;
 import java.util.Date;
 import lombok.AllArgsConstructor;

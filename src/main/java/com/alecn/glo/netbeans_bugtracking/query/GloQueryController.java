@@ -23,7 +23,7 @@
  */
 package com.alecn.glo.netbeans_bugtracking.query;
 
-import com.alecn.glo.netbeans_bugtracking.GloRepository;
+import com.alecn.glo.netbeans_bugtracking.repository.GloRepository;
 import com.alecn.glo.netbeans_bugtracking.issue.GloIssue;
 import com.alecn.glo.sojo.Card;
 import com.alecn.glo.sojo.Column;
@@ -31,13 +31,13 @@ import com.alecn.glo.util.GloLogger;
 import com.alecn.glo.util.LazyValue;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 import javax.swing.JComponent;
 import javax.swing.JTable;
@@ -125,13 +125,48 @@ public class GloQueryController implements QueryController, ActionListener {
         }
     }
 
+    private static class GloIssueVisRenderer implements Function<GloIssue, String> {
+
+        @Override
+        public String apply(GloIssue t) {
+            if (t == null) {
+                return "";
+            }
+            Card card = t.getCard();
+            if (card == null) {
+                return "";
+            }
+            StringBuilder sb = new StringBuilder();
+            sb.append(card.getName())
+                    .append(" (id=")
+                    .append(card.getId())
+                    .append(")\n");
+            if (card.getAssignees() == null || card.getAssignees().isEmpty()) {
+                sb.append("Not assigned\n");
+            } else {
+                sb.append("Assigned to: ")
+                        .append(String.join(", ", card.getAssignees().stream().map(pu -> pu.getId()).collect(Collectors.toList())))
+                        .append("\n");
+            }
+            Integer tasksNo = card.getTotal_task_count();
+            sb.append(String.format("Tasks: %d", tasksNo == null ? 0 : tasksNo));
+            return sb.toString();
+        }
+
+    }
+
+    private static final GloIssueVisRenderer GLO_ISSUE_VIS_RENDERER = new GloIssueVisRenderer();
+
     private void onSearch() {
         LOGGER.info("Retrieving list of columns...\n");
         List<Column> columns = gloRepository.listColumns();
         LOGGER.info("Got %d columns\n", columns.size());
         JTable resultTable = gloQueryPanel.get().resultTable;
-        GloQueryResultTableModel tableModel = new GloQueryResultTableModel(columns.stream().map(c -> c.getName()).collect(Collectors.toList()));
-        resultTable.setModel(tableModel);
+        GloQueryResultTableModel tableModel = new GloQueryResultTableModel(columns.stream().map(c -> c.getName()).collect(Collectors.toList()),
+                GLO_ISSUE_VIS_RENDERER,
+                GLO_ISSUE_VIS_RENDERER
+        );
+        tableModel.setThisModelToTable(resultTable);
         LOGGER.info("Retrieving list of cards...\n");
         List<Card> cards = gloRepository.listCards();
         LOGGER.info("Got %d cards\n", cards.size());

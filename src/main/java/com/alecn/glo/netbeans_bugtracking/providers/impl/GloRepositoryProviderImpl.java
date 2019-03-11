@@ -23,7 +23,7 @@
  */
 package com.alecn.glo.netbeans_bugtracking.providers.impl;
 
-import com.alecn.glo.netbeans_bugtracking.GloRepository;
+import com.alecn.glo.netbeans_bugtracking.repository.GloRepository;
 import com.alecn.glo.netbeans_bugtracking.issue.GloIssue;
 import com.alecn.glo.netbeans_bugtracking.providers.GloRepositoryProvider;
 import com.alecn.glo.netbeans_bugtracking.query.GloQuery;

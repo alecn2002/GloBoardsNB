@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.alecn.glo.netbeans_bugtracking;
+package com.alecn.glo.netbeans_bugtracking.repository;
 
 import com.alecn.glo.GloConfig;
 import com.alecn.glo.sojo.Board;
@@ -202,8 +202,7 @@ public class GloRepositoryController implements RepositoryController, DocumentLi
             List<Board> boards = gloRepository.getBoardsList();
             LOGGER.info("%d boards retrieved\n", boards.size());
             NameIdListModel<Board> model = new NameIdListModel<>(boards, b -> b.getName(), b -> b.getId());
-            panel.gloRepoBoard.setModel(model);
-            panel.gloRepoBoard.setRenderer(model.rendererFactory());
+            model.setThisModelToControl(panel.gloRepoBoard);
             LOGGER.info("and appended to boards list in combobox\n");
             verified = V_STATE.VERIFIED;
             isValid();
