@@ -25,6 +25,8 @@ package com.alecn.glo.netbeans_bugtracking.issue;
 
 import com.alecn.glo.netbeans_bugtracking.repository.GloRepository;
 import com.alecn.glo.sojo.Card;
+import java.beans.PropertyChangeListener;
+import java.beans.PropertyChangeSupport;
 import java.util.Date;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -69,5 +71,17 @@ public class GloIssue {
 
     IssueScheduleInfo getSchedule() {
         return null;
+    }
+    //
+    // Change Support
+    //
+    private transient final PropertyChangeSupport propertyChangeSupport = new PropertyChangeSupport(this);
+
+    public void addPropertyChangeListener(PropertyChangeListener listener) {
+        propertyChangeSupport.addPropertyChangeListener(listener);
+    }
+
+    public void removePropertyChangeListener(PropertyChangeListener listener) {
+        propertyChangeSupport.removePropertyChangeListener(listener);
     }
 }

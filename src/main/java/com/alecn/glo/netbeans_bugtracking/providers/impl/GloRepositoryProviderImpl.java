@@ -27,9 +27,14 @@ import com.alecn.glo.netbeans_bugtracking.repository.GloRepository;
 import com.alecn.glo.netbeans_bugtracking.issue.GloIssue;
 import com.alecn.glo.netbeans_bugtracking.providers.GloRepositoryProvider;
 import com.alecn.glo.netbeans_bugtracking.query.GloQuery;
+import com.alecn.glo.sojo.Card;
+import com.alecn.glo.sojo.Description;
 import java.awt.Image;
 import java.beans.PropertyChangeListener;
 import java.util.Collection;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.stream.Collectors;
 import org.netbeans.modules.bugtracking.spi.RepositoryController;
 import org.netbeans.modules.bugtracking.spi.RepositoryInfo;
@@ -39,6 +44,8 @@ import org.openide.util.lookup.ServiceProvider;
 public class GloRepositoryProviderImpl implements GloRepositoryProvider {
 
 //    private static final GloConfig gloConfig = Lookup.getDefault().lookup(GloConfig.class);
+
+    private final Set<GloIssue> newIssues = Collections.synchronizedSet(new HashSet<>());
 
     @Override
     public RepositoryInfo getInfo(GloRepository r) {
@@ -70,14 +77,19 @@ public class GloRepositoryProviderImpl implements GloRepositoryProvider {
         return r.createQuery();
     }
 
+    private GloIssue createIssue(GloIssue gloIssue) {
+        newIssues.add(gloIssue);
+        return gloIssue;
+    }
+
     @Override
     public GloIssue createIssue(GloRepository r) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return createIssue(new GloIssue(new Card(), r));
     }
 
     @Override
     public GloIssue createIssue(GloRepository r, String summary, String description) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return createIssue(new GloIssue(Card.builder().name(summary).description(new Description(description)).build(), r));
     }
 
     @Override

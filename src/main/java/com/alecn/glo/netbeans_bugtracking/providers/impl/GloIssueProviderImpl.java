@@ -96,12 +96,12 @@ public class GloIssueProviderImpl  implements GloIssueProvider {
 
     @Override
     public void removePropertyChangeListener(GloIssue i, PropertyChangeListener listener) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        i.removePropertyChangeListener(listener);
     }
 
     @Override
     public void addPropertyChangeListener(GloIssue i, PropertyChangeListener listener) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        i.addPropertyChangeListener(listener);
     }
 
 }
