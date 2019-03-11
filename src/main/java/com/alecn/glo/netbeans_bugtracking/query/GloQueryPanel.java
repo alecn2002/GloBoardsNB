@@ -63,6 +63,7 @@ public class GloQueryPanel extends javax.swing.JPanel {
 
             }
         ));
+        resultTable.setRowHeight(64);
         qResultTable.setViewportView(resultTable);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
