@@ -59,7 +59,10 @@ public class GloConnector implements BugtrackingConnector {
 
     @Override
     public Repository createRepository(RepositoryInfo ri) {
-        GloRepository repo = new GloRepository(ri);
+        GloRepository repo = GloRepository.getInstanceById(ri.getID());
+        if (repo == null) {
+            repo = new GloRepository(ri);
+        }
         return createRepository(repo);
     }
 

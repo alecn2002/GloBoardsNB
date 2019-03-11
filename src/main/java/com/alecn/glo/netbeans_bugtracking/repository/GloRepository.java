@@ -161,12 +161,15 @@ public class GloRepository {
     }
 
     public void setInfoValues(String name, String access_key, String boardId, String boardName) {
-        this.repositoryInfo = new RepositoryInfo(UUID.randomUUID().toString(),
-                GloConnector.ID,
-                GloConstants.GLO_URL,
-                name,
-                name + " (" + boardName + ")"
-        );
+        String id = (this.repositoryInfo == null)
+                ? UUID.randomUUID().toString()
+                : this.repositoryInfo.getID();
+        this.repositoryInfo = new RepositoryInfo(id,
+                    GloConnector.ID,
+                    GloConstants.GLO_URL,
+                    name,
+                    name + " (" + boardName + ")"
+            );
         repositoryInfo.putValue(PROPERTY_ACCESS_KEY, access_key);
         repositoryInfo.putValue(PROPERTY_BOARD_ID, boardId);
         repositoryInfo.putValue(PROPERTY_BOARD_NAME, boardName);

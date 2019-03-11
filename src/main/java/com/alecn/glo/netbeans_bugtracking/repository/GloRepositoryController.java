@@ -136,7 +136,8 @@ public class GloRepositoryController implements RepositoryController, DocumentLi
             boardId = selectedBoard.getId();
             boardName = selectedBoard.getName();
         }
-        gloRepository.setInfoValues(panel.getNameText(),
+        gloRepository.setInfoValues(
+                panel.getNameText(),
                 panel.getAccessKey(),
                 boardId,
                 boardName);
