@@ -29,16 +29,46 @@ import com.alecn.glo.sojo.Board;
  *
  * @author anovitsk
  */
-public class GloRepositoryPanel extends javax.swing.JPanel {
+class GloRepositoryPanel extends javax.swing.JPanel {
 
     private final transient GloRepositoryController controller;
 
     /**
      * Creates new form GloRepositoryPanel
      */
-    public GloRepositoryPanel(GloRepositoryController controller) {
+    GloRepositoryPanel(GloRepositoryController controller) {
         this.controller = controller;
         initComponents();
+    }
+
+    void setSelectedBoard(Board board) {
+        if (gloRepoBoard.getModel() == null) {
+            return;
+        }
+        gloRepoBoard.getModel().setSelectedItem(board);
+    }
+
+    Board getSelectedBoard() {
+        if (gloRepoBoard.getModel() == null) {
+            return null;
+        }
+        return (Board)gloRepoBoard.getModel().getSelectedItem();
+    }
+
+    void setNameText(String displayName) {
+        gloRepositoryName.setText(displayName);
+    }
+
+    String getNameText() {
+        return gloRepositoryName.getText();
+    }
+
+    void setAccessKey(String accessKey) {
+        gloRepoAccessKey.setText(accessKey);
+    }
+
+    String getAccessKey() {
+        return gloRepoAccessKey.getText();
     }
 
     /**

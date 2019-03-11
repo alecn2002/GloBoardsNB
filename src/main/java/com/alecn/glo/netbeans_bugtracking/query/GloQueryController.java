@@ -39,7 +39,6 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import javax.swing.JComponent;
 import javax.swing.JTable;
-import javax.swing.table.TableColumn;
 import lombok.AllArgsConstructor;
 import org.netbeans.modules.bugtracking.spi.QueryController;
 import org.openide.util.HelpCtx;
