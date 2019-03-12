@@ -146,7 +146,7 @@ public class GloQueryController implements QueryController, ActionListener {
                         .append(String.join(", ", card.getAssignees().stream().map(pu -> pu.getId()).collect(Collectors.toList())))
                         .append("</i><br>");
             }
-            Integer tasksNo = card.getTotal_task_count();
+            Integer tasksNo = card.getTotalTaskCount();
             sb.append(String.format("Tasks: %d", tasksNo == null ? 0 : tasksNo));
             sb.append("</body></html>");
             return sb.toString();
@@ -171,7 +171,7 @@ public class GloQueryController implements QueryController, ActionListener {
         LOGGER.info("Got %d cards\n", cards.size());
         columns.forEach(column -> {
             tableModel.addColumnValues(cards.stream()
-            .filter(c -> c.getColumn_id().equals(column.getId()))
+            .filter(c -> c.getColumnId().equals(column.getId()))
             .map(c -> new GloIssue(c, gloRepository))
             .collect(Collectors.toList()));
         });

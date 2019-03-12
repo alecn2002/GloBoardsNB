@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright 2019 alecn.
+ * Copyright 2019 anovitsk.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -21,37 +21,27 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.alecn.glo.sojo;
+package com.alecn.glo.service;
 
-import java.util.Date;
-import java.util.List;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-import lombok.ToString;
-import lombok.experimental.SuperBuilder;
+import com.alecn.glo.client.CardFieldsEnum;
+import com.alecn.glo.sojo.Card;
+import java.util.Collection;
+import javax.ws.rs.core.Response;
 
 /**
  *
- * @author alecn
+ * @author anovitsk
  */
-@Getter
-@Setter
-@NoArgsConstructor
-@SuperBuilder
-@EqualsAndHashCode(callSuper = true)
-@ToString(callSuper = true)
-public class Card extends DatedNamedEntity {
-    private Integer position;
-    private Description description;
-    private String boardId;
-    private String columnId;
-    private List<PartialUser> assignees;
-    private List<Label> labels;
-    private Date due_date;
-    private Integer commentCount;
-    private Integer attachmentCount;
-    private Integer completedTaskCount;
-    private Integer totalTaskCount;
+public interface CardService {
+
+    Card get(String boardId, String id, Collection<CardFieldsEnum> fields);
+
+    Card get(String boardId, String id);
+
+    Card edit(Card card);
+
+    Response delete(Card card);
+
+    Response delete(String boardId, String id);
+
 }

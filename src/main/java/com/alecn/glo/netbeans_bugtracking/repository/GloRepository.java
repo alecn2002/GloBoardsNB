@@ -28,8 +28,10 @@ import com.alecn.glo.GloConnector;
 import com.alecn.glo.client.impl.GloConstants;
 import com.alecn.glo.netbeans_bugtracking.query.GloQuery;
 import com.alecn.glo.service.BoardService;
+import com.alecn.glo.service.CardService;
 import com.alecn.glo.service.CommentService;
 import com.alecn.glo.service.impl.BoardServiceImpl;
+import com.alecn.glo.service.impl.CardServiceImpl;
 import com.alecn.glo.service.impl.CommentServiceImpl;
 import com.alecn.glo.sojo.Board;
 import com.alecn.glo.sojo.Card;
@@ -104,6 +106,7 @@ public class GloRepository {
     private final transient InstanceContent ic;
 
     private transient BoardService boardService;
+    private transient CardService cardService;
     private transient CommentService commentService;
 
     private final transient LazyValue<GloRepositoryController> gloRepositoryController = new LazyValue<>(() -> new GloRepositoryController(this));
@@ -126,6 +129,7 @@ public class GloRepository {
             return;
         }
         this.boardService = new BoardServiceImpl(access_key);
+        this.cardService = new CardServiceImpl(access_key);
         this.commentService = new CommentServiceImpl(access_key);
         oeWriter.outWrite(o -> o.println("<<<< createServices() - services created"));
     }

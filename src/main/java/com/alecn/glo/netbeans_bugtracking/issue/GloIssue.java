@@ -25,9 +25,11 @@ package com.alecn.glo.netbeans_bugtracking.issue;
 
 import com.alecn.glo.netbeans_bugtracking.repository.GloRepository;
 import com.alecn.glo.sojo.Card;
+import com.alecn.glo.util.GloLogger;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 import java.util.Date;
+import javax.ws.rs.core.Response;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import org.netbeans.modules.bugtracking.spi.IssueScheduleInfo;
@@ -40,17 +42,19 @@ import org.netbeans.modules.bugtracking.spi.IssueScheduleInfo;
 @AllArgsConstructor
 public class GloIssue {
 
+    private static final GloLogger LOGGER = new GloLogger(GloIssue.class);
+
     private static boolean _isNew(Card card) {
         return card.getUpdated_date() == null
                 && card.getArchived_date() == null;
     }
 
     private static boolean _isFinished(Card card) {
-        return card.getCompleted_task_count() >= card.getTotal_task_count()
+        return card.getCompletedTaskCount() >= card.getTotalTaskCount()
                 || card.getArchived_date() != null;
     }
 
-    private final Card card;
+    private Card card;
     private final GloRepository repository;
 
     public boolean isNew() {
@@ -66,11 +70,39 @@ public class GloIssue {
     }
 
     Date getDueDate() {
-        return null; // Calendar.getInstance().getTime(); // FIXME hmmmmmm...
+        return card.getDue_date(); // Calendar.getInstance().getTime(); // FIXME hmmmmmm...
     }
 
     IssueScheduleInfo getSchedule() {
         return null;
+    }
+
+    public void refresh() {
+        if (card == null || card.getId() == null || card.getBoardId() == null || repository == null) {
+            LOGGER.severe("Refresh requested, but either card, or card or board id, or repository is null");
+            return;
+        }
+        // TODO do it in proper thread-safe way
+        this.card = repository.getCardService().get(card.getBoardId(), card.getId());
+    }
+
+    public void save() {
+        // TODO check if changed
+        if (card == null || card.getId() == null || card.getBoardId() == null || repository == null) {
+            LOGGER.severe("Save requested, but either card, or card or board id, or repository is null");
+            return;
+        }
+        // TODO do it in proper thread-safe way
+        this.card = repository.getCardService().edit(card);
+    }
+
+    public Response delete() {
+        if (card == null || card.getId() == null || card.getBoardId() == null || repository == null) {
+            LOGGER.severe("Save requested, but either card, or card or board id, or repository is null");
+            return Response.noContent().build();
+        }
+        // TODO do it in proper thread-safe way
+        return repository.getCardService().delete(card);
     }
     //
     // Change Support
