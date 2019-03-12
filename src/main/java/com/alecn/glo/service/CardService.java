@@ -34,6 +34,8 @@ import javax.ws.rs.core.Response;
  */
 public interface CardService {
 
+    Card create(Card card);
+
     Card get(String boardId, String id, Collection<CardFieldsEnum> fields);
 
     Card get(String boardId, String id);

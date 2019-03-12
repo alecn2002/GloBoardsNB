@@ -90,4 +90,16 @@ public class CardServiceImpl implements CardService {
         return delete(card.getBoard_id(), card.getId());
     }
 
+    @Override
+    public Card create(Card card) {
+        return cardClient.create(card.getBoard_id(),
+                card.getColumn_id(),
+                card.getName(),
+                card.getPosition(),
+                card.getDescription().getText(),
+                card.getAssignees(),
+                card.getLabels().stream().map(l -> PartialLabel.builder().id(l.getId()).build()).collect(Collectors.toList()),
+                card.getDue_date());
+    }
+
 }

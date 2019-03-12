@@ -25,10 +25,17 @@ package com.alecn.glo.netbeans_bugtracking.issue;
 
 import com.alecn.glo.netbeans_bugtracking.repository.GloRepository;
 import com.alecn.glo.sojo.Card;
+import com.alecn.glo.sojo.Column;
 import com.alecn.glo.sojo.Description;
+import com.alecn.glo.ui.NameIdListModel;
 import com.alecn.glo.util.GloLogger;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
+import java.util.List;
 import javax.swing.JComponent;
 import org.netbeans.modules.bugtracking.spi.IssueController;
 import org.openide.util.HelpCtx;
@@ -37,7 +44,7 @@ import org.openide.util.HelpCtx;
  *
  * @author anovitsk
  */
-public class GloIssueController implements IssueController  {
+public class GloIssueController implements IssueController, ActionListener, KeyListener  {
 
     private static final GloLogger LOGGER = new GloLogger(GloIssueController.class);
 
@@ -45,14 +52,21 @@ public class GloIssueController implements IssueController  {
     private final GloRepository gloRepository;
     private final GloIssuePanel component;
 
+    @SuppressWarnings("LeakingThisInConstructor")
     public GloIssueController(GloRepository gloRepository, GloIssue gloIssue) {
         this.gloIssue = gloIssue;
         this.gloRepository = gloRepository;
         this.component = new GloIssuePanel();
+
+        component.deleteButton.addActionListener(this);
+        component.refreshButton.addActionListener(this);
+        component.saveButton.addActionListener(this);
+
+        component.nameField.addKeyListener(this);
     }
 
     public GloIssueController(GloRepository gloRepository) {
-        this(gloRepository, new GloIssue(new Card(), gloRepository));
+        this(gloRepository, gloRepository.createIssue());
     }
 
     @Override
@@ -132,5 +146,70 @@ public class GloIssueController implements IssueController  {
         component.nameField.setText(nvl(gloIssue.getCard().getName()));
         component.descriptionField.setText(nvl(nvl(gloIssue.getCard().getDescription(), EMPTY_DESCR).getText()));
         component.idField.setText(nvl(gloIssue.getCard().getId()));
+
+        String selectedColumnId = gloIssue.getCard().getColumn_id();
+        List<Column> columns = gloRepository.listColumns();
+        Column selectedColumn = (selectedColumnId == null || selectedColumnId.isEmpty())
+                ? null
+                : columns.stream().filter(c -> c.getId().equals(selectedColumnId)).findFirst().get();
+        NameIdListModel model = new NameIdListModel<>(
+                columns,
+                (Column c) -> c.getName(),
+                (Column c) -> c.getId()
+        );
+        model.setSelectedItem(selectedColumn);
+        component.columnList.setModel(model);
+    }
+
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        if (e.getSource().equals(component.nameField)) {
+            on_name_changed();
+        } else if (e.getSource().equals(component.deleteButton)) {
+            on_delete();
+        } else if (e.getSource().equals(component.refreshButton)) {
+            on_refresh();
+        } else if (e.getSource().equals(component.saveButton)) {
+            on_save();
+        }
+    }
+
+    private void on_name_changed() {
+        component.titleField.setText(component.nameField.getText());
+    }
+
+    private void on_delete() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    private void on_refresh() {
+        gloIssue.refresh();
+        populateComponent();
+    }
+
+    private void on_save() {
+        gloIssue.save();
+        populateComponent();
+    }
+
+    @Override
+    public void keyTyped(KeyEvent e) {
+        if (e.getSource().equals(component.nameField)) {
+            on_name_changed();
+        }
+    }
+
+    @Override
+    public void keyPressed(KeyEvent e) {
+        if (e.getSource().equals(component.nameField)) {
+            on_name_changed();
+        }
+    }
+
+    @Override
+    public void keyReleased(KeyEvent e) {
+        if (e.getSource().equals(component.nameField)) {
+            on_name_changed();
+        }
     }
 }

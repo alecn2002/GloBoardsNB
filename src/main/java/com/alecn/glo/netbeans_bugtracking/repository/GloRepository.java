@@ -26,6 +26,7 @@ package com.alecn.glo.netbeans_bugtracking.repository;
 import com.alecn.glo.GloConfig;
 import com.alecn.glo.GloConnector;
 import com.alecn.glo.client.impl.GloConstants;
+import com.alecn.glo.netbeans_bugtracking.issue.GloIssue;
 import com.alecn.glo.netbeans_bugtracking.query.GloQuery;
 import com.alecn.glo.service.BoardService;
 import com.alecn.glo.service.CardService;
@@ -187,6 +188,10 @@ public class GloRepository {
 
     public GloQuery createQuery() {
         return new GloQuery(this);
+    }
+
+    public GloIssue createIssue() {
+        return new GloIssue(Card.builder().board_id(getBoardId()).build(), this);
     }
 
     public List<Board> getBoardsList() {

@@ -23,6 +23,8 @@
  */
 package com.alecn.glo.netbeans_bugtracking.issue;
 
+import com.alecn.glo.sojo.Column;
+
 /**
  *
  * @author anovitsk
@@ -53,6 +55,11 @@ public class GloIssuePanel extends javax.swing.JPanel {
         jLabel5 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
         descriptionField = new javax.swing.JTextArea();
+        refreshButton = new javax.swing.JButton();
+        saveButton = new javax.swing.JButton();
+        deleteButton = new javax.swing.JButton();
+        jLabel1 = new javax.swing.JLabel();
+        columnList = new javax.swing.JComboBox<>();
 
         titleField.setFont(new java.awt.Font("DejaVu Serif", 1, 18)); // NOI18N
         org.openide.awt.Mnemonics.setLocalizedText(titleField, org.openide.util.NbBundle.getMessage(GloIssuePanel.class, "GloIssuePanel.titleField.text")); // NOI18N
@@ -76,6 +83,14 @@ public class GloIssuePanel extends javax.swing.JPanel {
         descriptionField.setRows(5);
         jScrollPane1.setViewportView(descriptionField);
 
+        org.openide.awt.Mnemonics.setLocalizedText(refreshButton, org.openide.util.NbBundle.getMessage(GloIssuePanel.class, "GloIssuePanel.refreshButton.text")); // NOI18N
+
+        org.openide.awt.Mnemonics.setLocalizedText(saveButton, org.openide.util.NbBundle.getMessage(GloIssuePanel.class, "GloIssuePanel.saveButton.text")); // NOI18N
+
+        org.openide.awt.Mnemonics.setLocalizedText(deleteButton, org.openide.util.NbBundle.getMessage(GloIssuePanel.class, "GloIssuePanel.deleteButton.text")); // NOI18N
+
+        org.openide.awt.Mnemonics.setLocalizedText(jLabel1, org.openide.util.NbBundle.getMessage(GloIssuePanel.class, "GloIssuePanel.jLabel1.text")); // NOI18N
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
@@ -94,9 +109,21 @@ public class GloIssuePanel extends javax.swing.JPanel {
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(idField, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(nameField)))
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(jLabel5)
-                        .addGap(0, 0, Short.MAX_VALUE)))
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(layout.createSequentialGroup()
+                            .addComponent(jLabel1)
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                            .addComponent(columnList, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addGroup(layout.createSequentialGroup()
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addComponent(jLabel5)
+                                .addGroup(layout.createSequentialGroup()
+                                    .addComponent(refreshButton)
+                                    .addGap(18, 18, 18)
+                                    .addComponent(saveButton)
+                                    .addGap(27, 27, 27)
+                                    .addComponent(deleteButton)))
+                            .addGap(0, 0, Short.MAX_VALUE))))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -106,7 +133,16 @@ public class GloIssuePanel extends javax.swing.JPanel {
                 .addComponent(titleField)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(37, 37, 37)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel1)
+                    .addComponent(columnList, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(13, 13, 13)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(refreshButton)
+                    .addComponent(saveButton)
+                    .addComponent(deleteButton))
+                .addGap(10, 10, 10)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel2)
                     .addComponent(idField))
@@ -118,7 +154,7 @@ public class GloIssuePanel extends javax.swing.JPanel {
                 .addComponent(jLabel5)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 118, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(369, Short.MAX_VALUE))
+                .addContainerGap(315, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
 
@@ -128,14 +164,19 @@ public class GloIssuePanel extends javax.swing.JPanel {
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    javax.swing.JComboBox<Column> columnList;
+    javax.swing.JButton deleteButton;
     javax.swing.JTextArea descriptionField;
     javax.swing.JLabel idField;
+    private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JSeparator jSeparator1;
     javax.swing.JTextField nameField;
+    javax.swing.JButton refreshButton;
+    javax.swing.JButton saveButton;
     javax.swing.JLabel titleField;
     // End of variables declaration//GEN-END:variables
 }

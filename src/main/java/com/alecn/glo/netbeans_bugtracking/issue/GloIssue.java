@@ -98,12 +98,19 @@ public class GloIssue {
 
     public void save() {
         // TODO check if changed
-        if (card == null || card.getId() == null || card.getBoard_id() == null || repository == null) {
+        if (card == null || card.getBoard_id() == null || repository == null) {
             LOGGER.severe("Save requested, but either card, or card or board id, or repository is null");
             return;
         }
         // TODO do it in proper thread-safe way
-        this.card = repository.getCardService().edit(card);
+        if (card.getId() == null) {
+            // Creating new card
+            this.card = repository.getCardService().create(card);
+        } else {
+            // Saving existing card
+            this.card = repository.getCardService().edit(card);
+        }
+
     }
 
     public Response delete() {
