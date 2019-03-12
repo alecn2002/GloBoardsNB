@@ -44,6 +44,9 @@ import lombok.Getter;
  */
 public abstract class GenericClientImpl<T, R, F extends FieldsEnumI> extends GloConstants {
 
+    private static final String ACCESS_KEY_HTTP_PARAM = "Authorization";
+    private static final String ACCESS_KEY_PREFIX = "Bearer ";
+
     @Getter
     enum EBoardsParams {
         FIELDS("fields"),
@@ -69,19 +72,20 @@ public abstract class GenericClientImpl<T, R, F extends FieldsEnumI> extends Glo
     private final String path;
     private final Class<T> klass;
     private final Class<T[]> arrayKlass;
+    private final String accessKey;
 
-    protected GenericClientImpl(String url, String access_key, String path, Class<T> klass, Class<T[]> arrayKlass) {
+    protected GenericClientImpl(String url, String accessKey, String path, Class<T> klass, Class<T[]> arrayKlass) {
         webTarget = ClientBuilder.newClient()
-                .target(url)
-                .queryParam(EBoardsParams.ACCESS_TOKEN.getQueryStr(), access_key);
+                .target(url);
 //                .queryParam(EBoardsParams.ACCESS_TOKEN.getQueryStr(), "pcad84c0e279a1a233e1eb31a7a4b20b4ad3ea947");
         this.path = path;
         this.klass = klass;
         this.arrayKlass = arrayKlass;
+        this.accessKey = accessKey;
     }
 
-    protected GenericClientImpl(String access_key, String path, Class<T> klass, Class<T[]> arrayKlass) {
-        this(GLO_URL, access_key, path, klass, arrayKlass);
+    protected GenericClientImpl(String accessKey, String path, Class<T> klass, Class<T[]> arrayKlass) {
+        this(GLO_URL, accessKey, path, klass, arrayKlass);
     }
 
     protected GenericClientImpl(String access_key, String path, Class<T> klass) {
@@ -89,28 +93,61 @@ public abstract class GenericClientImpl<T, R, F extends FieldsEnumI> extends Glo
     }
 
     private WebTarget prepareWebTarget(Function<WebTarget, WebTarget> fixer) {
-        // TODO replace with real authorizetion!
         WebTarget myWebTarget = webTarget.path(path);
         return fixer == null
                 ? myWebTarget
                 : fixer.apply(myWebTarget);
     }
 
-    private WebTarget prepareWebTarget(String id, Collection<F> fields, Function<WebTarget, WebTarget> fixer) {
+    private WebTarget prepareWebTarget(String id, Collection<F> fields, boolean archived, Integer page, Integer per_page, boolean sort_desc, Function<WebTarget, WebTarget> fixer) {
         WebTarget myWebTarget = prepareWebTarget(fixer);
         if (id != null) {
             myWebTarget = myWebTarget.path(id);
         }
-        for (F field : fields) {
-            myWebTarget = myWebTarget.queryParam(EBoardsParams.FIELDS.getQueryStr(), field.getRestName());
+        if (fields != null) {
+            for (F field : fields) {
+                myWebTarget = myWebTarget.queryParam(EBoardsParams.FIELDS.getQueryStr(), field.getRestName());
+            }
+        }
+        if (archived) {
+            myWebTarget = myWebTarget.queryParam(EBoardsParams.ARCHIVED.getQueryStr(), "true");
+        }
+        if (page != null && per_page != null) {
+            myWebTarget = myWebTarget.queryParam(EBoardsParams.PAGE.getQueryStr(), page)
+                                     .queryParam(EBoardsParams.PER_PAGE.getQueryStr(), per_page);
+        }
+        if (sort_desc) {
+            myWebTarget = myWebTarget.queryParam(EBoardsParams.SORT.getQueryStr(), "desc");
         }
 
         return myWebTarget;
     }
 
+    private WebTarget prepareWebTarget(String id, Collection<F> fields, Function<WebTarget, WebTarget> fixer) {
+         return prepareWebTarget(id, fields, false, null, null, false, fixer);
+    }
+
+    private Invocation.Builder prepareInvocationBuilder(String id, Collection<F> fields, boolean archived, Integer page, Integer per_page, boolean sort_desc, Function<WebTarget, WebTarget> fixer, MediaType mediaType) {
+        WebTarget myWebTarget = prepareWebTarget(id, fields, archived, page, per_page, sort_desc, fixer);
+        return myWebTarget.request(mediaType)
+                .header(ACCESS_KEY_HTTP_PARAM, ACCESS_KEY_PREFIX + accessKey);
+    }
+
+    private Invocation.Builder prepareInvocationBuilder(String id, Collection<F> fields, Function<WebTarget, WebTarget> fixer, MediaType mediaType) {
+        return prepareInvocationBuilder(id, fields, false, null, null, false, fixer, mediaType);
+    }
+
+    private Invocation.Builder prepareInvocationBuilder(Function<WebTarget, WebTarget> fixer, MediaType mediaType) {
+        return prepareInvocationBuilder(null, null, fixer, mediaType);
+
+    }
+
     private Invocation.Builder prepareInvocationBuilder(Function<WebTarget, WebTarget> fixer) {
-        WebTarget myWebTarget = prepareWebTarget(fixer);
-        return myWebTarget.request(MediaType.APPLICATION_JSON);
+        return prepareInvocationBuilder(fixer, MediaType.APPLICATION_JSON_TYPE);
+    }
+
+    private Invocation.Builder prepareInvocationBuilder(String id, Collection<F> fields, Function<WebTarget, WebTarget> fixer) {
+        return prepareInvocationBuilder(id, fields, fixer, MediaType.APPLICATION_JSON_TYPE);
     }
 
     protected T get(Function<WebTarget, WebTarget> fixer) {
@@ -118,8 +155,7 @@ public abstract class GenericClientImpl<T, R, F extends FieldsEnumI> extends Glo
     }
 
     protected T get(String id, Collection<F> fields, Function<WebTarget, WebTarget> fixer) {
-        return prepareWebTarget(id, fields, fixer)
-                .request(MediaType.APPLICATION_JSON)
+        return prepareInvocationBuilder(id, fields, fixer)
                 .get(klass);
     }
 
@@ -129,8 +165,7 @@ public abstract class GenericClientImpl<T, R, F extends FieldsEnumI> extends Glo
                     id,
                     fields.size(),
                     GloLogger.join(fields, ff -> ff.getRestName()));
-        return prepareWebTarget(id, fields, fixer)
-                .request(MediaType.APPLICATION_JSON)
+        return prepareInvocationBuilder(id, fields, fixer)
                 .get(klass);
     }
 
@@ -147,18 +182,7 @@ public abstract class GenericClientImpl<T, R, F extends FieldsEnumI> extends Glo
     }
 
     protected List<T> list(Collection<F> fields, boolean archived, Integer page, Integer per_page, boolean sort_desc, Function<WebTarget, WebTarget> fixer) {
-        WebTarget myWebTarget = prepareWebTarget(null, fields, fixer);
-        if (archived) {
-            myWebTarget = myWebTarget.queryParam(EBoardsParams.ARCHIVED.getQueryStr(), "true");
-        }
-        if (page != null && per_page != null) {
-            myWebTarget = myWebTarget.queryParam(EBoardsParams.PAGE.getQueryStr(), page)
-                                     .queryParam(EBoardsParams.PER_PAGE.getQueryStr(), per_page);
-        }
-        if (sort_desc) {
-            myWebTarget = myWebTarget.queryParam(EBoardsParams.SORT.getQueryStr(), "desc");
-        }
-        Invocation.Builder invocationBuilder = myWebTarget.request(MediaType.APPLICATION_JSON);
+        Invocation.Builder invocationBuilder = prepareInvocationBuilder(null, fields, archived, page, per_page, sort_desc, fixer, MediaType.APPLICATION_JSON_TYPE);
         return Arrays.asList(invocationBuilder.get(arrayKlass));
     }
 
