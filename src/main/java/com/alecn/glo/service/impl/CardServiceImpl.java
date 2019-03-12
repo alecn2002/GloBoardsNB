@@ -65,10 +65,10 @@ public class CardServiceImpl implements CardService {
 
     @Override
     public Card edit(Card card) {
-        if (card == null || card.getBoardId() == null || card.getId() == null) {
+        if (card == null || card.getBoard_id() == null || card.getId() == null) {
             return null; // TODO better error processing
         }
-        return cardClient.edit(card.getBoardId(), card.getColumnId(), card.getId(), card.getName(), card.getPosition(), card.getDescription().getText(),
+        return cardClient.edit(card.getBoard_id(), card.getColumn_id(), card.getId(), card.getName(), card.getPosition(), card.getDescription().getText(),
                 card.getAssignees(),
                 card.getLabels().stream().map(l -> PartialLabel.builder().id(l.getId()).build()).collect(Collectors.toList()),
                 card.getDue_date());
@@ -84,10 +84,10 @@ public class CardServiceImpl implements CardService {
 
     @Override
     public Response delete(Card card) {
-        if (card == null || card.getBoardId() == null || card.getId() == null) {
+        if (card == null || card.getBoard_id() == null || card.getId() == null) {
             return Response.status(422, "Unprocessable Entity: card is null").build();
         }
-        return delete(card.getBoardId(), card.getId());
+        return delete(card.getBoard_id(), card.getId());
     }
 
 }

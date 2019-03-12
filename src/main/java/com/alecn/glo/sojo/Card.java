@@ -45,13 +45,13 @@ import lombok.experimental.SuperBuilder;
 public class Card extends DatedNamedEntity {
     private Integer position;
     private Description description;
-    private String boardId;
-    private String columnId;
+    private String board_id;
+    private String column_id;
     private List<PartialUser> assignees;
     private List<Label> labels;
     private Date due_date;
-    private Integer commentCount;
-    private Integer attachmentCount;
-    private Integer completedTaskCount;
-    private Integer totalTaskCount;
+    private Integer comment_count;
+    private Integer attachment_count;
+    private Integer completed_task_count;
+    private Integer total_task_count;
 }

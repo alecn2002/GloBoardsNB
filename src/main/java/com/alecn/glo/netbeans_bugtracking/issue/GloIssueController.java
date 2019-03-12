@@ -23,10 +23,13 @@
  */
 package com.alecn.glo.netbeans_bugtracking.issue;
 
+import com.alecn.glo.netbeans_bugtracking.repository.GloRepository;
+import com.alecn.glo.sojo.Card;
+import com.alecn.glo.sojo.Description;
+import com.alecn.glo.util.GloLogger;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 import javax.swing.JComponent;
-import lombok.AllArgsConstructor;
 import org.netbeans.modules.bugtracking.spi.IssueController;
 import org.openide.util.HelpCtx;
 
@@ -34,14 +37,27 @@ import org.openide.util.HelpCtx;
  *
  * @author anovitsk
  */
-@AllArgsConstructor
 public class GloIssueController implements IssueController  {
 
+    private static final GloLogger LOGGER = new GloLogger(GloIssueController.class);
+
     private final GloIssue gloIssue;
+    private final GloRepository gloRepository;
+    private final GloIssuePanel component;
+
+    public GloIssueController(GloRepository gloRepository, GloIssue gloIssue) {
+        this.gloIssue = gloIssue;
+        this.gloRepository = gloRepository;
+        this.component = new GloIssuePanel();
+    }
+
+    public GloIssueController(GloRepository gloRepository) {
+        this(gloRepository, new GloIssue(new Card(), gloRepository));
+    }
 
     @Override
     public JComponent getComponent() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return component;
     }
 
     @Override
@@ -51,27 +67,40 @@ public class GloIssueController implements IssueController  {
 
     @Override
     public void opened() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        populateComponent();
     }
 
     @Override
     public void closed() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        // Usually nothing to do here
     }
 
     @Override
     public boolean saveChanges() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        try {
+            gloIssue.save();
+            return true;
+        } catch (Error | Exception ex) {
+            LOGGER.severe("Error saving card: %s", ex.getMessage());
+            return false;
+        }
     }
 
     @Override
     public boolean discardUnsavedChanges() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        try {
+            gloIssue.refresh();
+            return true;
+        } catch (Error | Exception ex) {
+            LOGGER.severe("Error refreshing card: %s", ex.getMessage());
+            return false;
+        }
     }
 
     @Override
     public boolean isChanged() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        // TODO
+        return true;
     }
 
     private final PropertyChangeSupport support = new PropertyChangeSupport(this);
@@ -86,4 +115,22 @@ public class GloIssueController implements IssueController  {
         support.removePropertyChangeListener(l);
     }
 
+    private static <T> T nvl(T v, T deflt) {
+        return v == null
+                ? deflt
+                : v;
+    }
+
+    private static String nvl(String v) {
+        return nvl(v, "");
+    }
+
+    private static final Description EMPTY_DESCR = new Description("");
+
+    private void populateComponent() {
+        component.titleField.setText(nvl(gloIssue.getCard().getName()));
+        component.nameField.setText(nvl(gloIssue.getCard().getName()));
+        component.descriptionField.setText(nvl(nvl(gloIssue.getCard().getDescription(), EMPTY_DESCR).getText()));
+        component.idField.setText(nvl(gloIssue.getCard().getId()));
+    }
 }

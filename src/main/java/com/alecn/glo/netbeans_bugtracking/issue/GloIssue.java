@@ -26,6 +26,7 @@ package com.alecn.glo.netbeans_bugtracking.issue;
 import com.alecn.glo.netbeans_bugtracking.repository.GloRepository;
 import com.alecn.glo.sojo.Card;
 import com.alecn.glo.util.GloLogger;
+import com.alecn.glo.util.LazyValue;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 import java.util.Date;
@@ -44,18 +45,27 @@ public class GloIssue {
 
     private static final GloLogger LOGGER = new GloLogger(GloIssue.class);
 
+
     private static boolean _isNew(Card card) {
         return card.getUpdated_date() == null
                 && card.getArchived_date() == null;
     }
 
     private static boolean _isFinished(Card card) {
-        return card.getCompletedTaskCount() >= card.getTotalTaskCount()
+        return card.getCompleted_task_count() >= card.getTotal_task_count()
                 || card.getArchived_date() != null;
     }
 
     private Card card;
     private final GloRepository repository;
+
+    private final transient LazyValue<GloIssueController> gloRepositoryController;
+
+    public GloIssue(Card card, GloRepository repository) {
+        this.card = card;
+        this.repository = repository;
+        this.gloRepositoryController = new LazyValue<>(() -> new GloIssueController(repository, this));
+    }
 
     public boolean isNew() {
         return _isNew(card);
@@ -78,17 +88,17 @@ public class GloIssue {
     }
 
     public void refresh() {
-        if (card == null || card.getId() == null || card.getBoardId() == null || repository == null) {
+        if (card == null || card.getId() == null || card.getBoard_id() == null || repository == null) {
             LOGGER.severe("Refresh requested, but either card, or card or board id, or repository is null");
             return;
         }
         // TODO do it in proper thread-safe way
-        this.card = repository.getCardService().get(card.getBoardId(), card.getId());
+        this.card = repository.getCardService().get(card.getBoard_id(), card.getId());
     }
 
     public void save() {
         // TODO check if changed
-        if (card == null || card.getId() == null || card.getBoardId() == null || repository == null) {
+        if (card == null || card.getId() == null || card.getBoard_id() == null || repository == null) {
             LOGGER.severe("Save requested, but either card, or card or board id, or repository is null");
             return;
         }
@@ -97,7 +107,7 @@ public class GloIssue {
     }
 
     public Response delete() {
-        if (card == null || card.getId() == null || card.getBoardId() == null || repository == null) {
+        if (card == null || card.getId() == null || card.getBoard_id() == null || repository == null) {
             LOGGER.severe("Save requested, but either card, or card or board id, or repository is null");
             return Response.noContent().build();
         }

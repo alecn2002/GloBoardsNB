@@ -91,7 +91,7 @@ public class GloIssueProviderImpl  implements GloIssueProvider {
 
     @Override
     public IssueController getController(GloIssue i) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return i.getGloRepositoryController().get();
     }
 
     @Override
