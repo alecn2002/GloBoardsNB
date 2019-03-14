@@ -89,7 +89,21 @@ public class GloIssue {
 
     public void refresh() {
         if (card == null || card.getId() == null || card.getBoard_id() == null || repository == null) {
-            LOGGER.severe("Refresh requested, but either card, or card or board id, or repository is null");
+            StringBuilder sb = new StringBuilder("Save requested, but");
+            if (card == null) {
+                sb.append(" card is NULL ");
+            } else {
+                if (card.getId() == null) {
+                    sb.append(" card ID is NULL");
+                }
+                if (card.getBoard_id() == null) {
+                    sb.append(" board ID is NULL");
+                }
+            }
+            if (repository == null) {
+                sb.append(" repository is NULL");
+            }
+            LOGGER.severe(sb.toString());
             return;
         }
         // TODO do it in proper thread-safe way
@@ -98,8 +112,25 @@ public class GloIssue {
 
     public void save() {
         // TODO check if changed
-        if (card == null || card.getBoard_id() == null || repository == null) {
-            LOGGER.severe("Save requested, but either card, or card or board id, or repository is null");
+        if (card.getBoard_id() == null) {
+            card.setBoard_id(repository.getBoardId());
+        }
+        if (card == null || card.getBoard_id() == null || card.getColumn_id()== null || repository == null) {
+            StringBuilder sb = new StringBuilder("Save requested, but");
+            if (card == null) {
+                sb.append(" Card is NULL ");
+            } else {
+                if (card.getBoard_id() == null) {
+                    sb.append(" Board ID is NULL");
+                }
+                if (card.getColumn_id() == null) {
+                    sb.append(" Column ID is NULL");
+                }
+            }
+            if (repository == null) {
+                sb.append(" Repository is NULL");
+            }
+            LOGGER.severe(sb.toString());
             return;
         }
         // TODO do it in proper thread-safe way

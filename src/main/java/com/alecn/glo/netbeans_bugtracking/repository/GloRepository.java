@@ -190,7 +190,7 @@ public class GloRepository {
         return new GloQuery(this);
     }
 
-    public GloIssue createIssue() {
+    public GloIssue createNewIssue() {
         return new GloIssue(Card.builder().board_id(getBoardId()).build(), this);
     }
 

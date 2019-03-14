@@ -66,7 +66,7 @@ public class GloIssueController implements IssueController, ActionListener, KeyL
     }
 
     public GloIssueController(GloRepository gloRepository) {
-        this(gloRepository, gloRepository.createIssue());
+        this(gloRepository, gloRepository.createNewIssue());
     }
 
     @Override
@@ -158,7 +158,15 @@ public class GloIssueController implements IssueController, ActionListener, KeyL
                 (Column c) -> c.getId()
         );
         model.setSelectedItem(selectedColumn);
-        component.columnList.setModel(model);
+        model.setThisModelToControl(component.columnList);
+    }
+
+    private void populateCard() {
+        Card card = gloIssue.getCard();
+
+        card.setColumn_id(component.getSelectedColumnId());
+        card.setName(component.getIssueName());
+        card.setDescription(new Description(component.getDescription()));
     }
 
     @Override
@@ -179,15 +187,19 @@ public class GloIssueController implements IssueController, ActionListener, KeyL
     }
 
     private void on_delete() {
+        // TODO ask before deleting
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     private void on_refresh() {
+        // TODO ask before refreshing
         gloIssue.refresh();
         populateComponent();
     }
 
     private void on_save() {
+        // TODO ask before saving
+        populateCard();
         gloIssue.save();
         populateComponent();
     }

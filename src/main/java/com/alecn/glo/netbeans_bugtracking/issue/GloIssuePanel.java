@@ -24,6 +24,9 @@
 package com.alecn.glo.netbeans_bugtracking.issue;
 
 import com.alecn.glo.sojo.Column;
+import com.alecn.glo.util.VisitorHelper;
+import javax.swing.ComboBoxModel;
+import javax.swing.JComboBox;
 
 /**
  *
@@ -36,6 +39,21 @@ public class GloIssuePanel extends javax.swing.JPanel {
      */
     public GloIssuePanel() {
         initComponents();
+    }
+
+    public String getSelectedColumnId() {
+        return VisitorHelper.nvlVisitor(columnList, (String)null,
+                cl -> ((JComboBox)cl).getModel(),
+                cm -> ((ComboBoxModel)cm).getSelectedItem(),
+                csi -> ((Column)csi).getId());
+    }
+
+    public String getIssueName() {
+        return nameField.getText();
+    }
+
+    public String getDescription() {
+        return descriptionField.getText();
     }
 
     /**

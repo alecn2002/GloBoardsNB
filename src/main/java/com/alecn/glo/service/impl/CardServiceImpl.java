@@ -28,7 +28,10 @@ import com.alecn.glo.client.CardFieldsEnum;
 import com.alecn.glo.client.impl.CardClientImpl;
 import com.alecn.glo.service.CardService;
 import com.alecn.glo.sojo.Card;
+import com.alecn.glo.sojo.Description;
+import com.alecn.glo.sojo.Label;
 import com.alecn.glo.sojo.PartialLabel;
+import com.alecn.glo.util.VisitorHelper;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
@@ -96,9 +99,13 @@ public class CardServiceImpl implements CardService {
                 card.getColumn_id(),
                 card.getName(),
                 card.getPosition(),
-                card.getDescription().getText(),
+                VisitorHelper.nvlVisitor(card, "",
+                        c -> ((Card)c).getDescription(),
+                        d -> ((Description)d).getText()),
                 card.getAssignees(),
-                card.getLabels().stream().map(l -> PartialLabel.builder().id(l.getId()).build()).collect(Collectors.toList()),
+                VisitorHelper.nvlVisitor(card, null,
+                        c -> ((Card)c).getLabels(),
+                        ll -> ((List<Label>)ll).stream().map(l -> PartialLabel.builder().id(l.getId()).build()).collect(Collectors.toList())),
                 card.getDue_date());
     }
 
