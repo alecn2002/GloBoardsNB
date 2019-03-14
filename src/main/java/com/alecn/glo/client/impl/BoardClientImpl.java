@@ -46,7 +46,7 @@ public class BoardClientImpl extends GenericClientImpl<Board, Board, BoardFields
     static final Collection<BoardFieldsEnum> ALL_FIELDS = Arrays.asList(BoardFieldsEnum.values());
 
     public BoardClientImpl(String access_key) {
-        super(access_key, GloConstants.GLO_PATH_BOARDS, Board.class, Board[].class);
+        super(access_key, GloConstants.GLO_PATH_BOARDS, Board.class, Board[].class, LOGGER);
     }
 
     public BoardClientImpl() {

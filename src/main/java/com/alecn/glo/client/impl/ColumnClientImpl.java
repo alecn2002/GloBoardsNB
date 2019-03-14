@@ -27,6 +27,7 @@ import com.alecn.glo.client.ColumnClient;
 import com.alecn.glo.client.FieldsEnumI;
 import com.alecn.glo.sojo.Column;
 import com.alecn.glo.client.dto.ColumnRequest;
+import com.alecn.glo.util.GloLogger;
 import javax.ws.rs.client.Entity;
 import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.Response;
@@ -35,8 +36,10 @@ import org.openide.util.lookup.ServiceProvider;
 @ServiceProvider(service = ColumnClient.class)
 public class ColumnClientImpl extends GenericClientImpl<Column, ColumnRequest, FieldsEnumI> implements ColumnClient {
 
+    private static final GloLogger LOGGER = new GloLogger(ColumnClientImpl.class);
+
     public ColumnClientImpl(String access_key) {
-        super(access_key, GLO_PATH_COLUMNS, Column.class, Column[].class);
+        super(access_key, GLO_PATH_COLUMNS, Column.class, Column[].class, LOGGER);
     }
 
     public ColumnClientImpl() {

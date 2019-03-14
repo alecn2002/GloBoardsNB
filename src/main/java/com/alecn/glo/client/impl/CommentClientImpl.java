@@ -89,7 +89,7 @@ public class CommentClientImpl extends GenericClientImpl<Comment, CommentRequest
     }
 
     public CommentClientImpl(String access_key) {
-        super(access_key, GLO_PATH_COMMENTS, Comment.class, Comment[].class);
+        super(access_key, GLO_PATH_COMMENTS, Comment.class, Comment[].class, LOGGER);
     }
 
     public CommentClientImpl() {

@@ -26,15 +26,25 @@ package com.alecn.glo.client.impl;
 import com.alecn.glo.client.FieldsEnumI;
 import static com.alecn.glo.client.impl.GloConstants.GLO_URL;
 import com.alecn.glo.util.GloLogger;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
+import java.util.Scanner;
 import java.util.function.Function;
+import java.util.stream.Collectors;
+import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
+import javax.ws.rs.client.ClientRequestContext;
+import javax.ws.rs.client.ClientRequestFilter;
+import javax.ws.rs.client.ClientResponseContext;
+import javax.ws.rs.client.ClientResponseFilter;
 import javax.ws.rs.client.Entity;
 import javax.ws.rs.client.Invocation;
 import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.MultivaluedMap;
 import javax.ws.rs.core.Response;
 import lombok.Getter;
 
@@ -46,6 +56,15 @@ public abstract class GenericClientImpl<T, R, F extends FieldsEnumI> extends Glo
 
     private static final String ACCESS_KEY_HTTP_PARAM = "Authorization";
     private static final String ACCESS_KEY_PREFIX = "Bearer ";
+
+    private static void dumpHeaders(GloLogger logger, MultivaluedMap<String, ?> headers) {
+        logger.info("Headers:");
+        headers.forEach((String name, List<?> values) ->
+                logger.info("    %s: %s",
+                            name,
+                            String.join(", ", values.stream().map(v -> v.toString()).collect(Collectors.toList())
+                            )));
+    }
 
     @Getter
     enum EBoardsParams {
@@ -73,23 +92,50 @@ public abstract class GenericClientImpl<T, R, F extends FieldsEnumI> extends Glo
     private final Class<T> klass;
     private final Class<T[]> arrayKlass;
     private final String accessKey;
+    private final GloLogger logger;
 
-    protected GenericClientImpl(String url, String accessKey, String path, Class<T> klass, Class<T[]> arrayKlass) {
-        webTarget = ClientBuilder.newClient()
-                .target(url);
-//                .queryParam(EBoardsParams.ACCESS_TOKEN.getQueryStr(), "pcad84c0e279a1a233e1eb31a7a4b20b4ad3ea947");
+    protected GenericClientImpl(String url, String accessKey, String path, Class<T> klass, Class<T[]> arrayKlass, GloLogger _logger) {
+        this.logger = _logger;
+        Client client = ClientBuilder.newClient();
+        client.register((ClientRequestFilter) (ClientRequestContext requestContext) -> {
+            if (requestContext == null) {
+                logger.warning("requestContext == null");
+            } else {
+                logger.info("Requesting %s %s", requestContext.getMethod(), requestContext.getUri().toString());
+                if (requestContext.hasEntity()) {
+                    logger.info("With entity: %s", requestContext.getEntity().toString());
+                }
+                dumpHeaders(logger, requestContext.getHeaders());
+            }
+        });
+        client.register((ClientResponseFilter) (ClientRequestContext requestContext, ClientResponseContext responseContext) -> {
+            if (responseContext == null) {
+                logger.warning("requestContext == null");
+            } else {
+                logger.info("Response %d %s", responseContext.getStatusInfo().getStatusCode(), responseContext.getStatusInfo().getReasonPhrase());
+                dumpHeaders(logger, responseContext.getHeaders());
+                InputStream objStream = responseContext.getEntityStream();
+                if (objStream.markSupported()) {
+                    objStream.mark(Integer.MAX_VALUE);
+                }
+                Scanner sc = new Scanner(objStream);
+                while (sc.hasNext()) {
+                    logger.info("---- %s", sc.nextLine());
+                }
+                if (objStream.markSupported()) {
+                    objStream.reset();
+                }
+            }
+        });
+        webTarget = client.target(url);
         this.path = path;
         this.klass = klass;
         this.arrayKlass = arrayKlass;
         this.accessKey = accessKey;
     }
 
-    protected GenericClientImpl(String accessKey, String path, Class<T> klass, Class<T[]> arrayKlass) {
-        this(GLO_URL, accessKey, path, klass, arrayKlass);
-    }
-
-    protected GenericClientImpl(String access_key, String path, Class<T> klass) {
-        this(access_key, path, klass, null);
+    protected GenericClientImpl(String accessKey, String path, Class<T> klass, Class<T[]> arrayKlass, GloLogger logger) {
+        this(GLO_URL, accessKey, path, klass, arrayKlass, logger);
     }
 
     private WebTarget prepareWebTarget(Function<WebTarget, WebTarget> fixer) {
@@ -216,7 +262,7 @@ public abstract class GenericClientImpl<T, R, F extends FieldsEnumI> extends Glo
         return prepareInvocationBuilder(fixer).delete(Response.class);
     }
 
-    protected <R, P> R execWithDefault(P param, P default_param, Function<P, R> toExec) {
+    protected <RR, P> RR execWithDefault(P param, P default_param, Function<P, RR> toExec) {
         P toUse = param == null
                 ? default_param
                 : param;

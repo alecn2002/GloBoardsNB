@@ -51,7 +51,7 @@ public class CardClientImpl extends GenericClientImpl<Card, CardRequest, CardFie
     static final Collection<CardFieldsEnum> DEFAULT_FIELDS = Arrays.asList(DEFAULT_FIELDS_LIST);
 
     public CardClientImpl(String access_key) {
-        super(access_key, GLO_PATH_CARDS, Card.class, Card[].class);
+        super(access_key, GLO_PATH_CARDS, Card.class, Card[].class, LOGGER);
     }
 
     public CardClientImpl() {
