@@ -41,5 +41,4 @@ import lombok.experimental.SuperBuilder;
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
 public class Column extends DatedNamedEntity {
-    private BoardMember created_by;
 }

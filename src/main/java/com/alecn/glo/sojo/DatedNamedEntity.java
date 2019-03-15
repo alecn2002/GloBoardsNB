@@ -45,4 +45,7 @@ public abstract class DatedNamedEntity extends NamedEntity {
     Date created_date;
     Date updated_date;
     Date archived_date;
+    PartialUser created_by;
+    PartialUser updated_by;
+    PartialUser archived_by;
 }
