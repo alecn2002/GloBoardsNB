@@ -26,6 +26,8 @@ package com.alecn.glo.client.impl;
 import com.alecn.glo.client.FieldsEnumI;
 import static com.alecn.glo.client.impl.GloConstants.GLO_URL;
 import com.alecn.glo.util.GloLogger;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Arrays;
@@ -94,6 +96,22 @@ public abstract class GenericClientImpl<T, R, F extends FieldsEnumI> extends Glo
     private final String accessKey;
     private final GloLogger logger;
 
+    private static void logResponseEntity(GloLogger logger, ClientResponseContext responseContext) throws IOException {
+        if (responseContext.hasEntity()) {
+            ByteArrayOutputStream result = new ByteArrayOutputStream();;
+            try (InputStream stream = responseContext.getEntityStream()) {
+                byte[] buffer = new byte[1024];
+                int length;
+                while ((length = stream.read(buffer)) != -1) {
+                    result.write(buffer, 0, length);
+                }
+            }
+            logger.info("    ==== Response body: '%s'", result.toString("UTF-8"));
+
+            responseContext.setEntityStream(new ByteArrayInputStream(result.toByteArray()));
+        }
+    }
+
     protected GenericClientImpl(String url, String accessKey, String path, Class<T> klass, Class<T[]> arrayKlass, GloLogger _logger) {
         this.logger = _logger;
         Client client = ClientBuilder.newClient();
@@ -115,16 +133,7 @@ public abstract class GenericClientImpl<T, R, F extends FieldsEnumI> extends Glo
                 logger.info("Response %d %s", responseContext.getStatusInfo().getStatusCode(), responseContext.getStatusInfo().getReasonPhrase());
                 dumpHeaders(logger, responseContext.getHeaders());
                 InputStream objStream = responseContext.getEntityStream();
-                if (objStream.markSupported()) {
-                    objStream.mark(Integer.MAX_VALUE);
-                }
-                Scanner sc = new Scanner(objStream);
-                while (sc.hasNext()) {
-                    logger.info("---- %s", sc.nextLine());
-                }
-                if (objStream.markSupported()) {
-                    objStream.reset();
-                }
+                logResponseEntity(logger, responseContext);
             }
         });
         webTarget = client.target(url);
