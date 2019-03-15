@@ -30,10 +30,11 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
+import java.io.UnsupportedEncodingException;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
-import java.util.Scanner;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 import javax.ws.rs.client.Client;
@@ -98,7 +99,7 @@ public abstract class GenericClientImpl<T, R, F extends FieldsEnumI> extends Glo
 
     private static void logResponseEntity(GloLogger logger, ClientResponseContext responseContext) throws IOException {
         if (responseContext.hasEntity()) {
-            ByteArrayOutputStream result = new ByteArrayOutputStream();;
+            ByteArrayOutputStream result = new ByteArrayOutputStream();
             try (InputStream stream = responseContext.getEntityStream()) {
                 byte[] buffer = new byte[1024];
                 int length;
@@ -112,20 +113,50 @@ public abstract class GenericClientImpl<T, R, F extends FieldsEnumI> extends Glo
         }
     }
 
+    private static class MyOutputStream extends OutputStream {
+
+        private final OutputStream originalStream;
+        private final OutputStream myStream;
+
+        public MyOutputStream(OutputStream originalStream, OutputStream myStream) {
+            this.originalStream = originalStream;
+            this.myStream = myStream;
+        }
+
+        @Override
+        public void write(int b) throws IOException {
+            originalStream.write(b);
+            myStream.write(b);
+        }
+
+        @Override
+        public void close() throws IOException {
+            originalStream.close();
+            myStream.close();
+        }
+    }
+
+    private final ByteArrayOutputStream myOutputStream;
+
     protected GenericClientImpl(String url, String accessKey, String path, Class<T> klass, Class<T[]> arrayKlass, GloLogger _logger) {
         this.logger = _logger;
         Client client = ClientBuilder.newClient();
+
+        this.myOutputStream = new ByteArrayOutputStream();
+
         client.register((ClientRequestFilter) (ClientRequestContext requestContext) -> {
             if (requestContext == null) {
                 logger.warning("requestContext == null");
             } else {
                 logger.info("Requesting %s %s", requestContext.getMethod(), requestContext.getUri().toString());
+                dumpHeaders(logger, requestContext.getHeaders());
                 if (requestContext.hasEntity()) {
                     logger.info("With entity: %s", requestContext.getEntity().toString());
                 }
-                dumpHeaders(logger, requestContext.getHeaders());
+                requestContext.setEntityStream(new MyOutputStream(requestContext.getEntityStream(), myOutputStream));
             }
         });
+
         client.register((ClientResponseFilter) (ClientRequestContext requestContext, ClientResponseContext responseContext) -> {
             if (responseContext == null) {
                 logger.warning("requestContext == null");
@@ -136,6 +167,7 @@ public abstract class GenericClientImpl<T, R, F extends FieldsEnumI> extends Glo
                 logResponseEntity(logger, responseContext);
             }
         });
+
         webTarget = client.target(url);
         this.path = path;
         this.klass = klass;
@@ -262,8 +294,18 @@ public abstract class GenericClientImpl<T, R, F extends FieldsEnumI> extends Glo
     }
 
     protected T post(Entity<R> entity, Function<WebTarget, WebTarget> fixer) {
-        // TODO logger
-        return prepareInvocationBuilder(fixer).post(entity, klass);
+        try {
+            return prepareInvocationBuilder(fixer).post(entity, klass);
+        } finally {
+            if (myOutputStream.size() > 0) {
+                try {
+                    logger.info("Request body: '%s'", myOutputStream.toString("UTF-8"));
+                } catch (UnsupportedEncodingException ex) {
+                    logger.severe("Unsupported encoding exception on attempt to print request body: %s", ex.getMessage());
+                }
+                myOutputStream.reset();
+            }
+        }
     }
 
     protected Response delete(Function<WebTarget, WebTarget> fixer) {

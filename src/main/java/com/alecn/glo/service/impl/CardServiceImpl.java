@@ -32,6 +32,7 @@ import com.alecn.glo.sojo.Description;
 import com.alecn.glo.sojo.Label;
 import com.alecn.glo.sojo.PartialLabel;
 import com.alecn.glo.util.VisitorHelper;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
@@ -103,9 +104,10 @@ public class CardServiceImpl implements CardService {
                         c -> ((Card)c).getDescription(),
                         d -> ((Description)d).getText()),
                 card.getAssignees(),
-                VisitorHelper.nvlVisitor(card, null,
-                        c -> ((Card)c).getLabels(),
-                        ll -> ((List<Label>)ll).stream().map(l -> PartialLabel.builder().id(l.getId()).build()).collect(Collectors.toList())),
+//                VisitorHelper.nvlVisitor(card, new ArrayList<>(),
+//                        c -> ((Card)c).getLabels(),
+//                        ll -> ((List<Label>)ll).stream().map(l -> PartialLabel.builder().id(l.getId()).build()).collect(Collectors.toList())),
+                null, // TODO add proper label processing
                 card.getDue_date());
     }
 

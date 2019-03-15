@@ -31,6 +31,7 @@ import com.alecn.glo.sojo.Description;
 import com.alecn.glo.sojo.PartialLabel;
 import com.alecn.glo.sojo.PartialUser;
 import com.alecn.glo.util.GloLogger;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Date;
@@ -85,7 +86,8 @@ public class CardClientImpl extends GenericClientImpl<Card, CardRequest, CardFie
                     .position(position)
                     .description(new Description(description))
                     .assignees(assignees)
-                    .labels(labels)
+//                    .labels(labels)
+                    .labels(new ArrayList<>()) // TODO proper labels processing
                     .due_date(due_date)
                     .build());
     }
