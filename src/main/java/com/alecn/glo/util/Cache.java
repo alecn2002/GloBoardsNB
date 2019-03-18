@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright 2019 anovitsk.
+ * Copyright 2019 alecn.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -23,28 +23,40 @@
  */
 package com.alecn.glo.util;
 
+import com.alecn.glo.sojo.Entity;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.function.Supplier;
-import lombok.NonNull;
-import lombok.RequiredArgsConstructor;
+import java.util.stream.Collector;
 
 /**
  *
- * @author anovitsk
+ * @author alecn
  */
-@RequiredArgsConstructor
-public class LazyValue<T> {
-    @NonNull
-    private final Supplier<T> supplier;
-    private T value;
+public class Cache<T extends Entity> {
 
-    public T get() {
-        if (value == null) {
-            refresh();
-        }
-        return value;
+    private final LazyValue<Map<String, T>> cache;
+
+    public Cache(Supplier<List<T>> refresher) {
+        this.cache = new LazyValue<>(
+                () -> ((List<T>)refresher.get()).stream()
+                    .sequential()
+                    .collect(Collector.<T, Map<String, T>>of(
+                            LinkedHashMap::new,
+                            (Map<String, T> m, T e) -> m.put(e.getId(), e),
+                            (Map<String, T> m1, Map<String, T> m2) -> {m1.putAll(m2); return m1;})));
+    }
+
+    public Map<String, T> getCache() {
+        return cache.get();
+    }
+
+    public T getElementById(String id) {
+        return cache.get().get(id);
     }
 
     public void refresh() {
-        value = supplier.get();
+        cache.refresh();
     }
 }

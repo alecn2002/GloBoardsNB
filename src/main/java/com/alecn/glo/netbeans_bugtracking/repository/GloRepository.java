@@ -37,6 +37,7 @@ import com.alecn.glo.service.impl.CommentServiceImpl;
 import com.alecn.glo.sojo.Board;
 import com.alecn.glo.sojo.Card;
 import com.alecn.glo.sojo.Column;
+import com.alecn.glo.util.Cache;
 import com.alecn.glo.util.LazyValue;
 import com.alecn.glo.util.OeWriter;
 import java.awt.Image;
@@ -45,6 +46,7 @@ import java.beans.PropertyChangeSupport;
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -113,8 +115,13 @@ public class GloRepository {
 
     private final transient LazyValue<GloRepositoryController> gloRepositoryController = new LazyValue<>(() -> new GloRepositoryController(this));
 
+    private final transient Cache<Column> columns;
+    private final transient Cache<Card> cards;
+
     public GloRepository() {
         this.ic = new InstanceContent();
+        this.columns = new Cache(() -> listColumns());
+        this.cards = new Cache(() -> listCards());
     }
 
     public GloRepository(RepositoryInfo repositoryInfo) {
@@ -227,7 +234,7 @@ public class GloRepository {
         propertyChangeSupport.removePropertyChangeListener(listener);
     }
 
-    public List<Column> listColumns() {
+    private List<Column> listColumns() {
         oeWriter.outWrite(o -> o.println(">>>> getBoardsList()"));
         if (boardService == null) {
             oeWriter.errWrite(o -> o.println("boardService == null"));
@@ -238,7 +245,15 @@ public class GloRepository {
         return list;
     }
 
-    public List<Card> listCards() {
+    public Collection<Column> getColumns() {
+        return columns.getCache().values();
+    }
+
+    public void refreshColumns() {
+        columns.refresh();
+    }
+
+    private List<Card> listCards() {
         oeWriter.outWrite(o -> o.println(">>>> getBoardsList()"));
         if (boardService == null) {
             oeWriter.errWrite(o -> o.println("boardService == null"));
@@ -247,6 +262,14 @@ public class GloRepository {
         List<Card> list = boardService.listCards(getBoardId()); // TODO caching
         oeWriter.outWrite(o -> o.printf("list of cards contains %d items\n", list.size()));
         return list;
+    }
+
+    public Collection<Card> getCards() {
+        return cards.getCache().values();
+    }
+
+    public void refreshCards() {
+        
     }
 
     public List<GloQuery> getQueries() {

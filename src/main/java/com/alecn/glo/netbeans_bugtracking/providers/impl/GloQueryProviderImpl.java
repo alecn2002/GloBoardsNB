@@ -59,7 +59,7 @@ public class GloQueryProviderImpl implements GloQueryProvider {
 
     @Override
     public boolean canRename(GloQuery q) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return false; // TODO Update when real query editor will be implemented
     }
 
     @Override

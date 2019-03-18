@@ -26,6 +26,7 @@ package com.alecn.glo.netbeans_bugtracking.query;
 import com.alecn.glo.netbeans_bugtracking.repository.GloRepository;
 import com.alecn.glo.netbeans_bugtracking.issue.GloIssue;
 import com.alecn.glo.sojo.Card;
+import java.util.Collection;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
@@ -66,7 +67,8 @@ public class GloQuery {
 
     public void refresh() {
         issues.clear();
-        List<Card> cards = gloRepository.listCards();
+        gloRepository.refreshCards(); // TODO move it to appropriate place
+        Collection<Card> cards = gloRepository.getCards();
         issues.addAll(cards.stream().map(c -> new GloIssue(c, gloRepository)).collect(Collectors.toList()));
         if (issueContainer != null) {
             issueContainer.clear();

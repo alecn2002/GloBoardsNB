@@ -34,8 +34,8 @@ import java.awt.event.ActionListener;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -158,7 +158,7 @@ public class GloQueryController implements QueryController, ActionListener {
 
     private void onSearch() {
         LOGGER.info("Retrieving list of columns...\n");
-        List<Column> columns = gloRepository.listColumns();
+        Collection<Column> columns = gloRepository.getColumns();
         LOGGER.info("Got %d columns\n", columns.size());
         JTable resultTable = gloQueryPanel.get().resultTable;
         GloQueryResultTableModel tableModel = new GloQueryResultTableModel(columns.stream().map(c -> c.getName()).collect(Collectors.toList()),

@@ -35,6 +35,8 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
+import java.util.Arrays;
+import java.util.Collection;
 import java.util.List;
 import javax.swing.JComponent;
 import org.netbeans.modules.bugtracking.spi.IssueController;
@@ -148,12 +150,12 @@ public class GloIssueController implements IssueController, ActionListener, KeyL
         component.idField.setText(nvl(gloIssue.getCard().getId()));
 
         String selectedColumnId = gloIssue.getCard().getColumn_id();
-        List<Column> columns = gloRepository.listColumns();
+        Collection<Column> columns = gloRepository.getColumns();
         Column selectedColumn = (selectedColumnId == null || selectedColumnId.isEmpty())
                 ? null
                 : columns.stream().filter(c -> c.getId().equals(selectedColumnId)).findFirst().get();
         NameIdListModel model = new NameIdListModel<>(
-                columns,
+                Arrays.asList(columns.toArray(new Column[0])),
                 (Column c) -> c.getName(),
                 (Column c) -> c.getId()
         );

@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright 2019 anovitsk.
+ * Copyright 2019 alecn.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -21,30 +21,16 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.alecn.glo.util;
+package com.alecn.glo.ui;
 
-import java.util.function.Supplier;
-import lombok.NonNull;
-import lombok.RequiredArgsConstructor;
+import com.alecn.glo.netbeans_bugtracking.issue.GloIssue;
+import java.awt.datatransfer.DataFlavor;
 
 /**
  *
- * @author anovitsk
+ * @author alecn
  */
-@RequiredArgsConstructor
-public class LazyValue<T> {
-    @NonNull
-    private final Supplier<T> supplier;
-    private T value;
+public class DndSupport {
+    public static final DataFlavor GLO_ISSUE_DATA_FLAVOR = new DataFlavor(GloIssue.class, DataFlavor.javaSerializedObjectMimeType);
 
-    public T get() {
-        if (value == null) {
-            refresh();
-        }
-        return value;
-    }
-
-    public void refresh() {
-        value = supplier.get();
-    }
 }
