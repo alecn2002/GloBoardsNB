@@ -25,8 +25,13 @@ package com.alecn.glo.netbeans_bugtracking.query;
 
 import com.alecn.glo.netbeans_bugtracking.repository.GloRepository;
 import com.alecn.glo.netbeans_bugtracking.issue.GloIssue;
+import com.alecn.glo.sojo.Card;
+import java.util.LinkedHashSet;
+import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 import lombok.Getter;
-import org.netbeans.modules.bugtracking.spi.QueryController;
+import lombok.Setter;
 import org.netbeans.modules.bugtracking.spi.QueryProvider;
 
 /**
@@ -36,18 +41,19 @@ import org.netbeans.modules.bugtracking.spi.QueryProvider;
 @Getter
 public class GloQuery {
 
-    private QueryProvider.IssueContainer<GloIssue> delegateContainer;
+    @Setter
+    private QueryProvider.IssueContainer<GloIssue> issueContainer;
 
     private final transient GloRepository gloRepository;
-    private final transient GloQueryController gloQueryController;
+    private final transient GloQueryController controller;
+
+    private final Set<GloIssue> issues;
 
     public GloQuery(GloRepository gloRepository) {
         this.gloRepository = gloRepository;
-        this.gloQueryController = new GloQueryController(gloRepository, this);
-    }
+        this.controller = new GloQueryController(gloRepository, this);
 
-    public void setIssueContainer(QueryProvider.IssueContainer<GloIssue> ic) {
-        delegateContainer = ic;
+        this.issues = new LinkedHashSet<>();
     }
 
     public String getDisplayName() {
@@ -58,8 +64,14 @@ public class GloQuery {
         return "GLO Query Tooltip"; // FIXME !!! GloQuery.getTooltip()
     }
 
-    public QueryController getController() {
-        return gloQueryController;
+    public void refresh() {
+        issues.clear();
+        List<Card> cards = gloRepository.listCards();
+        issues.addAll(cards.stream().map(c -> new GloIssue(c, gloRepository)).collect(Collectors.toList()));
+        if (issueContainer != null) {
+            issueContainer.clear();
+            issueContainer.add(issues.toArray(new GloIssue[0]));
+        }
     }
 
 }

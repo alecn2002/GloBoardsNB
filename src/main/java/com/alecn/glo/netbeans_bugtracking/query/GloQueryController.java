@@ -167,12 +167,11 @@ public class GloQueryController implements QueryController, ActionListener {
         );
         tableModel.setThisModelToTable(resultTable);
         LOGGER.info("Retrieving list of cards...\n");
-        List<Card> cards = gloRepository.listCards();
-        LOGGER.info("Got %d cards\n", cards.size());
+        gloQuery.refresh();
+        LOGGER.info("Got %d cards\n", gloQuery.getIssues().size());
         columns.forEach(column -> {
-            tableModel.addColumnValues(cards.stream()
-            .filter(c -> c.getColumn_id().equals(column.getId()))
-            .map(c -> new GloIssue(c, gloRepository))
+            tableModel.addColumnValues(gloQuery.getIssues().stream()
+            .filter(c -> c.getCard().getColumn_id().equals(column.getId()))
             .collect(Collectors.toList()));
         });
     }

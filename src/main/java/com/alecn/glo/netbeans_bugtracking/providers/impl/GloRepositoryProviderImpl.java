@@ -94,7 +94,7 @@ public class GloRepositoryProviderImpl implements GloRepositoryProvider {
 
     @Override
     public Collection<GloQuery> getQueries(GloRepository r) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return r.getQueries();
     }
 
     @Override
@@ -107,7 +107,8 @@ public class GloRepositoryProviderImpl implements GloRepositoryProvider {
 
     @Override
     public boolean canAttachFiles(GloRepository r) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        // TODO implement files attachment
+        return false;
     }
 
     @Override

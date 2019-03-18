@@ -74,7 +74,7 @@ public class GloQueryProviderImpl implements GloQueryProvider {
 
     @Override
     public void refresh(GloQuery q) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        q.refresh();
     }
 
 }

@@ -52,7 +52,7 @@ public class GloIssue {
     }
 
     private static boolean _isFinished(Card card) {
-        return card.getCompleted_task_count() >= card.getTotal_task_count()
+        return (card.getCompleted_task_count() != null && card.getTotal_task_count() != null && card.getCompleted_task_count() >= card.getTotal_task_count())
                 || card.getArchived_date() != null;
     }
 

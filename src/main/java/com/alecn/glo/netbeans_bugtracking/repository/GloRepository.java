@@ -44,6 +44,7 @@ import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -246,5 +247,11 @@ public class GloRepository {
         List<Card> list = boardService.listCards(getBoardId()); // TODO caching
         oeWriter.outWrite(o -> o.printf("list of cards contains %d items\n", list.size()));
         return list;
+    }
+
+    public List<GloQuery> getQueries() {
+        // TODO make a real query storage
+        GloQuery[] queries = {new GloQuery(this)};
+        return Arrays.asList(queries);
     }
 }

@@ -32,7 +32,6 @@ import com.alecn.glo.sojo.Description;
 import com.alecn.glo.sojo.Label;
 import com.alecn.glo.sojo.PartialLabel;
 import com.alecn.glo.util.VisitorHelper;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
@@ -72,10 +71,17 @@ public class CardServiceImpl implements CardService {
         if (card == null || card.getBoard_id() == null || card.getId() == null) {
             return null; // TODO better error processing
         }
-        return cardClient.edit(card.getBoard_id(), card.getColumn_id(), card.getId(), card.getName(), card.getPosition(), card.getDescription().getText(),
-                card.getAssignees(),
-                card.getLabels().stream().map(l -> PartialLabel.builder().id(l.getId()).build()).collect(Collectors.toList()),
-                card.getDue_date());
+        return cardClient.edit(card.getBoard_id(), card.getColumn_id(), card.getId(), card.getName(), card.getPosition(),
+                        VisitorHelper.nvlVisitor(card, "",
+                                                 c -> ((Card)c).getDescription(),
+                                                 d -> ((Description)d).getText()),
+                        card.getAssignees(),
+                        (List<PartialLabel>)null,
+//                        VisitorHelper.nvlVisitor(card,
+//                                (List<PartialLabel>)null,
+//                                c -> ((Card)c).getLabels(),
+//                                ll -> ((List<Label>)ll).stream().map(l -> PartialLabel.builder().id(l.getId()).build()).collect(Collectors.toList()),
+                        card.getDue_date());
     }
 
     @Override
