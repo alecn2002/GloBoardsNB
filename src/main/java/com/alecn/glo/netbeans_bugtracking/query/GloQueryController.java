@@ -167,6 +167,7 @@ public class GloQueryController implements QueryController, ActionListener {
         );
         tableModel.setThisModelToTable(resultTable);
         LOGGER.info("Retrieving list of cards...\n");
+        gloRepository.refreshCards();
         gloQuery.refresh();
         LOGGER.info("Got %d cards\n", gloQuery.getIssues().size());
         columns.forEach(column -> {

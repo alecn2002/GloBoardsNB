@@ -48,11 +48,14 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 import java.util.function.Function;
+import java.util.stream.Collectors;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NonNull;
@@ -269,12 +272,37 @@ public class GloRepository {
     }
 
     public void refreshCards() {
-        
+        cards.refresh();
+    }
+
+    private static class CountingMap<K> {
+        private final Map<K, Integer> counter;
+
+        public CountingMap() {
+            this.counter  = new HashMap<>();
+        }
+
+        public Integer getNext(K key) {
+            Integer ans = counter.get(key);
+            counter.put(key, 1 + ((ans == null) ? 0 : ans));
+            return ans;
+        }
     }
 
     public List<GloQuery> getQueries() {
-        // TODO make a real query storage
-        GloQuery[] queries = {new GloQuery(this)};
-        return Arrays.asList(queries);
+        refreshCards();
+        CountingMap<String> usedNames = new CountingMap<>();
+        return getColumns().stream()
+                .map(col -> {
+                    Integer id = usedNames.getNext(col.getName());
+                    return new HashMap.SimpleEntry<>(
+                            col.getId(),
+                            id == null
+                                ? col.getName()
+                                : String.format("%s (%d)", col.getName(), id)
+                    );
+                })
+                .map(in -> new GloQuery(this, in.getKey(), in.getValue()))
+                .collect(Collectors.toList());
     }
 }

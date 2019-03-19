@@ -26,11 +26,12 @@ package com.alecn.glo.netbeans_bugtracking.query;
 import com.alecn.glo.netbeans_bugtracking.repository.GloRepository;
 import com.alecn.glo.netbeans_bugtracking.issue.GloIssue;
 import com.alecn.glo.sojo.Card;
+import com.alecn.glo.sojo.Column;
 import java.util.Collection;
 import java.util.LinkedHashSet;
-import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 import lombok.Getter;
 import lombok.Setter;
 import org.netbeans.modules.bugtracking.spi.QueryProvider;
@@ -50,26 +51,47 @@ public class GloQuery {
 
     private final Set<GloIssue> issues;
 
-    public GloQuery(GloRepository gloRepository) {
+    @Setter
+    private String columnId;
+    @Setter
+    private String columnName;
+
+    public GloQuery(GloRepository gloRepository, String columnId, String columnName) {
         this.gloRepository = gloRepository;
         this.controller = new GloQueryController(gloRepository, this);
 
         this.issues = new LinkedHashSet<>();
+
+        this.columnId = columnId;
+        this.columnName = columnName;
+    }
+
+    public GloQuery(GloRepository gloRepository, Column column) {
+        this(gloRepository, column.getId(), column.getName());
+    }
+
+    public GloQuery(GloRepository gloRepository) {
+        this(gloRepository, null, null);
     }
 
     public String getDisplayName() {
-        return "GLo Query"; // FIXME !!! GloQuery.getDisplayName()
+        return columnName == null
+                ? "GLo Query"
+                : columnName; // FIXME !!! GloQuery.getDisplayName()
     }
 
     public String getTooltip() {
-        return "GLO Query Tooltip"; // FIXME !!! GloQuery.getTooltip()
+        return getDisplayName(); // FIXME !!! GloQuery.getTooltip()
     }
 
     public void refresh() {
         issues.clear();
-        gloRepository.refreshCards(); // TODO move it to appropriate place
-        Collection<Card> cards = gloRepository.getCards();
-        issues.addAll(cards.stream().map(c -> new GloIssue(c, gloRepository)).collect(Collectors.toList()));
+//        gloRepository.refreshCards(); // TODO move it to appropriate place
+        Stream<Card> cards = gloRepository.getCards().stream();
+        if (columnId != null) {
+            cards = cards.filter(c -> columnId.equals(c.getColumn_id()));
+        }
+        issues.addAll(cards.map(c -> new GloIssue(c, gloRepository)).collect(Collectors.toList()));
         if (issueContainer != null) {
             issueContainer.clear();
             issueContainer.add(issues.toArray(new GloIssue[0]));
