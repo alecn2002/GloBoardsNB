@@ -26,6 +26,7 @@ package com.alecn.glo.service.impl;
 import com.alecn.glo.client.BoardClient;
 import com.alecn.glo.client.BoardFieldsEnum;
 import com.alecn.glo.client.CardClient;
+import com.alecn.glo.client.CardFieldsEnum;
 import com.alecn.glo.client.ColumnClient;
 import com.alecn.glo.service.BoardService;
 import com.alecn.glo.sojo.Board;
@@ -36,6 +37,7 @@ import com.alecn.glo.client.impl.CardClientImpl;
 import com.alecn.glo.client.impl.ColumnClientImpl;
 import com.alecn.glo.sojo.Card;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.List;
 import javax.ws.rs.core.Response;
 import org.openide.util.Lookup;
@@ -114,6 +116,11 @@ public class BoardServiceImpl implements BoardService {
     @Override
     public List<Card> listCards(String boardId) {
         return cardClient.list(boardId, null, false, null, null, false);
+    }
+
+    @Override
+    public List<Card> listCards(String boardId, Collection<CardFieldsEnum> fields) {
+        return cardClient.list(boardId, fields, false, null, null, false);
     }
 
 }

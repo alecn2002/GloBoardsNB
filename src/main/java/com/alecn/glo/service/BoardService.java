@@ -23,9 +23,11 @@
  */
 package com.alecn.glo.service;
 
+import com.alecn.glo.client.CardFieldsEnum;
 import com.alecn.glo.sojo.Board;
 import com.alecn.glo.sojo.Card;
 import com.alecn.glo.sojo.Column;
+import java.util.Collection;
 import java.util.List;
 import javax.ws.rs.core.Response;
 
@@ -40,15 +42,17 @@ public interface BoardService {
 
     List<Column> listBoardColumns(String board_id);
 
-    Column createColumn(String boardId, String columnName);
+    Column createColumn(String boardId, String columnName); // TODO move to ColumnService
 
-    Column createColumn(String boardId, String columnName, Integer position);
+    Column createColumn(String boardId, String columnName, Integer position); // TODO move to ColumnService
 
-    Column editColumn(String boardId, String columnId, String columnName);
+    Column editColumn(String boardId, String columnId, String columnName); // TODO move to ColumnService
 
-    Column editColumn(String boardId, String columnId, String columnName, Integer position);
+    Column editColumn(String boardId, String columnId, String columnName, Integer position); // TODO move to ColumnService
 
-    Response deleteColumn(String boardId, String columnId);
+    Response deleteColumn(String boardId, String columnId); // TODO move to ColumnService
 
-    List<Card> listCards(String boardId);
+    List<Card> listCards(String boardId); // TODO move to CardService
+
+    List<Card> listCards(String boardId, Collection<CardFieldsEnum> fields); // TODO move to CardService
 }

@@ -25,6 +25,7 @@ package com.alecn.glo.netbeans_bugtracking.repository;
 
 import com.alecn.glo.GloConfig;
 import com.alecn.glo.GloConnector;
+import com.alecn.glo.client.CardFieldsEnum;
 import com.alecn.glo.client.impl.GloConstants;
 import com.alecn.glo.netbeans_bugtracking.issue.GloIssue;
 import com.alecn.glo.netbeans_bugtracking.query.GloQuery;
@@ -262,7 +263,7 @@ public class GloRepository {
             oeWriter.errWrite(o -> o.println("boardService == null"));
             return new ArrayList<>();
         }
-        List<Card> list = boardService.listCards(getBoardId()); // TODO caching
+        List<Card> list = boardService.listCards(getBoardId(), Arrays.asList(CardFieldsEnum.values())); // TODO caching
         oeWriter.outWrite(o -> o.printf("list of cards contains %d items\n", list.size()));
         return list;
     }
