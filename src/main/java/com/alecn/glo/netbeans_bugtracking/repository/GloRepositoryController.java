@@ -30,6 +30,7 @@ import com.alecn.glo.util.GloLogger;
 import com.alecn.glo.util.OeWriter;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.Collection;
 import java.util.List;
 import javax.swing.JComponent;
 import javax.swing.SwingUtilities;
@@ -200,7 +201,7 @@ public class GloRepositoryController implements RepositoryController, DocumentLi
         errorMessage = "";
         try {
             LOGGER.info("Starting to retrieve boards list...\n");
-            List<Board> boards = gloRepository.getBoardsList();
+            Collection<Board> boards = gloRepository.getBoardsList();
             LOGGER.info("%d boards retrieved\n", boards.size());
             NameIdListModel<Board> model = new NameIdListModel<>(boards, b -> b.getName(), b -> b.getId());
             model.setThisModelToControl(panel.gloRepoBoard);

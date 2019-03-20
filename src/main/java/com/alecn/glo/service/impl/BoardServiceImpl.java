@@ -53,6 +53,8 @@ public class BoardServiceImpl implements BoardService {
     private static final BoardFieldsEnum[] FIELDS_FOR_BOARD_COLUMNS_LIST = {BoardFieldsEnum.COLUMNS};
     private static final List<BoardFieldsEnum> FIELDS_FOR_BOARD_COLUMNS = Arrays.asList(FIELDS_FOR_BOARD_COLUMNS_LIST);
 
+    private static final List<BoardFieldsEnum> ALL_BOARD_COLUMNS = Arrays.asList(BoardFieldsEnum.values());
+
     private static final BoardClient BOARD_CLIENT = Lookup.getDefault().lookup(BoardClient.class);
     private static final ColumnClient COLUMN_CLIENT = Lookup.getDefault().lookup(ColumnClient.class);
     private static final CardClient CARD_CLIENT = Lookup.getDefault().lookup(CardClient.class);
@@ -76,6 +78,11 @@ public class BoardServiceImpl implements BoardService {
     @Override
     public List<Board> listBoards() {
         return boardClient.list();
+    }
+
+    @Override
+    public List<Board> listBoards(List<BoardFieldsEnum> fields) {
+        return boardClient.list(fields);
     }
 
     @Override

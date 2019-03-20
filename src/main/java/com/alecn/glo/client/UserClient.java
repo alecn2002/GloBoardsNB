@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright 2019 alecn.
+ * Copyright 2019 anovitsk.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -23,26 +23,17 @@
  */
 package com.alecn.glo.client;
 
-import com.alecn.glo.sojo.Board;
+import com.alecn.glo.sojo.User;
 import java.util.Collection;
-import java.util.List;
 
 /**
  *
- * @author AlecN <alecn2002@gmail.com>
+ * @author anovitsk
  */
-public interface BoardClient {
-    List<Board> list(final Collection<BoardFieldsEnum> fields, boolean archived, Integer page, Integer per_page, boolean sort_desc);
+public interface UserClient {
 
-    List<Board> list(final Collection<BoardFieldsEnum> fields);
+    User get();
 
-    List<Board> list();
+    User get(Collection<UserFieldsEnum> fields);
 
-    Board get(String board_id, final Collection<BoardFieldsEnum> fields);
-
-    Board get(String board_id);
-
-    Board get(Board board, final Collection<BoardFieldsEnum> fields);
-
-    Board get(Board board);
 }

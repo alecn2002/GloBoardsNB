@@ -25,6 +25,7 @@ package com.alecn.glo.netbeans_bugtracking.repository;
 
 import com.alecn.glo.GloConfig;
 import com.alecn.glo.GloConnector;
+import com.alecn.glo.client.BoardFieldsEnum;
 import com.alecn.glo.client.CardFieldsEnum;
 import com.alecn.glo.client.impl.GloConstants;
 import com.alecn.glo.netbeans_bugtracking.issue.GloIssue;
@@ -36,6 +37,7 @@ import com.alecn.glo.service.impl.BoardServiceImpl;
 import com.alecn.glo.service.impl.CardServiceImpl;
 import com.alecn.glo.service.impl.CommentServiceImpl;
 import com.alecn.glo.sojo.Board;
+import com.alecn.glo.sojo.BoardMember;
 import com.alecn.glo.sojo.Card;
 import com.alecn.glo.sojo.Column;
 import com.alecn.glo.util.Cache;
@@ -121,11 +123,20 @@ public class GloRepository {
 
     private final transient Cache<Column> columns;
     private final transient Cache<Card> cards;
+    private final transient Cache<Board> boards;
+    private final transient Cache<BoardMember> members;
 
     public GloRepository() {
         this.ic = new InstanceContent();
         this.columns = new Cache(() -> listColumns());
         this.cards = new Cache(() -> listCards());
+        this.boards = new Cache(() -> listBoards());
+        this.members = new Cache(() -> {
+            List<BoardMember> boardMembers = new ArrayList<>(listBoardMembers());
+            boardMembers.addAll(listInvitedMembers());
+            return boardMembers;
+        }
+        );
     }
 
     public GloRepository(RepositoryInfo repositoryInfo) {
@@ -206,13 +217,33 @@ public class GloRepository {
         return new GloIssue(Card.builder().board_id(getBoardId()).build(), this);
     }
 
-    public List<Board> getBoardsList() {
+    public Collection<Board> getBoardsList() {
+        return boards.getCache().values();
+    }
+
+    public Board getCurrentBoard() {
+        return boards.getElementById(getBoardId());
+    }
+
+    public List<BoardMember> listBoardMembers() {
+        return getCurrentBoard().getMembers();
+    }
+
+    public List<BoardMember> listInvitedMembers() {
+        return getCurrentBoard().getInvited_members();
+    }
+
+    public BoardMember getBoardMemberById(String id) {
+        return members.getElementById(id);
+    }
+
+    private List<Board> listBoards() {
         oeWriter.outWrite(o -> o.println(">>>> getBoardsList()"));
         if (boardService == null) {
             oeWriter.errWrite(o -> o.println("boardService == null"));
             return new ArrayList<>();
         }
-        List<Board> list = boardService.listBoards(); // TODO caching
+        List<Board> list = boardService.listBoards(Arrays.asList(BoardFieldsEnum.values())); // TODO caching
         oeWriter.outWrite(o -> o.printf("list of boards contains %d items\n", list.size()));
         return list;
     }

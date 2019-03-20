@@ -28,7 +28,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Supplier;
-import java.util.stream.Collector;
+import java.util.stream.Collectors;
 
 /**
  *
@@ -42,10 +42,7 @@ public class Cache<T extends Entity> {
         this.cache = new LazyValue<>(
                 () -> ((List<T>)refresher.get()).stream()
                     .sequential()
-                    .collect(Collector.<T, Map<String, T>>of(
-                            LinkedHashMap::new,
-                            (Map<String, T> m, T e) -> m.put(e.getId(), e),
-                            (Map<String, T> m1, Map<String, T> m2) -> {m1.putAll(m2); return m1;})));
+                    .collect(Collectors.toMap(e -> e.getId(), e -> e, (v1, v2) -> v1, LinkedHashMap::new)));
     }
 
     public Map<String, T> getCache() {
@@ -53,7 +50,9 @@ public class Cache<T extends Entity> {
     }
 
     public T getElementById(String id) {
-        return cache.get().get(id);
+        return VisitorHelper.nvlVisitor(cache, null,
+                c -> ((LazyValue<Map<String, T>>)c).get(),
+                m -> ((Map<String, T>) m).get(id));
     }
 
     public void refresh() {

@@ -86,4 +86,9 @@ public class BoardClientImpl extends GenericClientImpl<Board, Board, BoardFields
     public List<Board> list() {
         return list(null, false, null, null, false);
     }
+
+    @Override
+    public List<Board> list(Collection<BoardFieldsEnum> fields) {
+        return list(fields, false, null, null, false);
+    }
 }

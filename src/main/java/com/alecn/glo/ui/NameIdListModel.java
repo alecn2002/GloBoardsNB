@@ -24,6 +24,8 @@
 package com.alecn.glo.ui;
 
 import java.awt.Component;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.function.Function;
 import javax.swing.AbstractListModel;
@@ -65,14 +67,16 @@ public class NameIdListModel<T> extends AbstractListModel<T> implements ComboBox
     private Integer selectionId;
 
 
-    public NameIdListModel(List<T> list, Function<T, String> nameVisitor, Function<T, String> idVisitor, Integer selectionId) {
-        this.list = list;
+    public NameIdListModel(Collection<T> list, Function<T, String> nameVisitor, Function<T, String> idVisitor, Integer selectionId) {
+        this.list = list instanceof List
+                ? (List<T>)list
+                : new ArrayList<>(list);
         this.nameVisitor = nameVisitor;
         this.idVisitor = idVisitor;
         this.selectionId = selectionId;
     }
 
-    public NameIdListModel(List<T> list, Function<T, String> nameVisitor, Function<T, String> idVisitor) {
+    public NameIdListModel(Collection<T> list, Function<T, String> nameVisitor, Function<T, String> idVisitor) {
         this(list, nameVisitor, idVisitor, null);
     }
 

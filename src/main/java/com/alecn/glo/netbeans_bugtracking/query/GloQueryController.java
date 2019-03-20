@@ -59,8 +59,53 @@ public class GloQueryController implements QueryController, ActionListener {
 
     private static final LazyValue<GloQueryPanel> gloQueryPanel = new LazyValue<>(() -> new GloQueryPanel());
 
+    @AllArgsConstructor
+    private static class GloIssueVisRenderer implements Function<GloIssue, String> {
+        // TODO this should go to UI...
+        private final GloRepository gloRepository;
+
+        @Override
+        public String apply(GloIssue t) {
+            if (t == null) {
+                return "";
+            }
+
+            Card card = t.getCard();
+
+            if (card == null) {
+                return "";
+            }
+
+            StringBuilder sb = new StringBuilder("<html><body>");
+
+            sb.append("<h3>").append(card.getName()).append("</h3>");
+
+            if (card.getAssignees() == null || card.getAssignees().isEmpty()) {
+                sb.append("<i>Not assigned</i><br>");
+            } else {
+                sb.append("<i>Assigned to: ")
+                        .append(String.join(", ", card.getAssignees().stream()
+                                .map(pu -> gloRepository.getBoardMemberById(pu.getId()).getName())
+                                .collect(Collectors.toList())))
+                        .append("</i><br>");
+            }
+            Integer tasksNo = card.getTotal_task_count();
+            sb.append(String.format("Tasks: %d", tasksNo == null ? 0 : tasksNo));
+
+            sb.append("</body></html>");
+            return sb.toString();
+        }
+
+    }
+
+    private final GloIssueVisRenderer GLO_ISSUE_VIS_RENDERER;
+
     private final transient GloRepository gloRepository;
     private final transient GloQuery gloQuery;
+
+    public GloQueryController(GloRepository gloRepository, GloQuery gloQuery) {
+        this(new GloIssueVisRenderer(gloRepository), gloRepository, gloQuery);
+    }
 
     @Override
     public boolean providesMode(QueryMode mode) {
@@ -124,38 +169,6 @@ public class GloQueryController implements QueryController, ActionListener {
             onSearch();
         }
     }
-
-    private static class GloIssueVisRenderer implements Function<GloIssue, String> {
-
-        @Override
-        public String apply(GloIssue t) {
-            if (t == null) {
-                return "";
-            }
-            Card card = t.getCard();
-            if (card == null) {
-                return "";
-            }
-            StringBuilder sb = new StringBuilder("<html><body>");
-            sb.append("<em>").append(card.getName()).append("</em>")
-                    .append(" <i>(id=") .append(card.getId()) .append(")</i><br>");
-            if (card.getAssignees() == null || card.getAssignees().isEmpty()) {
-                sb.append("<i>Not assigned</i><br>");
-            } else {
-                sb.append("<i>Assigned to: ")
-                        .append(String.join(", ", card.getAssignees().stream().map(pu -> pu.getId()).collect(Collectors.toList()))) // TODO replace with usernames
-                        .append("</i><br>");
-            }
-            Integer tasksNo = card.getTotal_task_count();
-            sb.append(String.format("Tasks: %d", tasksNo == null ? 0 : tasksNo));
-            sb.append("</body></html>");
-            return sb.toString();
-        }
-
-    }
-
-    private static final GloIssueVisRenderer GLO_ISSUE_VIS_RENDERER = new GloIssueVisRenderer();
-
     private void onSearch() {
         LOGGER.info("Retrieving list of columns...\n");
         Collection<Column> columns = gloRepository.getColumns();

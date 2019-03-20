@@ -23,6 +23,7 @@
  */
 package com.alecn.glo.service;
 
+import com.alecn.glo.client.BoardFieldsEnum;
 import com.alecn.glo.client.CardFieldsEnum;
 import com.alecn.glo.sojo.Board;
 import com.alecn.glo.sojo.Card;
@@ -37,6 +38,8 @@ import javax.ws.rs.core.Response;
  */
 public interface BoardService {
     List<Board> listBoards();
+
+    List<Board> listBoards(List<BoardFieldsEnum> fields);
 
     Board getBoard(String id);
 
