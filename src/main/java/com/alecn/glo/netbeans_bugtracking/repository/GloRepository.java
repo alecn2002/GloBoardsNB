@@ -41,6 +41,7 @@ import com.alecn.glo.sojo.BoardMember;
 import com.alecn.glo.sojo.Card;
 import com.alecn.glo.sojo.Column;
 import com.alecn.glo.util.Cache;
+import com.alecn.glo.util.GloLogger;
 import com.alecn.glo.util.LazyValue;
 import com.alecn.glo.util.OeWriter;
 import java.awt.Image;
@@ -73,6 +74,8 @@ import org.openide.util.lookup.InstanceContent;
 @Getter
 @AllArgsConstructor
 public class GloRepository {
+
+    static final GloLogger LOGGER = new GloLogger(GloRepository.class);
 
     static final String PROPERTY_ACCESS_KEY = "accessKey";              // NOI18N
 
@@ -124,6 +127,7 @@ public class GloRepository {
     private final transient Cache<Column> columns;
     private final transient Cache<Card> cards;
     private final transient Cache<Board> boards;
+    private final transient Cache<Board> currentBoard;
     private final transient Cache<BoardMember> members;
 
     public GloRepository() {
@@ -131,6 +135,7 @@ public class GloRepository {
         this.columns = new Cache(() -> listColumns());
         this.cards = new Cache(() -> listCards());
         this.boards = new Cache(() -> listBoards());
+        this.currentBoard = new Cache(() -> fetchCurrentBoard());
         this.members = new Cache(() -> {
             List<BoardMember> boardMembers = new ArrayList<>(listBoardMembers());
             boardMembers.addAll(listInvitedMembers());
@@ -222,11 +227,16 @@ public class GloRepository {
     }
 
     public Board getCurrentBoard() {
-        return boards.getElementById(getBoardId());
+        return currentBoard.getElementById(getBoardId());
     }
 
     public List<BoardMember> listBoardMembers() {
-        return getCurrentBoard().getMembers();
+        List<BoardMember> ans = getCurrentBoard().getMembers();
+        LOGGER.info("List of BoardUsers contains %d : [%s]", ans.size(),
+                String.join(", ", ans.stream()
+                .map(bu -> String.format("%s <%s> as %s", bu.getName(), bu.getUsername(), bu.getRole()))
+                .collect(Collectors.toList())));
+        return ans;
     }
 
     public List<BoardMember> listInvitedMembers() {
@@ -305,6 +315,11 @@ public class GloRepository {
 
     public void refreshCards() {
         cards.refresh();
+    }
+
+    private List<Board> fetchCurrentBoard() {
+        Board[] boards = new Board[] {boardService.getBoardWithAllFields(getBoardId())};
+        return Arrays.asList(boards);
     }
 
     private static class CountingMap<K> {

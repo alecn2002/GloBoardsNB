@@ -43,6 +43,8 @@ public interface BoardService {
 
     Board getBoard(String id);
 
+    Board getBoardWithAllFields(String id);
+
     List<Column> listBoardColumns(String board_id);
 
     Column createColumn(String boardId, String columnName); // TODO move to ColumnService

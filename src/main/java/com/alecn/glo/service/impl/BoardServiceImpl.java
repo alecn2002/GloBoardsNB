@@ -91,6 +91,11 @@ public class BoardServiceImpl implements BoardService {
     }
 
     @Override
+    public Board getBoardWithAllFields(String id) {
+        return boardClient.get(id, ALL_BOARD_COLUMNS);
+    }
+
+    @Override
     public List<Column> listBoardColumns(String board_id) {
         return boardClient.get(board_id, FIELDS_FOR_BOARD_COLUMNS).getColumns();
     }

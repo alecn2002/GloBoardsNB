@@ -25,6 +25,7 @@ package com.alecn.glo.netbeans_bugtracking.query;
 
 import com.alecn.glo.netbeans_bugtracking.repository.GloRepository;
 import com.alecn.glo.netbeans_bugtracking.issue.GloIssue;
+import com.alecn.glo.sojo.BoardMember;
 import com.alecn.glo.sojo.Card;
 import com.alecn.glo.sojo.Column;
 import com.alecn.glo.util.GloLogger;
@@ -85,7 +86,12 @@ public class GloQueryController implements QueryController, ActionListener {
             } else {
                 sb.append("<i>Assigned to: ")
                         .append(String.join(", ", card.getAssignees().stream()
-                                .map(pu -> gloRepository.getBoardMemberById(pu.getId()).getName())
+                                .map(pu -> {
+                                    BoardMember assignee = gloRepository.getBoardMemberById(pu.getId());
+                                    return assignee.getName() == null
+                                            ? assignee.getUsername()
+                                            : assignee.getName();
+                                        })
                                 .collect(Collectors.toList())))
                         .append("</i><br>");
             }
