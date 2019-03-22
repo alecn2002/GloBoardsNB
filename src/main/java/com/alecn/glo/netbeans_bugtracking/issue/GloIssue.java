@@ -25,8 +25,10 @@ package com.alecn.glo.netbeans_bugtracking.issue;
 
 import com.alecn.glo.netbeans_bugtracking.repository.GloRepository;
 import com.alecn.glo.sojo.Card;
+import com.alecn.glo.sojo.Description;
 import com.alecn.glo.util.GloLogger;
 import com.alecn.glo.util.LazyValue;
+import com.alecn.glo.util.VisitorHelper;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 import java.util.Date;
@@ -79,13 +81,19 @@ public class GloIssue {
         // TODO is anything to do here?
     }
 
-    Date getDueDate() {
+    public Date getDueDate() {
         return card.getDue_date(); // Calendar.getInstance().getTime(); // FIXME hmmmmmm...
     }
 
-    IssueScheduleInfo getSchedule() {
+    public IssueScheduleInfo getSchedule() {
         return null;
     }
+
+    public String getDescriptionText() {
+        return VisitorHelper.nvlVisitor(getCard(), (String)null,
+                c -> ((Card)c).getDescription(),
+                d -> ((Description)d).getText());
+     }
 
     public void refresh() {
         if (card == null || card.getId() == null || card.getBoard_id() == null || repository == null) {

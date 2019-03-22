@@ -34,10 +34,10 @@ public class VisitorHelper {
     public static <T, R> R nvlVisitor(T v, R default_value, Function... accessors) {
         Object cur = v;
         for (Function accessor : accessors) {
-            cur = accessor.apply(cur);
             if (cur == null) {
                 return default_value;
             }
+            cur = accessor.apply(cur);
         }
         return (R)cur;
     }

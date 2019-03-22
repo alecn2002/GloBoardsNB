@@ -25,10 +25,14 @@ package com.alecn.glo.netbeans_bugtracking.providers.impl;
 
 import com.alecn.glo.netbeans_bugtracking.providers.GloIssueProvider;
 import com.alecn.glo.netbeans_bugtracking.issue.GloIssue;
+import com.alecn.glo.sojo.Card;
+import com.alecn.glo.sojo.Description;
+import com.alecn.glo.util.VisitorHelper;
 import java.beans.PropertyChangeListener;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.function.Function;
 import org.netbeans.modules.bugtracking.spi.IssueController;
 import org.openide.util.lookup.ServiceProvider;
 
@@ -61,7 +65,7 @@ public class GloIssueProviderImpl  implements GloIssueProvider {
 
     @Override
     public String getSummary(GloIssue i) {
-        return i.getCard().getDescription().getText();
+        return i.getDescriptionText();
     }
 
     @Override
