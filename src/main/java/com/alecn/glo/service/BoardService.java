@@ -39,7 +39,7 @@ import javax.ws.rs.core.Response;
 public interface BoardService {
     List<Board> listBoards();
 
-    List<Board> listBoards(List<BoardFieldsEnum> fields);
+    List<Board> listBoards(Collection<BoardFieldsEnum> fields);
 
     Board getBoard(String id);
 

@@ -50,6 +50,11 @@ import org.openide.util.lookup.ServiceProvider;
 @ServiceProvider(service = BoardService.class)
 public class BoardServiceImpl implements BoardService {
 
+    private static final BoardFieldsEnum[] DEFAULT_FIELDS_LIST = {BoardFieldsEnum.NAME};
+    static final Collection<BoardFieldsEnum> DEFAULT_FIELDS = Arrays.asList(DEFAULT_FIELDS_LIST);
+
+    static final Collection<BoardFieldsEnum> ALL_FIELDS = Arrays.asList(BoardFieldsEnum.values());
+
     private static final BoardFieldsEnum[] FIELDS_FOR_BOARD_COLUMNS_LIST = {BoardFieldsEnum.COLUMNS};
     private static final List<BoardFieldsEnum> FIELDS_FOR_BOARD_COLUMNS = Arrays.asList(FIELDS_FOR_BOARD_COLUMNS_LIST);
 
@@ -77,17 +82,17 @@ public class BoardServiceImpl implements BoardService {
 
     @Override
     public List<Board> listBoards() {
-        return boardClient.list();
+        return listBoards(DEFAULT_FIELDS);
     }
 
     @Override
-    public List<Board> listBoards(List<BoardFieldsEnum> fields) {
-        return boardClient.list(fields);
+    public List<Board> listBoards(Collection<BoardFieldsEnum> fields) {
+        return boardClient.list(fields, false, null, null, false);
     }
 
     @Override
     public Board getBoard(String id) {
-        return boardClient.get(id);
+        return boardClient.get(id, DEFAULT_FIELDS);
     }
 
     @Override
