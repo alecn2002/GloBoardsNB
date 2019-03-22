@@ -318,8 +318,8 @@ public class GloRepository {
     }
 
     private List<Board> fetchCurrentBoard() {
-        Board[] boards = new Board[] {boardService.getBoardWithAllFields(getBoardId())};
-        return Arrays.asList(boards);
+        Board[] local_boards = new Board[] {boardService.getBoardWithAllFields(getBoardId())};
+        return Arrays.asList(local_boards);
     }
 
     private static class CountingMap<K> {

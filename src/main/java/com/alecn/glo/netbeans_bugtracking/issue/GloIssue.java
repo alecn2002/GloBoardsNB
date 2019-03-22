@@ -82,7 +82,7 @@ public class GloIssue {
     }
 
     public Date getDueDate() {
-        return card.getDue_date(); // Calendar.getInstance().getTime(); // FIXME hmmmmmm...
+        return card.getDue_date();
     }
 
     public IssueScheduleInfo getSchedule() {

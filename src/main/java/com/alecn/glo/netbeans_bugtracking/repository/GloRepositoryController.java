@@ -31,7 +31,6 @@ import com.alecn.glo.util.OeWriter;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.Collection;
-import java.util.List;
 import javax.swing.JComponent;
 import javax.swing.SwingUtilities;
 import javax.swing.event.ChangeListener;
@@ -120,7 +119,7 @@ public class GloRepositoryController implements RepositoryController, DocumentLi
         panel.setNameText(gloRepository.getDisplayName()); // gloRepositoryName.setText(gloRepository.getDisplayName());
         panel.setAccessKey(gloRepository.getAccessKey());
 
-//        panel.gloRepoBoard.setSelectedItem(gloRepository.);
+        panel.gloRepoBoard.setSelectedItem(gloRepository.getCurrentBoard());
     }
 
     @Override

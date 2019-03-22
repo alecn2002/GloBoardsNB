@@ -38,13 +38,13 @@ public class LazyValue<T> {
     private T value;
 
     public T get() {
-        if (value == null) {
-            refresh();
-        }
-        return value;
+        return (value == null)
+                ? refresh()
+                : value;
     }
 
-    public void refresh() {
+    public T refresh() {
         value = supplier.get();
+        return value;
     }
 }

@@ -29,13 +29,11 @@ import com.alecn.glo.client.impl.CardClientImpl;
 import com.alecn.glo.service.CardService;
 import com.alecn.glo.sojo.Card;
 import com.alecn.glo.sojo.Description;
-import com.alecn.glo.sojo.Label;
 import com.alecn.glo.sojo.PartialLabel;
 import com.alecn.glo.util.VisitorHelper;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
-import java.util.stream.Collectors;
 import javax.ws.rs.core.Response;
 import org.openide.util.Lookup;
 

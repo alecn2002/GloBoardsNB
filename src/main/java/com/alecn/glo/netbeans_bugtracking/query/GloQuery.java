@@ -27,7 +27,6 @@ import com.alecn.glo.netbeans_bugtracking.repository.GloRepository;
 import com.alecn.glo.netbeans_bugtracking.issue.GloIssue;
 import com.alecn.glo.sojo.Card;
 import com.alecn.glo.sojo.Column;
-import java.util.Collection;
 import java.util.LinkedHashSet;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -77,7 +76,7 @@ public class GloQuery {
     public String getDisplayName() {
         return columnName == null
                 ? "GLo Query"
-                : columnName; // FIXME !!! GloQuery.getDisplayName()
+                : columnName;
     }
 
     public String getTooltip() {
@@ -86,7 +85,6 @@ public class GloQuery {
 
     public void refresh() {
         issues.clear();
-//        gloRepository.refreshCards(); // TODO move it to appropriate place
         Stream<Card> cards = gloRepository.getCards().stream();
         if (columnId != null) {
             cards = cards.filter(c -> columnId.equals(c.getColumn_id()));
