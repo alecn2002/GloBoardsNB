@@ -40,9 +40,14 @@ public class Cache<T extends Entity> {
 
     public Cache(Supplier<List<T>> refresher) {
         this.cache = new LazyValue<>(
-                () -> ((List<T>)refresher.get()).stream()
-                    .sequential()
-                    .collect(Collectors.toMap(e -> e.getId(), e -> e, (v1, v2) -> v1, LinkedHashMap::new)));
+                () -> {
+                    List<T> list = (List<T>)refresher.get();
+                    return list == null
+                            ? null
+                            : list.stream()
+                                .sequential()
+                                .collect(Collectors.toMap(e -> e.getId(), e -> e, (v1, v2) -> v1, LinkedHashMap::new));
+                                  });
     }
 
     public Map<String, T> getCache() {

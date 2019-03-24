@@ -259,7 +259,9 @@ public class GloRepository {
     }
 
     public String getBoardId() {
-        return repositoryInfo.getValue(PROPERTY_BOARD_ID);
+        return repositoryInfo == null
+                ? null
+                : repositoryInfo.getValue(PROPERTY_BOARD_ID);
     }
 
     public void removed() {
@@ -318,7 +320,11 @@ public class GloRepository {
     }
 
     private List<Board> fetchCurrentBoard() {
-        Board[] local_boards = new Board[] {boardService.getBoardWithAllFields(getBoardId())};
+        String boardId = getBoardId();
+        if (boardId == null) {
+            return null;
+        }
+        Board[] local_boards = new Board[] {boardService.getBoardWithAllFields(boardId)};
         return Arrays.asList(local_boards);
     }
 
