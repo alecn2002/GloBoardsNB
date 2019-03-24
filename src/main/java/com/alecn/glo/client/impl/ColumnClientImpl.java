@@ -28,15 +28,36 @@ import com.alecn.glo.client.FieldsEnumI;
 import com.alecn.glo.sojo.Column;
 import com.alecn.glo.client.dto.ColumnRequest;
 import com.alecn.glo.util.GloLogger;
+import java.util.function.Function;
 import javax.ws.rs.client.Entity;
 import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.Response;
 import org.openide.util.lookup.ServiceProvider;
 
 @ServiceProvider(service = ColumnClient.class)
-public class ColumnClientImpl extends GenericClientImpl<Column, ColumnRequest, FieldsEnumI> implements ColumnClient {
+public class ColumnClientImpl extends GenericBoardPartClient<Column, ColumnRequest, FieldsEnumI> implements ColumnClient {
 
     private static final GloLogger LOGGER = new GloLogger(ColumnClientImpl.class);
+
+    private static class BoardColumnIdResolver extends BoardIdResolver implements Function<WebTarget, WebTarget> {
+
+        private final String column_id;
+
+        public static WebTarget apply(WebTarget t, String column_id) {
+            return t.path(column_id);
+        }
+
+        public BoardColumnIdResolver(String board_id, String column_id) {
+            super(board_id);
+            this.column_id = column_id;
+        }
+
+        @Override
+        public WebTarget apply(WebTarget t) {
+            return BoardColumnIdResolver.apply(super.apply(t), column_id);
+        }
+
+    }
 
     public ColumnClientImpl(String access_key) {
         super(access_key, GLO_PATH_COLUMNS, Column.class, Column[].class, LOGGER);
@@ -48,25 +69,20 @@ public class ColumnClientImpl extends GenericClientImpl<Column, ColumnRequest, F
 
     @Override
     public Column create(final String board_id, ColumnRequest column_request) {
-        return super.post(Entity.json(column_request), (WebTarget t) -> {
-            return apply_board_id(t, board_id);
-        });
+        return super.post(Entity.json(column_request),
+                new BoardIdResolver(board_id)
+        );
     }
 
     @Override
     public Column edit(String board_id, String column_id, ColumnRequest column_request) {
-        return super.post(Entity.json(column_request), (WebTarget t) -> {
-            return apply_board_id(t, board_id)
-                    .path(column_id);
-        });
+        return super.post(Entity.json(column_request),
+                new BoardColumnIdResolver(board_id, column_id));
     }
 
     @Override
     public Response delete(String board_id, String column_id) {
-        return super.delete((WebTarget t) -> {
-            return apply_board_id(t, board_id)
-                    .path(column_id);
-        });
+        return super.delete(new BoardColumnIdResolver(board_id, column_id));
     }
 
 }

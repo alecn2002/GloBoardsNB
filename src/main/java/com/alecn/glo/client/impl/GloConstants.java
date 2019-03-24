@@ -49,7 +49,7 @@ public abstract class GloConstants {
     protected static final String GLO_PATH_ATTACHMENTS = GLO_PATH_CARD + "/attachments";
 
     protected static final String GLO_PATH_COMMENTS = GLO_PATH_CARD + "/comments";
-    protected static final String GLO_PATH_COMMENT = GLO_PATH_COMMENTS + "/{" + GLO_PATH_COMMENT_ID + "}" + "/cards";;
+    protected static final String GLO_PATH_COMMENT = GLO_PATH_COMMENTS + "/{" + GLO_PATH_COMMENT_ID + "}";
 
     protected static final String GLO_PATH_USER = "user";
 }

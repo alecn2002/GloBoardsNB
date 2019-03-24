@@ -26,7 +26,6 @@ package com.alecn.glo.client.impl;
 import com.alecn.glo.client.CommentClient;
 import com.alecn.glo.client.CommentFieldsEnum;
 import com.alecn.glo.client.dto.CommentRequest;
-import static com.alecn.glo.client.impl.GloConstants.GLO_PATH_COMMENT_ID;
 import com.alecn.glo.sojo.Comment;
 import com.alecn.glo.util.GloLogger;
 import java.util.Arrays;
@@ -36,37 +35,20 @@ import java.util.function.Function;
 import javax.ws.rs.client.Entity;
 import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.Response;
-import lombok.AllArgsConstructor;
 import org.openide.util.lookup.ServiceProvider;
 
 @ServiceProvider(service = CommentClient.class)
-public class CommentClientImpl extends GenericClientImpl<Comment, CommentRequest, CommentFieldsEnum> implements CommentClient {
+public class CommentClientImpl extends GenericCardPartClientImpl<Comment, CommentRequest, CommentFieldsEnum> implements CommentClient {
 
     private static final GloLogger LOGGER = new GloLogger(CommentClientImpl.class);
 
     private static final CommentFieldsEnum[] DEFAULT_FIELDS_LIST = {CommentFieldsEnum.TEXT};
     static final Collection<CommentFieldsEnum> DEFAULT_FIELDS = Arrays.asList(DEFAULT_FIELDS_LIST);
 
-    @AllArgsConstructor
-    private static class BoardCardIdResolver implements Function<WebTarget, WebTarget> {
-        private final String board_id;
-        private final String card_id;
-
-        public static WebTarget apply(WebTarget t, String board_id, String card_id) {
-            return t.resolveTemplate(GLO_PATH_BOARD_ID, board_id)
-                    .resolveTemplate(GLO_PATH_CARD_ID, card_id);
-        }
-
-        @Override
-        public WebTarget apply(WebTarget t) {
-            return apply(t, this.board_id, this.card_id);
-        }
-    }
-
     private static class BoardCardCommentIdResolver extends BoardCardIdResolver implements Function<WebTarget, WebTarget> {
 
         public static WebTarget apply(WebTarget t, String comment_id) {
-            return t.resolveTemplate(GLO_PATH_COMMENT_ID, comment_id);
+            return t.path(comment_id);
         }
 
         private final String comment_id;

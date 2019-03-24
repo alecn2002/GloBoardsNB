@@ -36,15 +36,12 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.Date;
 import java.util.List;
-import java.util.function.Function;
 import javax.ws.rs.client.Entity;
-import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.Response;
-import lombok.AllArgsConstructor;
 import org.openide.util.lookup.ServiceProvider;
 
 @ServiceProvider(service = CardClient.class)
-public class CardClientImpl extends GenericClientImpl<Card, CardRequest, CardFieldsEnum> implements CardClient {
+public class CardClientImpl extends GenericBoardPartClient<Card, CardRequest, CardFieldsEnum> implements CardClient {
 
     private static final GloLogger LOGGER = new GloLogger(CardClientImpl.class);
 
@@ -57,20 +54,6 @@ public class CardClientImpl extends GenericClientImpl<Card, CardRequest, CardFie
 
     public CardClientImpl() {
         this("pcad84c0e279a1a233e1eb31a7a4b20b4ad3ea947"); // TODO remove default access key!
-    }
-
-    @AllArgsConstructor
-    private static class BoardIdResolver implements Function<WebTarget, WebTarget> {
-        private final String board_id;
-
-        public static WebTarget apply(WebTarget t, String board_id) {
-            return t.resolveTemplate(GloConstants.GLO_PATH_BOARD_ID, board_id);
-        }
-
-        @Override
-        public WebTarget apply(WebTarget t) {
-            return apply(t, this.board_id);
-        }
     }
 
     private static Collection<CardFieldsEnum> fieldsOrDefaults(Collection<CardFieldsEnum> fields) {
