@@ -47,7 +47,7 @@ public class AttachmentClientImpl extends GenericCardPartClientImpl<Attachment, 
 
     @Override
     public Attachment create(String boardId, String cardId, byte[] attachment) {
-        Multip
+        // TODO require uploading from file, not bytestream
         return super.post(Entity.entity(attachment, MediaType.MULTIPART_FORM_DATA_TYPE),
                 new BoardCardIdResolver(boardId, cardId));
     }

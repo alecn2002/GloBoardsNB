@@ -27,7 +27,6 @@ import com.alecn.glo.client.BoardClient;
 import com.alecn.glo.client.BoardFieldsEnum;
 import com.alecn.glo.sojo.Board;
 import com.alecn.glo.util.GloLogger;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 import org.openide.util.lookup.ServiceProvider;
