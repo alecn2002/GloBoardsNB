@@ -31,9 +31,7 @@ import com.alecn.glo.util.GloLogger;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
-import java.util.function.Function;
 import javax.ws.rs.client.Entity;
-import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.Response;
 import org.openide.util.lookup.ServiceProvider;
 
@@ -44,25 +42,6 @@ public class CommentClientImpl extends GenericCardPartClientImpl<Comment, Commen
 
     private static final CommentFieldsEnum[] DEFAULT_FIELDS_LIST = {CommentFieldsEnum.TEXT};
     static final Collection<CommentFieldsEnum> DEFAULT_FIELDS = Arrays.asList(DEFAULT_FIELDS_LIST);
-
-    private static class BoardCardCommentIdResolver extends BoardCardIdResolver implements Function<WebTarget, WebTarget> {
-
-        public static WebTarget apply(WebTarget t, String comment_id) {
-            return t.path(comment_id);
-        }
-
-        private final String comment_id;
-
-        public BoardCardCommentIdResolver(String board_id, String card_id, String comment_id) {
-            super(board_id, card_id);
-            this.comment_id = comment_id;
-        }
-
-        @Override
-        public WebTarget apply(WebTarget t) {
-            return apply(super.apply(t), this.comment_id);
-        }
-    }
 
     private static Collection<CommentFieldsEnum> fieldsOrDefaults(Collection<CommentFieldsEnum> fields) {
         return fields == null
@@ -80,25 +59,23 @@ public class CommentClientImpl extends GenericCardPartClientImpl<Comment, Commen
 
     @Override
     public List<Comment> list(String board_id, String card_id, Collection<CommentFieldsEnum> fields, Integer page, Integer per_page, boolean sort_desc) {
-        return super.list(fieldsOrDefaults(fields), false, page, per_page, sort_desc, new BoardCardIdResolver(board_id, card_id), LOGGER, "comments");
+        return super.list(fieldsOrDefaults(fields), false, page, per_page, sort_desc, boardCardIdResolverFactory(board_id, card_id), LOGGER, "comments");
     }
 
     @Override
     public Comment create(String board_id, String card_id, String text) {
-        return super.post(Entity.json(new CommentRequest(text)),
-                new BoardCardIdResolver(board_id, card_id));
+        return super.post(Entity.json(new CommentRequest(text)), boardCardIdResolverFactory(board_id, card_id));
     }
 
     @Override
     public Comment edit(String board_id, String card_id, final String id, String text) {
-        return super.post(Entity.json(new CommentRequest(text)),
-                new BoardCardCommentIdResolver(board_id, card_id, id)
+        return super.post(Entity.json(new CommentRequest(text)), boardCardIdResolverPathApplierFactory(board_id, card_id, id)
                 );
     }
 
     @Override
     public Response delete(String board_id, String card_id, String id) {
-        return super.delete(new BoardCardCommentIdResolver(board_id, card_id, id));
+        return super.delete(boardCardIdResolverPathApplierFactory(board_id, card_id, id));
     }
 
 }

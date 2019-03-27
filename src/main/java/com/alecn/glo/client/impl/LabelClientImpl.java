@@ -23,42 +23,36 @@
  */
 package com.alecn.glo.client.impl;
 
-import com.alecn.glo.client.ColumnClient;
 import com.alecn.glo.client.FieldsEnumI;
-import com.alecn.glo.sojo.Column;
-import com.alecn.glo.client.dto.ColumnRequest;
+import com.alecn.glo.client.LabelClient;
+import com.alecn.glo.client.dto.LabelRequest;
+import com.alecn.glo.sojo.Label;
 import com.alecn.glo.util.GloLogger;
 import javax.ws.rs.client.Entity;
 import javax.ws.rs.core.Response;
-import org.openide.util.lookup.ServiceProvider;
 
-@ServiceProvider(service = ColumnClient.class)
-public class ColumnClientImpl extends GenericBoardPartClient<Column, ColumnRequest, FieldsEnumI> implements ColumnClient {
 
-    private static final GloLogger LOGGER = new GloLogger(ColumnClientImpl.class);
+public class LabelClientImpl extends GenericBoardPartClient<Label, LabelRequest, FieldsEnumI> implements LabelClient {
 
-    public ColumnClientImpl(String access_key) {
-        super(access_key, GLO_PATH_COLUMNS, Column.class, Column[].class, LOGGER);
-    }
+    private static final GloLogger LOGGER = new GloLogger(LabelClientImpl.class);
 
-    public ColumnClientImpl() {
-        this("pcad84c0e279a1a233e1eb31a7a4b20b4ad3ea947"); // TODO remove default access key!
+    public LabelClientImpl(String accessKey) {
+        super(accessKey, GLO_PATH_LABELS, Label.class, Label[].class, LOGGER);
     }
 
     @Override
-    public Column create(final String board_id, ColumnRequest column_request) {
-        return super.post(Entity.json(column_request), boardIdResolverFactory(board_id)
-        );
+    public Label create(String boardId, LabelRequest labelRequest) {
+        return super.post(Entity.json(labelRequest), boardIdResolverFactory(boardId));
     }
 
     @Override
-    public Column edit(String board_id, String column_id, ColumnRequest column_request) {
-        return super.post(Entity.json(column_request), boardIdResolverPathApplierFactory(board_id, column_id));
+    public Label edit(String boardId, String labelId, LabelRequest labelRequest) {
+        return super.post(Entity.json(labelRequest), boardIdResolverPathApplierFactory(boardId, labelId));
     }
 
     @Override
-    public Response delete(String board_id, String column_id) {
-        return super.delete(boardIdResolverPathApplierFactory(board_id, column_id));
+    public Response delete(String boardId, String labelId) {
+        return super.delete(boardIdResolverPathApplierFactory(boardId, labelId));
     }
 
 }

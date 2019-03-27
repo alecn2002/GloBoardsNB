@@ -77,35 +77,29 @@ public class CardClientImpl extends GenericBoardPartClient<Card, CardRequest, Ca
 
     @Override
     public List<Card> list(String board_id, Collection<CardFieldsEnum> fields, boolean archived, Integer page, Integer per_page, boolean sort_desc) {
-        return super.list(fieldsOrDefaults(fields), archived, page, per_page, sort_desc, new BoardIdResolver(board_id), LOGGER, "cards");
+        return super.list(fieldsOrDefaults(fields), archived, page, per_page, sort_desc, boardIdResolverFactory(board_id), LOGGER, "cards");
     }
 
     @Override
     public Card create(String board_id, String column_id, String name, Integer position, String description, List<PartialUser> assignees, List<PartialLabel> labels, Date due_date) {
         return super.post(buildCardRequestEntity(column_id, name, position, description, assignees, labels, due_date),
-                new BoardIdResolver(board_id));
+                          boardIdResolverFactory(board_id));
     }
 
     @Override
     public Card get(String board_id, String id, Collection<CardFieldsEnum> fields) {
-        return super.get(id, fieldsOrDefaults(fields), new BoardIdResolver(board_id), LOGGER, "card");
+        return super.get(id, fieldsOrDefaults(fields), boardIdResolverFactory(board_id), LOGGER, "card");
     }
 
     @Override
     public Card edit(String board_id, String column_id, String id, String name, Integer position, String description, List<PartialUser> assignees, List<PartialLabel> labels, Date due_date) {
         return super.post(buildCardRequestEntity(column_id, name, position, description, assignees, labels, due_date),
-                (wt) -> {
-                    return BoardIdResolver.apply(wt, board_id)
-                                          .path(id);
-                });
+                          boardIdResolverPathApplierFactory(board_id, id));
     }
 
     @Override
     public Response delete(String board_id, String id) {
-        return super.delete((wt) -> {
-            return BoardIdResolver.apply(wt, board_id)
-                           .path(id);
-        });
+        return super.delete(boardIdResolverPathApplierFactory(board_id, id));
     }
 
 }

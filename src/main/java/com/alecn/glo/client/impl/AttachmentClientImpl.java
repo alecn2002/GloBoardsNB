@@ -42,14 +42,14 @@ public class AttachmentClientImpl extends GenericCardPartClientImpl<Attachment, 
     @Override
     public Collection<Attachment> list(String boardId, String cardId, Collection<AttachmentFields> fields, Integer page, Integer per_page, boolean sortDesc) {
         return super.list(fields, sortDesc, page, per_page, sortDesc,
-                new BoardCardIdResolver(boardId, cardId));
+                          boardCardIdResolverFactory(boardId, cardId));
     }
 
     @Override
     public Attachment create(String boardId, String cardId, byte[] attachment) {
         // TODO require uploading from file, not bytestream
         return super.post(Entity.entity(attachment, MediaType.MULTIPART_FORM_DATA_TYPE),
-                new BoardCardIdResolver(boardId, cardId));
+                          boardCardIdResolverFactory(boardId, cardId));
     }
 
 }

@@ -33,6 +33,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 import java.util.Arrays;
@@ -45,7 +46,7 @@ import org.openide.util.HelpCtx;
  *
  * @author anovitsk
  */
-public class GloIssueController implements IssueController, ActionListener, KeyListener  {
+public class GloIssueController implements IssueController, ActionListener, KeyListener, PropertyChangeListener  {
 
     private static final GloLogger LOGGER = new GloLogger(GloIssueController.class);
 
@@ -53,11 +54,14 @@ public class GloIssueController implements IssueController, ActionListener, KeyL
     private final GloRepository gloRepository;
     private final GloIssuePanel component;
 
+    private boolean changed;
+
     @SuppressWarnings("LeakingThisInConstructor")
     public GloIssueController(GloRepository gloRepository, GloIssue gloIssue) {
         this.gloIssue = gloIssue;
         this.gloRepository = gloRepository;
         this.component = new GloIssuePanel();
+        this.changed = false;
 
         component.deleteButton.addActionListener(this);
         component.refreshButton.addActionListener(this);
@@ -94,6 +98,7 @@ public class GloIssueController implements IssueController, ActionListener, KeyL
     public boolean saveChanges() {
         try {
             gloIssue.save();
+            changed = false;
             return true;
         } catch (Error | Exception ex) {
             LOGGER.severe("Error saving card: %s", ex.getMessage());
@@ -105,6 +110,7 @@ public class GloIssueController implements IssueController, ActionListener, KeyL
     public boolean discardUnsavedChanges() {
         try {
             gloIssue.refresh();
+            changed = false;
             return true;
         } catch (Error | Exception ex) {
             LOGGER.severe("Error refreshing card: %s", ex.getMessage());
@@ -114,8 +120,7 @@ public class GloIssueController implements IssueController, ActionListener, KeyL
 
     @Override
     public boolean isChanged() {
-        // TODO
-        return true;
+        return changed;
     }
 
     private final PropertyChangeSupport support = new PropertyChangeSupport(this);
@@ -196,6 +201,7 @@ public class GloIssueController implements IssueController, ActionListener, KeyL
         // TODO ask before refreshing
         gloIssue.refresh();
         populateComponent();
+        this.changed = false;
     }
 
     private void on_save() {
@@ -203,6 +209,7 @@ public class GloIssueController implements IssueController, ActionListener, KeyL
         populateCard();
         gloIssue.save();
         populateComponent();
+        this.changed = false;
     }
 
     @Override
@@ -224,5 +231,10 @@ public class GloIssueController implements IssueController, ActionListener, KeyL
         if (e.getSource().equals(component.nameField)) {
             on_name_changed();
         }
+    }
+
+    @Override
+    public void propertyChange(PropertyChangeEvent evt) {
+        this.changed = true;
     }
 }

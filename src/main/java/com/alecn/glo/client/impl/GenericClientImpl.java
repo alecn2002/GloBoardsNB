@@ -90,6 +90,14 @@ public abstract class GenericClientImpl<T, R, F extends FieldsEnumI> extends Glo
         return target.resolveTemplate(GLO_PATH_BOARD_ID, board_id);
     }
 
+    protected static Function<WebTarget, WebTarget> pathApplierFactory(String path) {
+        return (WebTarget t) -> t.path(path);
+    }
+
+    protected static Function<WebTarget, WebTarget> pathApplierFactory(Function<WebTarget, WebTarget> chain, String path) {
+        return (WebTarget t) -> chain.apply(t).path(path);
+    }
+
     private final WebTarget webTarget;
     private final String path;
     private final Class<T> klass;

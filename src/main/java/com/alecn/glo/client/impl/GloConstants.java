@@ -44,12 +44,14 @@ public abstract class GloConstants {
     protected static final String GLO_PATH_CARDS = GLO_PATH_BOARD + "/cards";
     protected static final String GLO_PATH_CARD = GLO_PATH_BOARD + "/cards/{" + GLO_PATH_CARD_ID + "}";
 
-    protected static final String GLO_PATH_COLUMN_CARDS = GLO_PATH_COLUMNS + "/{" + GLO_PATH_COLUMN_ID + "}" + "/cards";
+    protected static final String GLO_PATH_COLUMN_CARDS = GLO_PATH_COLUMN + "/cards";
 
     protected static final String GLO_PATH_ATTACHMENTS = GLO_PATH_CARD + "/attachments";
 
     protected static final String GLO_PATH_COMMENTS = GLO_PATH_CARD + "/comments";
     protected static final String GLO_PATH_COMMENT = GLO_PATH_COMMENTS + "/{" + GLO_PATH_COMMENT_ID + "}";
+
+    protected static final String GLO_PATH_LABELS = GLO_PATH_BOARD + "/labels";
 
     protected static final String GLO_PATH_USER = "user";
 }
