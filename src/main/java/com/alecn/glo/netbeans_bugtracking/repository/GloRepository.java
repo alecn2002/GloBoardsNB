@@ -40,6 +40,7 @@ import com.alecn.glo.sojo.Board;
 import com.alecn.glo.sojo.BoardMember;
 import com.alecn.glo.sojo.Card;
 import com.alecn.glo.sojo.Column;
+import com.alecn.glo.sojo.Label;
 import com.alecn.glo.util.Cache;
 import com.alecn.glo.util.GloLogger;
 import com.alecn.glo.util.LazyValue;
@@ -294,6 +295,10 @@ public class GloRepository {
 
     public Collection<Column> getColumns() {
         return columns.getCache().values();
+    }
+
+    public Collection<Label> getLabels() {
+        return getCurrentBoard().getLabels();
     }
 
     public void refreshColumns() {

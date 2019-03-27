@@ -31,8 +31,6 @@ import com.alecn.glo.ui.NameIdListModel;
 import com.alecn.glo.util.GloLogger;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
@@ -46,7 +44,7 @@ import org.openide.util.HelpCtx;
  *
  * @author anovitsk
  */
-public class GloIssueController implements IssueController, ActionListener, KeyListener, PropertyChangeListener  {
+public class GloIssueController implements IssueController, ActionListener, PropertyChangeListener  {
 
     private static final GloLogger LOGGER = new GloLogger(GloIssueController.class);
 
@@ -66,8 +64,6 @@ public class GloIssueController implements IssueController, ActionListener, KeyL
         component.deleteButton.addActionListener(this);
         component.refreshButton.addActionListener(this);
         component.saveButton.addActionListener(this);
-
-        component.nameField.addKeyListener(this);
     }
 
     public GloIssueController(GloRepository gloRepository) {
@@ -210,27 +206,6 @@ public class GloIssueController implements IssueController, ActionListener, KeyL
         gloIssue.save();
         populateComponent();
         this.changed = false;
-    }
-
-    @Override
-    public void keyTyped(KeyEvent e) {
-        if (e.getSource().equals(component.nameField)) {
-            on_name_changed();
-        }
-    }
-
-    @Override
-    public void keyPressed(KeyEvent e) {
-        if (e.getSource().equals(component.nameField)) {
-            on_name_changed();
-        }
-    }
-
-    @Override
-    public void keyReleased(KeyEvent e) {
-        if (e.getSource().equals(component.nameField)) {
-            on_name_changed();
-        }
     }
 
     @Override
