@@ -83,6 +83,7 @@ public class GloIssuePanel extends javax.swing.JPanel {
         columnList = new javax.swing.JComboBox<>();
         jLabel6 = new javax.swing.JLabel();
         commentsScrollPane = new javax.swing.JScrollPane();
+        commentsPanel = new javax.swing.JPanel();
         jLabel3 = new javax.swing.JLabel();
         labelsField = new javax.swing.JTextField();
         jButton1 = new javax.swing.JButton();
@@ -121,6 +122,11 @@ public class GloIssuePanel extends javax.swing.JPanel {
 
         org.openide.awt.Mnemonics.setLocalizedText(jLabel6, org.openide.util.NbBundle.getMessage(GloIssuePanel.class, "GloIssuePanel.jLabel6.text")); // NOI18N
 
+        commentsPanel.setAlignmentX(0.0F);
+        commentsPanel.setAlignmentY(0.0F);
+        commentsPanel.setLayout(new java.awt.GridLayout(6, 1, 0, 4));
+        commentsScrollPane.setViewportView(commentsPanel);
+
         org.openide.awt.Mnemonics.setLocalizedText(jLabel3, org.openide.util.NbBundle.getMessage(GloIssuePanel.class, "GloIssuePanel.jLabel3.text")); // NOI18N
 
         labelsField.setText(org.openide.util.NbBundle.getMessage(GloIssuePanel.class, "GloIssuePanel.labelsField.text")); // NOI18N
@@ -140,7 +146,7 @@ public class GloIssuePanel extends javax.swing.JPanel {
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(commentsScrollPane, javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 662, Short.MAX_VALUE)
+                    .addComponent(jScrollPane1)
                     .addComponent(titleField, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jSeparator1)
                     .addGroup(layout.createSequentialGroup()
@@ -212,7 +218,7 @@ public class GloIssuePanel extends javax.swing.JPanel {
                     .addComponent(jLabel6)
                     .addComponent(jButton1))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(commentsScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 241, Short.MAX_VALUE)
+                .addComponent(commentsScrollPane)
                 .addContainerGap())
         );
 
@@ -230,6 +236,7 @@ public class GloIssuePanel extends javax.swing.JPanel {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     javax.swing.JComboBox<Column> columnList;
+    javax.swing.JPanel commentsPanel;
     private javax.swing.JScrollPane commentsScrollPane;
     javax.swing.JButton deleteButton;
     javax.swing.JTextArea descriptionField;

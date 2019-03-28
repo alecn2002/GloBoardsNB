@@ -29,6 +29,7 @@ import com.alecn.glo.sojo.Column;
 import com.alecn.glo.sojo.Description;
 import com.alecn.glo.ui.NameIdListModel;
 import com.alecn.glo.util.GloLogger;
+import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.beans.PropertyChangeEvent;
@@ -38,6 +39,7 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.stream.Collectors;
 import javax.swing.JComponent;
+import javax.swing.JTextArea;
 import org.netbeans.modules.bugtracking.spi.IssueController;
 import org.openide.util.HelpCtx;
 
@@ -173,6 +175,17 @@ public class GloIssueController implements IssueController, ActionListener, Prop
 //        String labelsText = String.join(" ", card.getLabels().stream().map(l -> l.getId()).collect(Collectors.toList()));
         LOGGER.info("Going to add %d label(s)", card.getLabels().size());
         component.getLabelsField().setText(labelsText);
+
+        // Populate comments
+        Arrays.asList(component.commentsPanel.getComponents()).forEach(c -> component.commentsPanel.remove(c));
+        Insets margin = new Insets(4, 0, 0, 0);
+        gloRepository.getCommentService().list(card.getBoard_id(), card.getId()).forEach(cmt -> {
+            LOGGER.info("Adding comment: '%s'", cmt.getText());
+            JTextArea ta = new JTextArea(cmt.getText());
+            ta.setSize(component.commentsPanel.getWidth(), ta.getHeight());
+            ta.setMargin(margin);
+            component.commentsPanel.add(ta);
+        });
     }
 
     private void populateCard() {
