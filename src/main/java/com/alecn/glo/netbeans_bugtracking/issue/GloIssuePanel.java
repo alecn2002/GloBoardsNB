@@ -27,11 +27,13 @@ import com.alecn.glo.sojo.Column;
 import com.alecn.glo.util.VisitorHelper;
 import javax.swing.ComboBoxModel;
 import javax.swing.JComboBox;
+import lombok.Getter;
 
 /**
  *
  * @author anovitsk
  */
+@Getter
 public class GloIssuePanel extends javax.swing.JPanel {
 
     /**
@@ -79,7 +81,11 @@ public class GloIssuePanel extends javax.swing.JPanel {
         deleteButton = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
         columnList = new javax.swing.JComboBox<>();
+        jLabel6 = new javax.swing.JLabel();
+        commentsScrollPane = new javax.swing.JScrollPane();
         jLabel3 = new javax.swing.JLabel();
+        labelsField = new javax.swing.JTextField();
+        jButton1 = new javax.swing.JButton();
 
         titleField.setFont(new java.awt.Font("DejaVu Serif", 1, 18)); // NOI18N
 
@@ -113,7 +119,18 @@ public class GloIssuePanel extends javax.swing.JPanel {
 
         org.openide.awt.Mnemonics.setLocalizedText(jLabel1, org.openide.util.NbBundle.getMessage(GloIssuePanel.class, "GloIssuePanel.jLabel1.text")); // NOI18N
 
+        org.openide.awt.Mnemonics.setLocalizedText(jLabel6, org.openide.util.NbBundle.getMessage(GloIssuePanel.class, "GloIssuePanel.jLabel6.text")); // NOI18N
+
         org.openide.awt.Mnemonics.setLocalizedText(jLabel3, org.openide.util.NbBundle.getMessage(GloIssuePanel.class, "GloIssuePanel.jLabel3.text")); // NOI18N
+
+        labelsField.setText(org.openide.util.NbBundle.getMessage(GloIssuePanel.class, "GloIssuePanel.labelsField.text")); // NOI18N
+
+        org.openide.awt.Mnemonics.setLocalizedText(jButton1, org.openide.util.NbBundle.getMessage(GloIssuePanel.class, "GloIssuePanel.jButton1.text")); // NOI18N
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
@@ -122,6 +139,7 @@ public class GloIssuePanel extends javax.swing.JPanel {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(commentsScrollPane, javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 662, Short.MAX_VALUE)
                     .addComponent(titleField, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jSeparator1)
@@ -145,9 +163,16 @@ public class GloIssuePanel extends javax.swing.JPanel {
                                 .addGap(18, 18, 18)
                                 .addComponent(saveButton)
                                 .addGap(27, 27, 27)
-                                .addComponent(deleteButton))
-                            .addComponent(jLabel3))
-                        .addGap(0, 0, Short.MAX_VALUE)))
+                                .addComponent(deleteButton)))
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jLabel3)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(labelsField))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jLabel6)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jButton1)))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -179,8 +204,16 @@ public class GloIssuePanel extends javax.swing.JPanel {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 118, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jLabel3)
-                .addContainerGap(294, Short.MAX_VALUE))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel3)
+                    .addComponent(labelsField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel6)
+                    .addComponent(jButton1))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(commentsScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 241, Short.MAX_VALUE)
+                .addContainerGap())
         );
 
         bindingGroup.bind();
@@ -190,19 +223,27 @@ public class GloIssuePanel extends javax.swing.JPanel {
         // TODO add your handling code here:
     }//GEN-LAST:event_nameFieldActionPerformed
 
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jButton1ActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     javax.swing.JComboBox<Column> columnList;
+    private javax.swing.JScrollPane commentsScrollPane;
     javax.swing.JButton deleteButton;
     javax.swing.JTextArea descriptionField;
     javax.swing.JLabel idField;
+    private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel6;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JSeparator jSeparator1;
+    private javax.swing.JTextField labelsField;
     javax.swing.JTextField nameField;
     javax.swing.JButton refreshButton;
     javax.swing.JButton saveButton;

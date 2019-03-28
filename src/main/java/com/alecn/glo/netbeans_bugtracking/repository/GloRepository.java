@@ -41,6 +41,7 @@ import com.alecn.glo.sojo.BoardMember;
 import com.alecn.glo.sojo.Card;
 import com.alecn.glo.sojo.Column;
 import com.alecn.glo.sojo.Label;
+import com.alecn.glo.sojo.PartialLabel;
 import com.alecn.glo.util.Cache;
 import com.alecn.glo.util.GloLogger;
 import com.alecn.glo.util.LazyValue;
@@ -58,6 +59,7 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.UUID;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -299,6 +301,19 @@ public class GloRepository {
 
     public Collection<Label> getLabels() {
         return getCurrentBoard().getLabels();
+    }
+
+    public Collection<Label> chooseLabelsByIds(Collection<String> labelIds) {
+        return getLabels().stream()
+                .filter(l -> labelIds.contains(l.getId()))
+                .collect(Collectors.toList());
+    }
+
+    public Collection<Label> chooseLabels(Collection<PartialLabel> labels) {
+        Set<String> labelIdSet = labels.stream()
+                .map(l -> l.getId())
+                .collect(Collectors.toSet());
+        return chooseLabelsByIds(labelIdSet);
     }
 
     public void refreshColumns() {

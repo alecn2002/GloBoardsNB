@@ -48,7 +48,7 @@ public class Card extends DatedNamedEntity {
     private String board_id;
     private String column_id;
     private List<PartialUser> assignees;
-    private List<Label> labels;
+    private List<PartialLabel> labels;
     private Date due_date;
     private Integer comment_count;
     private Integer attachment_count;

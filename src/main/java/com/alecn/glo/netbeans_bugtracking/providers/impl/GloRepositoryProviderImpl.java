@@ -31,6 +31,7 @@ import com.alecn.glo.sojo.Card;
 import com.alecn.glo.sojo.Description;
 import java.awt.Image;
 import java.beans.PropertyChangeListener;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
@@ -59,7 +60,11 @@ public class GloRepositoryProviderImpl implements GloRepositoryProvider {
 
     @Override
     public Collection<GloIssue> getIssues(GloRepository r, String... ids) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        final Set<String> idsSet = new HashSet<>(Arrays.asList(ids));
+        return r.getCards().stream()
+                .filter(c -> idsSet.contains(c.getId()))
+                .map(c -> new GloIssue(c, r))
+                .collect(Collectors.toList());
     }
 
     @Override

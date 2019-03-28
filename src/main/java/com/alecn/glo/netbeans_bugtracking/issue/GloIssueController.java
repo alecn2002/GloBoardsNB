@@ -36,6 +36,7 @@ import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.stream.Collectors;
 import javax.swing.JComponent;
 import org.netbeans.modules.bugtracking.spi.IssueController;
 import org.openide.util.HelpCtx;
@@ -144,12 +145,14 @@ public class GloIssueController implements IssueController, ActionListener, Prop
     private static final Description EMPTY_DESCR = new Description("");
 
     private void populateComponent() {
-        component.titleField.setText(nvl(gloIssue.getCard().getName()));
-        component.nameField.setText(nvl(gloIssue.getCard().getName()));
-        component.descriptionField.setText(nvl(nvl(gloIssue.getCard().getDescription(), EMPTY_DESCR).getText()));
-        component.idField.setText(nvl(gloIssue.getCard().getId()));
+        Card card = gloIssue.getCard();
 
-        String selectedColumnId = gloIssue.getCard().getColumn_id();
+        component.titleField.setText(nvl(card.getName()));
+        component.nameField.setText(nvl(card.getName()));
+        component.descriptionField.setText(nvl(nvl(card.getDescription(), EMPTY_DESCR).getText()));
+        component.idField.setText(nvl(card.getId()));
+
+        String selectedColumnId = card.getColumn_id();
         Collection<Column> columns = gloRepository.getColumns();
         Column selectedColumn = (selectedColumnId == null || selectedColumnId.isEmpty())
                 ? null
@@ -161,6 +164,15 @@ public class GloIssueController implements IssueController, ActionListener, Prop
         );
         model.setSelectedItem(selectedColumn);
         model.setThisModelToControl(component.columnList);
+
+        String labelsText = String.join(" ",
+                gloRepository.chooseLabels(card.getLabels())
+                        .stream()
+                        .map(l -> l.getName())
+                        .collect(Collectors.toList()));
+//        String labelsText = String.join(" ", card.getLabels().stream().map(l -> l.getId()).collect(Collectors.toList()));
+        LOGGER.info("Going to add %d label(s)", card.getLabels().size());
+        component.getLabelsField().setText(labelsText);
     }
 
     private void populateCard() {
@@ -169,6 +181,7 @@ public class GloIssueController implements IssueController, ActionListener, Prop
         card.setColumn_id(component.getSelectedColumnId());
         card.setName(component.getIssueName());
         card.setDescription(new Description(component.getDescription()));
+
     }
 
     @Override
