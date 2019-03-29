@@ -30,6 +30,8 @@ import com.alecn.glo.sojo.Description;
 import com.alecn.glo.ui.NameIdListModel;
 import com.alecn.glo.util.GloLogger;
 import java.awt.Insets;
+import java.awt.Color;
+import java.awt.LayoutManager;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.beans.PropertyChangeEvent;
@@ -39,6 +41,8 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.stream.Collectors;
 import javax.swing.JComponent;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
 import javax.swing.JTextArea;
 import org.netbeans.modules.bugtracking.spi.IssueController;
 import org.openide.util.HelpCtx;
@@ -154,6 +158,7 @@ public class GloIssueController implements IssueController, ActionListener, Prop
         component.descriptionField.setText(nvl(nvl(card.getDescription(), EMPTY_DESCR).getText()));
         component.idField.setText(nvl(card.getId()));
 
+        // Populating COLUMN field
         String selectedColumnId = card.getColumn_id();
         Collection<Column> columns = gloRepository.getColumns();
         Column selectedColumn = (selectedColumnId == null || selectedColumnId.isEmpty())
@@ -167,13 +172,21 @@ public class GloIssueController implements IssueController, ActionListener, Prop
         model.setSelectedItem(selectedColumn);
         model.setThisModelToControl(component.columnList);
 
+        // Populating LABELS field
+//        gloRepository.chooseLabels(card.getLabels())
+//                .forEach(l -> {
+//                    JLabel label = new JLabel(l.getName());
+//                    com.alecn.glo.sojo.Color lc = l.getColor();
+//                    java.awt.Color color = new java.awt.Color(lc.getR(), lc.getG(), lc.getB(), lc.getA());
+//                    label.setBackground(color);
+//                    component.getLabelsField().add(label);
+//                });
+
         String labelsText = String.join(" ",
                 gloRepository.chooseLabels(card.getLabels())
                         .stream()
                         .map(l -> l.getName())
                         .collect(Collectors.toList()));
-//        String labelsText = String.join(" ", card.getLabels().stream().map(l -> l.getId()).collect(Collectors.toList()));
-        LOGGER.info("Going to add %d label(s)", card.getLabels().size());
         component.getLabelsField().setText(labelsText);
 
         // Populate comments

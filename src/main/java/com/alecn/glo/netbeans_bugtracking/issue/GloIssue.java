@@ -25,12 +25,14 @@ package com.alecn.glo.netbeans_bugtracking.issue;
 
 import com.alecn.glo.netbeans_bugtracking.repository.GloRepository;
 import com.alecn.glo.sojo.Card;
+import com.alecn.glo.sojo.Comment;
 import com.alecn.glo.sojo.Description;
 import com.alecn.glo.util.GloLogger;
 import com.alecn.glo.util.LazyValue;
 import com.alecn.glo.util.VisitorHelper;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
+import java.util.Collection;
 import java.util.Date;
 import javax.ws.rs.core.Response;
 import lombok.AllArgsConstructor;
@@ -159,6 +161,10 @@ public class GloIssue {
         }
         // TODO do it in proper thread-safe way
         return repository.getCardService().delete(card);
+    }
+
+    public Collection<Comment> getComments() {
+        return repository.getCommentService().list(card.getBoard_id(), card.getId());
     }
     //
     // Change Support
