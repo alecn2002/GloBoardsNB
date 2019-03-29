@@ -27,6 +27,7 @@ import com.alecn.glo.netbeans_bugtracking.repository.GloRepository;
 import com.alecn.glo.sojo.Card;
 import com.alecn.glo.sojo.Column;
 import com.alecn.glo.sojo.Description;
+import com.alecn.glo.sojo.Label;
 import com.alecn.glo.ui.NameIdListModel;
 import com.alecn.glo.util.GloLogger;
 import java.awt.Insets;
@@ -172,7 +173,9 @@ public class GloIssueController implements IssueController, ActionListener, Prop
         model.setSelectedItem(selectedColumn);
         model.setThisModelToControl(component.columnList);
 
+        // -----------------------
         // Populating LABELS field
+
 //        gloRepository.chooseLabels(card.getLabels())
 //                .forEach(l -> {
 //                    JLabel label = new JLabel(l.getName());
@@ -183,22 +186,28 @@ public class GloIssueController implements IssueController, ActionListener, Prop
 //                });
 
         String labelsText = String.join(" ",
-                gloRepository.chooseLabels(card.getLabels())
+                gloIssue.getLabels()
                         .stream()
                         .map(l -> l.getName())
                         .collect(Collectors.toList()));
         component.getLabelsField().setText(labelsText);
 
-        // Populate comments
-        Arrays.asList(component.commentsPanel.getComponents()).forEach(c -> component.commentsPanel.remove(c));
-        Insets margin = new Insets(4, 0, 0, 0);
-        gloRepository.getCommentService().list(card.getBoard_id(), card.getId()).forEach(cmt -> {
-            LOGGER.info("Adding comment: '%s'", cmt.getText());
+        // -----------------------
+        // Populating COMMENTS
+        clearCommentsPanel();
+        Insets margin = new Insets(4, 0, 4, 0);
+        gloIssue.getComments().forEach(cmt -> {
+            LOGGER.info("Adding comment: '%s'", cmt.getText()); // TODO lower logging level
+            // TODO introduce comment editor component
             JTextArea ta = new JTextArea(cmt.getText());
             ta.setSize(component.commentsPanel.getWidth(), ta.getHeight());
             ta.setMargin(margin);
             component.commentsPanel.add(ta);
         });
+    }
+
+    private void clearCommentsPanel() {
+        Arrays.asList(component.commentsPanel.getComponents()).forEach(c -> component.commentsPanel.remove(c));
     }
 
     private void populateCard() {

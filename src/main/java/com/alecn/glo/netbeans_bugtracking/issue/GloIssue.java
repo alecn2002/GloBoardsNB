@@ -27,6 +27,7 @@ import com.alecn.glo.netbeans_bugtracking.repository.GloRepository;
 import com.alecn.glo.sojo.Card;
 import com.alecn.glo.sojo.Comment;
 import com.alecn.glo.sojo.Description;
+import com.alecn.glo.sojo.Label;
 import com.alecn.glo.util.GloLogger;
 import com.alecn.glo.util.LazyValue;
 import com.alecn.glo.util.VisitorHelper;
@@ -166,6 +167,12 @@ public class GloIssue {
     public Collection<Comment> getComments() {
         return repository.getCommentService().list(card.getBoard_id(), card.getId());
     }
+
+
+    public Collection<Label> getLabels() {
+        return repository.chooseLabels(card.getLabels());
+    }
+
     //
     // Change Support
     //
