@@ -13,6 +13,8 @@ Some functions don't work as expected - you find and tell [me](mailto:alecn2002@
 
 # Glo Boards issue tracking plugin for NetBeans [![][license img]][license]
 
+Plugin allows to connect to GitKraken Glo issue tracking boards from inside NetBeans IDE
+
 ## Preword
 
 This plugin was checked for compatibility with NetBeans 8.2 and Java JRE 8. Though it should work with later NetBeans releases, and later Java.

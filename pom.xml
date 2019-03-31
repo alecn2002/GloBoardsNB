@@ -127,4 +127,7 @@
             <version>1.2.1</version>
         </dependency>
     </dependencies>
+    <name>AlecN &lt;alecn2002@gmail.com&gt;</name>
+    <description>Plugin allows to connect to GitKraken Glo issue tracking boards from inside NetBeans IDE
+</description>
 </project>
