@@ -42,7 +42,7 @@ import org.netbeans.modules.bugtracking.spi.IssueScheduleInfo;
 
 /**
  *
- * @author anovitsk
+ * @author <a href="mailto:alecn2002@gmail.com">AlecN</a>
  */
 @Getter
 @AllArgsConstructor

@@ -31,7 +31,7 @@ import lombok.Setter;
 
 /**
  *
- * @author AlecN <alecn2002@gmail.com>
+ * @author <a href="mailto:alecn2002@gmail.com">AlecN</a>
  */
 @Getter
 @Setter

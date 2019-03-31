@@ -30,7 +30,7 @@ import java.util.stream.Collectors;
 
 /**
  *
- * @author alecn
+ * @author <a href="mailto:alecn2002@gmail.com">AlecN</a>
  */
 public class GloLogger {
 

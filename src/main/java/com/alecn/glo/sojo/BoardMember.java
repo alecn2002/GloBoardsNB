@@ -32,9 +32,8 @@ import lombok.experimental.SuperBuilder;
 
 /**
  *
- * @author AlecN <alecn2002@gmail.com>
+ * @author <a href="mailto:alecn2002@gmail.com">AlecN</a>
  */
-// "username":"alecn2002","name":null,"email":"alecn2002@gmail.com","id":"66cb0405-0eb3-4103-ab3b-f80fb5bfaab8","role":"owner"
 @Getter
 @Setter
 @NoArgsConstructor

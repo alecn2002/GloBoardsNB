@@ -44,7 +44,7 @@ import org.openide.util.Lookup;
 
 /**
  *
- * @author alecn
+ * @author <a href="mailto:alecn2002@gmail.com">AlecN</a>
  */
 @Getter
 public class GloRepositoryController implements RepositoryController, DocumentListener, ActionListener {

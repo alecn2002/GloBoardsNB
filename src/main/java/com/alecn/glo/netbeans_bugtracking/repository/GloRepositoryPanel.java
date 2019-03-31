@@ -27,7 +27,7 @@ import com.alecn.glo.sojo.Board;
 
 /**
  *
- * @author anovitsk
+ * @author <a href="mailto:alecn2002@gmail.com">AlecN</a>
  */
 class GloRepositoryPanel extends javax.swing.JPanel {
 

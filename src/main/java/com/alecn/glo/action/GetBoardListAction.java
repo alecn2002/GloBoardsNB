@@ -43,7 +43,7 @@ import org.openide.util.NbBundle.Messages;
 
 /**
  *
- * @author AlecN <alecn2002@gmail.com>
+ * @author <a href="mailto:alecn2002@gmail.com">AlecN</a>
  */
 @ActionID(
         category = "Team",

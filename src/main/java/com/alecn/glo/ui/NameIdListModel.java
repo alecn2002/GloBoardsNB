@@ -36,7 +36,7 @@ import javax.swing.plaf.basic.BasicComboBoxRenderer;
 
 /**
  *
- * @author alecn
+ * @author <a href="mailto:alecn2002@gmail.com">AlecN</a>
  */
 public class NameIdListModel<T> extends AbstractListModel<T> implements ComboBoxModel<T> {
 

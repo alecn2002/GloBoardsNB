@@ -25,7 +25,7 @@ package com.alecn.glo.client;
 
 /**
  *
- * @author alecn
+ * @author <a href="mailto:alecn2002@gmail.com">AlecN</a>
  */
 public enum ColumnFieldsEnum implements FieldsEnumI {
     NONE;

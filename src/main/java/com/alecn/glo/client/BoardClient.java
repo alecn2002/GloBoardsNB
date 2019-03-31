@@ -29,7 +29,7 @@ import java.util.List;
 
 /**
  *
- * @author AlecN <alecn2002@gmail.com>
+ * @author <a href="mailto:alecn2002@gmail.com">AlecN</a>
  */
 public interface BoardClient {
     List<Board> list(final Collection<BoardFieldsEnum> fields, boolean archived, Integer page, Integer per_page, boolean sort_desc);

@@ -28,7 +28,7 @@ import java.awt.datatransfer.DataFlavor;
 
 /**
  *
- * @author alecn
+ * @author <a href="mailto:alecn2002@gmail.com">AlecN</a>
  */
 public class DndSupport {
     public static final DataFlavor GLO_ISSUE_DATA_FLAVOR = new DataFlavor(GloIssue.class, DataFlavor.javaSerializedObjectMimeType);

@@ -34,7 +34,7 @@ import lombok.ToString;
 
 /**
  *
- * @author alecn
+ * @author <a href="mailto:alecn2002@gmail.com">AlecN</a>
  */
 @Getter
 @Setter

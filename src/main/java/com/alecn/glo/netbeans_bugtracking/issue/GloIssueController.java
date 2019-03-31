@@ -50,7 +50,7 @@ import org.openide.util.HelpCtx;
 
 /**
  *
- * @author anovitsk
+ * @author <a href="mailto:alecn2002@gmail.com">AlecN</a>
  */
 public class GloIssueController implements IssueController, ActionListener, PropertyChangeListener  {
 

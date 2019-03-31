@@ -25,7 +25,7 @@ package com.alecn.glo.client.impl;
 
 /**
  *
- * @author AlecN <alecn2002@gmail.com>
+ * @author <a href="mailto:alecn2002@gmail.com">AlecN</a>
  */
 public abstract class GloConstants {
     public static final String GLO_URL = "https://gloapi.gitkraken.com/v1/glo/";

@@ -27,7 +27,7 @@ import java.util.function.Function;
 
 /**
  *
- * @author anovitsk
+ * @author <a href="mailto:alecn2002@gmail.com">AlecN</a>
  */
 public class VisitorHelper {
 

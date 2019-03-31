@@ -45,7 +45,7 @@ import org.openide.util.lookup.ServiceProvider;
 
 /**
  *
- * @author AlecN <alecn2002@gmail.com>
+ * @author <a href="mailto:alecn2002@gmail.com">AlecN</a>
  */
 @ServiceProvider(service = BoardService.class)
 public class BoardServiceImpl implements BoardService {

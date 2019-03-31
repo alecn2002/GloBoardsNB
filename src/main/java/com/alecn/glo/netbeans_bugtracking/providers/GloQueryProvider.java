@@ -29,7 +29,7 @@ import org.netbeans.modules.bugtracking.spi.QueryProvider;
 
 /**
  *
- * @author anovitsk
+ * @author <a href="mailto:alecn2002@gmail.com">AlecN</a>
  */
 public interface GloQueryProvider extends QueryProvider<GloQuery, GloIssue> {
 

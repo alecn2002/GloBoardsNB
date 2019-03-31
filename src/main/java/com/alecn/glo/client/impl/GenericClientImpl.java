@@ -53,7 +53,7 @@ import lombok.Getter;
 
 /**
  *
- * @author AlecN <alecn2002@gmail.com>
+ * @author <a href="mailto:alecn2002@gmail.com">AlecN</a>
  */
 public abstract class GenericClientImpl<T, R, F extends FieldsEnumI> extends GloConstants {
 

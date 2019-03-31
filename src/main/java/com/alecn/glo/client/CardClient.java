@@ -33,7 +33,7 @@ import javax.ws.rs.core.Response;
 
 /**
  *
- * @author anovitsk
+ * @author <a href="mailto:alecn2002@gmail.com">AlecN</a>
  */
 public interface CardClient {
     List<Card> list(String board_id, Collection<CardFieldsEnum> fields, boolean archived, Integer page, Integer per_page, boolean sort_desc);

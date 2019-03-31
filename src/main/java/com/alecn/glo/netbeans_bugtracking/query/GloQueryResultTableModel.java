@@ -39,7 +39,7 @@ import lombok.RequiredArgsConstructor;
 
 /**
  *
- * @author alecn
+ * @author <a href="mailto:alecn2002@gmail.com">AlecN</a>
  */
 @RequiredArgsConstructor
 public class GloQueryResultTableModel implements TableModel {

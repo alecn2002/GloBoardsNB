@@ -31,7 +31,7 @@ import javax.ws.rs.core.Response;
 
 /**
  *
- * @author alecn
+ * @author <a href="mailto:alecn2002@gmail.com">AlecN</a>
  */
 public interface CommentService {
     List<Comment> list(String board_id, String card_id, Collection<CommentFieldsEnum> fields, Integer page, Integer per_page, boolean sort_desc);

@@ -28,7 +28,7 @@ import java.util.Collection;
 
 /**
  *
- * @author alecn
+ * @author <a href="mailto:alecn2002@gmail.com">AlecN</a>
  */
 public interface AttachmentService {
 

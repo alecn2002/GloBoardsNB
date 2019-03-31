@@ -30,7 +30,7 @@ import org.openide.util.lookup.ServiceProvider;
 
 /**
  *
- * @author anovitsk
+ * @author <a href="mailto:alecn2002@gmail.com">AlecN</a>
  */
 @ServiceProvider(service = GloIssueScheduleProvider.class)
 public class GloIssueScheduleProvider implements IssueScheduleProvider<GloIssue> {

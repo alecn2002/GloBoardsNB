@@ -25,7 +25,7 @@ package com.alecn.glo.netbeans_bugtracking.query;
 
 /**
  *
- * @author anovitsk
+ * @author <a href="mailto:alecn2002@gmail.com">AlecN</a>
  */
 public class GloQueryPanel extends javax.swing.JPanel {
 

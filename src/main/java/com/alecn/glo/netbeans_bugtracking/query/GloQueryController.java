@@ -48,7 +48,7 @@ import org.openide.util.HelpCtx;
 
 /**
  *
- * @author anovitsk
+ * @author <a href="mailto:alecn2002@gmail.com">AlecN</a>
  */
 @AllArgsConstructor
 public class GloQueryController implements QueryController, ActionListener {

@@ -31,7 +31,7 @@ import lombok.Getter;
 
 /**
  *
- * @author anovitsk
+ * @author <a href="mailto:alecn2002@gmail.com">AlecN</a>
  */
 @Getter
 public class GloIssuePanel extends javax.swing.JPanel {

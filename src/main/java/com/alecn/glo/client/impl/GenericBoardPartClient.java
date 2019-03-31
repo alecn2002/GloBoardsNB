@@ -30,7 +30,7 @@ import javax.ws.rs.client.WebTarget;
 
 /**
  *
- * @author alecn
+ * @author <a href="mailto:alecn2002@gmail.com">AlecN</a>
  */
 public abstract class GenericBoardPartClient<T, R, F extends FieldsEnumI> extends GenericClientImpl<T, R, F> {
 

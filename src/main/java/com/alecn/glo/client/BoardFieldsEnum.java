@@ -27,7 +27,7 @@ import lombok.Getter;
 
 /**
  *
- * @author AlecN <alecn2002@gmail.com>
+ * @author <a href="mailto:alecn2002@gmail.com">AlecN</a>
  */
 @Getter
 public enum BoardFieldsEnum implements FieldsEnumI {

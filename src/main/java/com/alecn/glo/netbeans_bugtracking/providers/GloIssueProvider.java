@@ -28,6 +28,6 @@ import org.netbeans.modules.bugtracking.spi.IssueProvider;
 
 /**
  *
- * @author anovitsk
+ * @author <a href="mailto:alecn2002@gmail.com">AlecN</a>
  */
 public interface GloIssueProvider extends IssueProvider<GloIssue> {}

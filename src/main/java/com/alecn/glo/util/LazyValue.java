@@ -29,7 +29,7 @@ import lombok.RequiredArgsConstructor;
 
 /**
  *
- * @author anovitsk
+ * @author <a href="mailto:alecn2002@gmail.com">AlecN</a>
  */
 @RequiredArgsConstructor
 public class LazyValue<T> {

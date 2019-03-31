@@ -39,7 +39,7 @@ import org.openide.util.lookup.ServiceProvider;
 
 /**
  *
- * @author anovitsk
+ * @author <a href="mailto:alecn2002@gmail.com">AlecN</a>
  */
 @ServiceProvider(service = GloConfig.class)
 public class GloConfig {

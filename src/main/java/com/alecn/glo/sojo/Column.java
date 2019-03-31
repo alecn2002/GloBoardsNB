@@ -31,9 +31,8 @@ import lombok.ToString;
 import lombok.experimental.SuperBuilder;
 /**
  *
- * @author AlecN <alecn2002@gmail.com>
+ * @author <a href="mailto:alecn2002@gmail.com">AlecN</a>
  */
-// {"created_date":"2018-05-08T07:54:55.532Z","name":"Glo Essentials","created_by":{"id":"66cb0405-0eb3-4103-ab3b-f80fb5bfaab8"},"id":"5af157cf4f33b71500146e6b"}
 @Getter
 @Setter
 @NoArgsConstructor

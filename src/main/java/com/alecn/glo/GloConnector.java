@@ -33,7 +33,7 @@ import org.openide.util.NbBundle;
 
 /**
  *
- * @author anovitsk
+ * @author <a href="mailto:alecn2002@gmail.com">AlecN</a>
  */
 @NbBundle.Messages({
     "LBL_ConnectorTooltip=NetBeans plugin for integration with GLO Boards"

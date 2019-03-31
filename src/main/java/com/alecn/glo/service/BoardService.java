@@ -34,7 +34,7 @@ import javax.ws.rs.core.Response;
 
 /**
  *
- * @author AlecN <alecn2002@gmail.com>
+ * @author <a href="mailto:alecn2002@gmail.com">AlecN</a>
  */
 public interface BoardService {
     List<Board> listBoards();
